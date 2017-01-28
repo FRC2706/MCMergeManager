@@ -6,10 +6,10 @@ import java.io.Serializable;
  * Created by MCSoftware on 2016-01-22.
  */
 public class BallShot implements Serializable {
+
     public static final int HIGH_GOAL = 0;
     public static final int LOW_GOAL  = 1;
     public static final int MISS      = 2;
-
 
     public int x;
     public int y;

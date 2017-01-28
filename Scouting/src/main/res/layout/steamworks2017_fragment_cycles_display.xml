@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:measureWithLargestChild="false">
+
+    <TextView
+        android:text="Match -1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cyclesDisplayMatchNo"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Vercital linear layout for the text boxes (so that we can get them all the same width) -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Gears"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/cycle_bars_height"
+                android:id="@+id/textView3"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="H. Fuel"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/cycle_bars_height"
+                android:id="@+id/textView4"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="L. Fuel"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/cycle_bars_height"
+                android:id="@+id/textView5"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="Defense"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/cycle_bars_height"
+                android:id="@+id/textView6"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="Climb"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/cycle_bars_height"
+                android:id="@+id/textView7"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+
+        <!-- Vertical linear layout for the CycleBars -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <view
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cycle_bars_height"
+                class="ca.team2706.cycles_display_test.CyclesDisplayView"
+                android:id="@+id/gears_cyclesDisplayView"
+                android:layout_weight="1.90" />
+
+            <view
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cycle_bars_height"
+                class="ca.team2706.cycles_display_test.CyclesDisplayView"
+                android:id="@+id/highFuel_cyclesDisplayView"
+                android:layout_weight="1.90" />
+
+            <view
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cycle_bars_height"
+                class="ca.team2706.cycles_display_test.CyclesDisplayView"
+                android:id="@+id/lowFuel_cyclesDisplayView"
+                android:layout_weight="1.90" />
+
+            <view
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cycle_bars_height"
+                class="ca.team2706.cycles_display_test.CyclesDisplayView"
+                android:id="@+id/defense_cyclesDisplayView"
+                android:layout_weight="1.90" />
+
+            <view
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cycle_bars_height"
+                class="ca.team2706.cycles_display_test.CyclesDisplayView"
+                android:id="@+id/climb_cyclesDisplayView"
+                android:layout_weight="1.90" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+</LinearLayout>

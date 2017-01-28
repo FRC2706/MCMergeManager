@@ -187,7 +187,7 @@ public class MatchData implements Serializable {
 
             sb.append("\n");
 
-            return "";
+            return sb.toString();
         }
 
         /** De-serializing constructor **/
