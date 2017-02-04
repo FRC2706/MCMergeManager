@@ -9,5 +9,5 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="offensive_courtyard_image_width">300dp</dimen>
     <dimen name="offensive_courtyard_image_height">226dp</dimen>
-
+    <dimen name="cycle_bars_height">25dp</dimen>
 </resources>

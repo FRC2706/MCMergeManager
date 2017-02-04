@@ -1,4 +1,4 @@
-package ca.team2706.scouting.mcmergemanager.stronghold2016.dataObjects;
+package ca.team2706.scouting.mcmergemanager.backend;
 
 import android.util.Log;
 
@@ -96,6 +96,16 @@ public class MatchSchedule implements Serializable {
     private List<Match> matches = new ArrayList<Match>();
 
     public List<Match> getMatches(){ return matches; }
+
+
+    public List<String> getTeamNumsAtEvent() {
+
+        // TODO placeholder
+
+        ArrayList<String> list = new ArrayList<>();
+        list.add("2706");
+        return list;
+    }
 
     public void addMatch(Match match) {
         matches.add(match);

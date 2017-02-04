@@ -21,8 +21,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/steamworks2017_content_auto_scouting" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/autoBallTextView" />
 
+    <include layout="@layout/steamworks2017_content_auto_scouting"
+        android:id="@+id/include" />
 
 
 </android.support.design.widget.CoordinatorLayout>

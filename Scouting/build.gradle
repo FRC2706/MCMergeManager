@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
 apply plugin: 'com.android.application'
@@ -42,4 +42,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-drive:8.4.0'
     compile 'com.google.android.gms:play-services-identity:8.4.0'
     compile files('libs/Jama-1.0.3.jar')
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }

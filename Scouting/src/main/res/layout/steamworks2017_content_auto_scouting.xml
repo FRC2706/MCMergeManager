@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:id="@+id/relativeLayoutMap"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".stronghold2016.gui.AutoScouting"
+    tools:showIn="@layout/stronghold2016_activity_auto_scouting">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textViewGameTime"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="480dp" />
+
+   <!--Button
+        android:layout_width="match_parent"
+        android:background="?attr/colorPrimaryDark"
+        android:layout_height="150dp"
+        android:text="Go To Teleop"
+        android:id="@+id/buttonTeleop"
+        android:onClick="toTeleop"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+-->
+    <CheckBox
+        android:text="Crossed Baseline?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:id="@+id/crossedBaselineCheckBox"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <CheckBox
+        android:text="Started with gear?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="22dp"
+        android:layout_alignBaseline="@+id/crossedBaselineCheckBox"
+        android:layout_alignBottom="@+id/crossedBaselineCheckBox"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/startingGearCheckBox" />
+
+    <SeekBar
+        android:layout_height="wrap_content"
+        android:id="@+id/autoBallSeekBar"
+        android:layout_width="500dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="134dp"
+        android:max="40"
+        android:progress="0"
+        />
+
+    <CheckBox
+        android:text="Started with balls?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:id="@+id/startingBallsCheckBox"
+        android:layout_below="@+id/crossedBaselineCheckBox"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/autoBallScoredTextView"
+        android:layout_height="wrap_content"
+        android:layout_width="500dp"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/autoBallSeekBar" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:background="?attr/colorPrimaryDark"
+        android:layout_height="150dp"
+        android:text="Go To Teleop"
+        android:id="@+id/buttonTeleop"
+        android:onClick="toTeleop"
+        android:layout_marginBottom="45dp"
+        android:layout_alignBottom="@+id/textViewGameTime"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:layout_below="@+id/autoBallScoredTextView"
+        android:layout_alignEnd="@+id/startingGearCheckBox"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="17dp"
+        android:id="@+id/editText2"
+        android:contentDescription="Notes..." />
+
+</RelativeLayout>

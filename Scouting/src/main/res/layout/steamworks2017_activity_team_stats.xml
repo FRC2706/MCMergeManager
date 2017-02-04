@@ -9,6 +9,6 @@
 
 
 
-    <include layout="@layout/stronghold2016_content_team_stats" />
+    <include layout="@layout/steamworks2017_content_team_stats" />
 
 </android.support.design.widget.CoordinatorLayout>

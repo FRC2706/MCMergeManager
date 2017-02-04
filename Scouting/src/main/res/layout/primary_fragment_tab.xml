@@ -84,6 +84,13 @@
                 android:onClick="takePicture"
                 />
 
+            <Button
+                android:text="Record Repair Time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button6"
+                android:onClick="onRepairTimeRecordClicked" />
+
         </LinearLayout>
 
 

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/steamworks2017_activity_teleop_scouting"
+    tools:context=".stronghold2016.gui.TeleopScouting">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="86dp"
+        android:layout_height="500dp">
+
+        <Button
+            android:text="DELIVERY"
+            android:id="@+id/gearDeliveryButton"
+            android:layout_height="90dp"
+            android:layout_width="150dp"
+            android:layout_marginEnd="7dp"
+            android:layout_alignBaseline="@+id/gearPickupButton"
+            android:layout_alignBottom="@+id/gearPickupButton"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/white"
+            android:textColor="@android:color/holo_purple"/>
+
+        <Button
+            android:text="PICKUP"
+            android:id="@+id/gearPickupButton"
+            android:layout_height="90dp"
+            android:layout_width="150dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="10dp"
+            android:layout_below="@+id/gearsTextView"
+            android:layout_alignParentStart="true"
+            android:background="@android:color/white"
+            android:textColor="@android:color/holo_purple"/>
+
+        <Button
+            android:text="SHOOTING"
+            android:id="@+id/ballShootingButton"
+            android:layout_height="90dp"
+            android:layout_width="150dp"
+            android:layout_alignBaseline="@+id/ballPickupButton"
+            android:layout_alignBottom="@+id/ballPickupButton"
+            android:layout_alignStart="@+id/gearDeliveryButton"
+            android:background="@android:color/white"
+            android:textColor="@android:color/holo_purple"/>
+
+        <TextView
+            android:text="CLIMBING"
+            android:layout_width="500dp"
+            android:layout_height="30dp"
+            android:id="@+id/ropeClimbingTextview"
+            android:textAppearance="@android:style/TextAppearance.Material.Large"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/ballPickupButton"
+            android:layout_alignStart="@+id/startedClimbingButton"
+            android:layout_marginStart="14dp"
+            android:textColor="@android:color/holo_purple"/>
+
+        <Button
+            android:text="SHOOTING"
+            android:id="@+id/ballPickupButton"
+            android:layout_height="90dp"
+            android:layout_width="150dp"
+            android:layout_marginTop="9dp"
+            android:layout_below="@+id/ballTextView"
+            android:layout_alignStart="@+id/gearPickupButton"
+            android:background="@android:color/white"
+            android:textColor="@android:color/holo_purple"/>
+
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textViewGameTime"
+
+            android:textColor="@android:color/holo_purple"
+
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:text="BALLS"
+            android:layout_width="500dp"
+            android:layout_height="30dp"
+            android:id="@+id/ballTextView"
+            android:textAppearance="@android:style/TextAppearance.Material.Large"
+            android:layout_below="@+id/gearDeliveryButton"
+            android:layout_alignStart="@+id/gearsTextView"
+            android:textColor="@android:color/holo_purple"/>
+
+        <TextView
+            android:text="GEARS"
+            android:layout_width="500dp"
+            android:layout_height="30dp"
+            android:id="@+id/gearsTextView"
+            android:textAppearance="@android:style/TextAppearance.Material.Large"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/textViewGameTime"
+            android:layout_marginStart="8dp"
+            android:textColor="@android:color/holo_purple"/>
+
+        <Button
+            android:text="STARTED CLIMBING"
+            android:id="@+id/startedClimbingButton"
+            android:layout_height="90dp"
+            android:layout_width="150dp"
+            android:layout_below="@+id/ropeClimbingTextview"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/white"
+            android:textColor="@android:color/holo_purple"/>
+
+    </RelativeLayout>
+</ScrollView>
+
+

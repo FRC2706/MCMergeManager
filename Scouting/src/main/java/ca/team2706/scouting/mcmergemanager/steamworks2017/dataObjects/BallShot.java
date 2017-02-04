@@ -1,9 +1,11 @@
-package ca.team2706.scouting.mcmergemanager.stronghold2016.dataObjects;
+package ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects;
 
 import java.io.Serializable;
 
 /**
  * Created by MCSoftware on 2016-01-22.
+ *
+ * RELIC OF STRONGHOLD2016 ~~ NEEDS UPDATING / REPLACING
  */
 public class BallShot implements Serializable {
 

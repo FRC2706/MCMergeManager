@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="275dp"
+    android:weightSum="1">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="70dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView26"
+        android:text="        Witch lift was the gear placed on?"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title" />
+
+    <Button
+        android:text="Boiler Side"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button7"
+        android:background="@android:color/white"
+        android:textColor="@android:color/holo_purple"/>
+
+    <Button
+        android:text="Middle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button8"
+        android:background="@android:color/white"
+        android:textColor="@android:color/holo_purple"/>
+
+    <Button
+        android:text="delivery side"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button9"
+        android:background="@android:color/white"
+        android:textColor="@android:color/holo_purple"/>
+
+</LinearLayout>

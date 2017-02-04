@@ -29,7 +29,7 @@ import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
 import ca.team2706.scouting.mcmergemanager.stronghold2016.StatsEngine;
 import ca.team2706.scouting.mcmergemanager.stronghold2016.dataObjects.TeleopScoutingObject;
-import ca.team2706.scouting.mcmergemanager.stronghold2016.gui.TeamStatsActivity;
+import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeamStatsActivity;
 
 
 public class TeamInfoFragment extends Fragment
