@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import Jama.Matrix;
 
+import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Cycle;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.DefenseEvent;
@@ -30,7 +33,7 @@ public class StatsEngine implements Serializable{
 
     private MatchData matchData;
     private MatchSchedule matchSchedule;
-    private RepairTimeObject[] repairTimeObjects;
+    private List<TeamDataObject> repairTimeObjects;
 
 
     /**
@@ -44,7 +47,7 @@ public class StatsEngine implements Serializable{
      *
      * @param repairTimeObjects May be null
      **/
-    public StatsEngine(MatchData matchData, MatchSchedule matchSchedule, RepairTimeObject[] repairTimeObjects) {
+    public StatsEngine(MatchData matchData, MatchSchedule matchSchedule, List<TeamDataObject> repairTimeObjects) {
         this.matchData = matchData;
         this.matchSchedule = matchSchedule;
         this.repairTimeObjects = repairTimeObjects;
@@ -412,10 +415,14 @@ public class StatsEngine implements Serializable{
 
         // Deal with RepairTimeObjects to see how much of the event teams spent
         // repairing their robot.
-        if(repairTimeObjects != null) {
+
+        List<TeamDataObject> teamRepairTimeObjects = FileUtils.filterTeamDataByTeam(teamNo, repairTimeObjects);
+
+        if(teamRepairTimeObjects != null) {
             int repairCount = 0;
             int workingCount = 0;
-            for (RepairTimeObject repairTimeObject : repairTimeObjects) {
+            for (TeamDataObject teamDataObject : teamRepairTimeObjects) {
+                RepairTimeObject repairTimeObject = (RepairTimeObject) teamDataObject;
                 switch (repairTimeObject.getRepairStatus()) {
                     case REPAIRING:
                         repairCount++;
@@ -425,8 +432,9 @@ public class StatsEngine implements Serializable{
                         break;
                 }
             }
-            teamStatsReport.repair_time_percent  = ((double) repairCount) / repairTimeObjects.length;
-            teamStatsReport.working_time_percent = ((double) workingCount) / repairTimeObjects.length;
+            teamStatsReport.repair_time_percent  = ((double) repairCount) / teamRepairTimeObjects.size();
+            teamStatsReport.working_time_percent = ((double) workingCount) / teamRepairTimeObjects.size();
+            teamStatsReport.repairTimeObjects = teamRepairTimeObjects;
         }
 
         // TODO:

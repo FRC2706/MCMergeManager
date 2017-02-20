@@ -26,6 +26,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,6 +37,8 @@ import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.JsonUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
 
@@ -53,6 +57,7 @@ public Context context;
 
     public static MatchData sMatchData = new MatchData();
     public static MatchSchedule sMatchSchedule = new MatchSchedule();
+    public static List<TeamDataObject> sRepairTimeObjects = new ArrayList<TeamDataObject>();
     public static TeamInfoTab mTeamInfoTab;
 
     @Override
@@ -72,6 +77,7 @@ public Context context;
         updateDataSyncLabel();
 
         FileUtils.checkFileReadWritePermissions(this);
+        FileUtils.checkLocalFileStructure(this);
     }
 
     @Override
@@ -90,6 +96,8 @@ public Context context;
         // that we fetched at the beginning.
         sMatchData = FileUtils.loadMatchDataFile();
         if(sMatchData == null) sMatchData = new MatchData();
+
+        sRepairTimeObjects = FileUtils.getRepairTimeObjects();
     }
 
     /**

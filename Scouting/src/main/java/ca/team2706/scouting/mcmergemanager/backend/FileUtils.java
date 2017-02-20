@@ -338,6 +338,22 @@ public class FileUtils {
         }
     }
 
+    public static List<TeamDataObject> getRepairTimeObjects() {
+        List<TeamDataObject> teamDataObjects = loadTeamDataFile();
+
+        List<TeamDataObject> repairTimeObjectList = new ArrayList<>();
+
+        if(teamDataObjects != null) {
+            for(TeamDataObject teamDataObject: teamDataObjects) {
+                if(teamDataObject instanceof RepairTimeObject)
+                    repairTimeObjectList.add(teamDataObject);
+            }
+        }
+
+
+        return repairTimeObjectList;
+    }
+
     /**
      * Load gearDeliveryData from the teamDataFile.
      */
@@ -405,7 +421,7 @@ public class FileUtils {
      * This will reload the entire TeamDataFile from disk. If you already have a List<TeamDataObject>, then
      * it would be more efficient to pass it to filterTeamDataByTeam().
      */
-    public List<TeamDataObject> loadTeamDataForTeam(int teamNo) {
+    public static List<TeamDataObject> loadTeamDataForTeam(int teamNo) {
         // TODO #90
 
         return filterTeamDataByTeam(teamNo, loadTeamDataFile());

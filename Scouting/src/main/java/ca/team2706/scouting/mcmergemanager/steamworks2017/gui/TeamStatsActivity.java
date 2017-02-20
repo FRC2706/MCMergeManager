@@ -67,7 +67,7 @@ public class TeamStatsActivity extends AppCompatActivity {
         CheckBox badManners = (CheckBox) findViewById(R.id.badManners);
         badManners.setChecked(m_teamStatsReport.badManners);
 
-        ((TextView) findViewById(R.id.schedToughnessTV)).setText( String.format("Time Spent Repairing: %.2f (%d)", m_teamStatsReport.repair_time_percent, m_teamStatsReport.repairTimeObjects.length) );
+        ((TextView) findViewById(R.id.repairTimeTV)).setText( String.format("Time Spent Repairing: %.0f%% (%d)", m_teamStatsReport.repair_time_percent, m_teamStatsReport.repairTimeObjects.size()) );
 
 
 

@@ -6,6 +6,7 @@ import java.util.List;
 
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 
 public class TeamStatsReport implements Serializable {
 
@@ -22,7 +23,7 @@ public class TeamStatsReport implements Serializable {
     public double scheduleToughness;    // Whether, on average, their opponents were stronger than their allies, or the other way around.
     // ie.: Are they seeded artificially high or artificially low by schedule luck?
 
-    public RepairTimeObject[] repairTimeObjects;
+    public List<TeamDataObject> repairTimeObjects;
     public double repair_time_percent;
     public double working_time_percent;
     // To get the total number of gearDeliveryData points, use repairTimeObjects.length

@@ -43,11 +43,6 @@ public class RepairTimeCollection extends AppCompatActivity {
         //Get list of teams
         List<String> teams = matchSchedule.getTeamNumsAtEvent();
 
-        // Create the fake list
-        teams = new ArrayList<String>();
-        teams.add("3242");
-        teams.add("5467");
-
         for(String team: teams) {
 
             View row = generateRow(team);

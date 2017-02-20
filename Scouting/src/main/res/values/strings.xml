@@ -66,4 +66,5 @@
     <string name="title_activity_new_teleop_scouting">NewTeleopScouting</string>
     <string name="title_activity_new_auto_scouting">NewAutoScouting</string>
     <string name="title_activity_pre_game">PreGameActivity</string>
+
 </resources>
