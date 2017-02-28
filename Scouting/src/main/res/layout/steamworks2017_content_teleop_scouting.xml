@@ -105,26 +105,8 @@
             android:layout_width="150dp"
             android:background="@android:color/white"
             android:textColor="@android:color/holo_purple"
-            android:layout_below="@+id/imageView2"
+            android:layout_below="@+id/gearImageView"
             android:layout_alignStart="@+id/gearPickupButton" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_gear"
-            android:id="@+id/imageView2"
-            android:layout_below="@+id/gearPickupButton"
-            android:layout_alignStart="@+id/ballPickupButton"
-            android:layout_marginTop="7dp" />
-
-        <TextView
-            android:text="0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView2"
-            android:layout_alignTop="@+id/imageView2"
-            android:layout_toEndOf="@+id/imageView2"
-            android:layout_marginTop="10dp" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -138,11 +120,30 @@
         <TextView
             android:text="0"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/numberBallsHolding"
-            android:layout_alignBaseline="@+id/textView2"
-            android:layout_alignBottom="@+id/textView2"
-            android:layout_toEndOf="@+id/startedClimbingButton" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/gearDeliveryButton"
+            android:layout_toEndOf="@+id/imageView3"
+            android:layout_marginTop="18dp" />
+
+        <Button
+            android:text="FAIL"
+            android:layout_height="45dp"
+            android:layout_above="@+id/ballPickupButton"
+            android:id="@+id/gearFailButton"
+            android:layout_toEndOf="@+id/gearImageView"
+            android:layout_width="53dp"
+            android:background="@android:color/white"
+            android:textColor="@android:color/holo_purple"
+            tools:visibility="invisible" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_gear"
+            android:id="@+id/gearImageView"
+            android:layout_below="@+id/gearPickupButton"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:text="BALLS"
@@ -151,8 +152,8 @@
             android:id="@+id/ballTextView"
             android:textAppearance="@android:style/TextAppearance.Large"
             android:textColor="@android:color/holo_purple"
-            android:layout_below="@+id/gearDeliveryButton"
-            android:layout_alignStart="@+id/startedClimbingButton" />
+            android:layout_alignTop="@+id/gearFailButton"
+            android:layout_alignStart="@+id/gearsTextView" />
 
     </RelativeLayout>
 </ScrollView>

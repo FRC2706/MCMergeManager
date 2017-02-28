@@ -22,6 +22,7 @@ public class GearDeliveryFragment extends DialogFragment {
     private FragmentListener listener;
     private GearDelivevryEvent gearDelivevryEvent = new GearDelivevryEvent();
     public Bundle gearDeliveryData = new Bundle();
+    public boolean gearDropped;
 
     public GearDeliveryFragment() {
         // Empty constructor is required for DialogFragment
@@ -29,12 +30,13 @@ public class GearDeliveryFragment extends DialogFragment {
         // Use `newInstance` instead as shown below
     }
 
-    public static GearDeliveryFragment newInstance(String title, FragmentListener listener) {
+    public static GearDeliveryFragment newInstance(String title, FragmentListener listener, boolean gearDropped) {
         GearDeliveryFragment frag = new GearDeliveryFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
         frag.setArguments(args);
         frag.listener = listener;
+        frag.gearDropped = gearDropped;
         return frag;
     }
 
@@ -104,6 +106,7 @@ public class GearDeliveryFragment extends DialogFragment {
                     }
                 }
         );
+
     }
 
     @Override

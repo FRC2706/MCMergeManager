@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -71,7 +72,7 @@ public class PostGameClass extends AppCompatActivity {
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // Not used by anything, just need to override it in the thing
+                // Not used by anything, just need to override it in the thing.
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -89,14 +90,12 @@ public class PostGameClass extends AppCompatActivity {
                 defenseEvent.skill = timeDefending;
                 postGameObject.time_dead = timeDead;
 
-
-               // MatchData.Match match = new MatchData.Match();
-
-               // FileUtils.appendToMatchDataFile(match);
-
                 returnHome(view);
             }
         });
+
+        EditText notes = (EditText) findViewById(R.id.postGameNotes);
+        postGameObject.notes = notes.getText().toString();
     }
 
         public void returnHome(View view ){
@@ -109,7 +108,6 @@ public class PostGameClass extends AppCompatActivity {
             post.time_dead = timeDead;
             post.time_defending = timeDefending;
 
-            //PostGameObject post = new PostGameObject(woo, PostGameObject.ClimbType.SUCCESS, timeDead, timeDefending);
             Intent intent = new Intent(this,PreGameActivity.class);
 
             MatchData.Match match = new MatchData.Match(pre, post, t, a);

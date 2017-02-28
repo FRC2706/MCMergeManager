@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/climbingTimeSeekBar"
         android:layout_weight="0.04"
-        android:max="120"
+        android:max="24"
         android:progress="0" />
 
     <TextView

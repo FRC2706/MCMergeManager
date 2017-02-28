@@ -36,10 +36,19 @@
         android:text="All the balls were scored" />
 
     <Button
-        android:text="Submit"
+        android:text="low Boiler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ballScoringSubmit"
+        android:layout_weight="0.04"
+        android:background="@android:color/white"
+        android:textColor="@android:color/holo_purple"
+        android:id="@+id/lowGoalButton" />
+
+    <Button
+        android:text="HIgh boiler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/highGoalButton"
         android:layout_weight="0.04"
         android:background="@android:color/white"
         android:textColor="@android:color/holo_purple" />

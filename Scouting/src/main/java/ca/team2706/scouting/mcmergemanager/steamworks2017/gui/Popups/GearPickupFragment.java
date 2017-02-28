@@ -30,7 +30,7 @@ public class GearPickupFragment extends DialogFragment {
         // Use `newInstance` instead as shown below
     }
 
-    public static GearPickupFragment newInstance(String title, FragmentListener listener, int gearHeld) {
+    public static GearPickupFragment newInstance(String title, FragmentListener listener, boolean gearHeld) {
         GearPickupFragment frag = new GearPickupFragment();
         Bundle args = new Bundle();
         args.putString("title", title);

@@ -1,29 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/appBarLayout">
-
-        <android.support.v7.widget.Toolbar
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
 
     <SeekBar
         android:layout_height="wrap_content"
         android:id="@+id/timeDeadSeekBar"
         android:layout_width="500dp"
-        android:max="40"
+        android:max="24"
         android:progress="0"
         android:layout_marginTop="52dp"
         android:layout_below="@+id/textView13"
@@ -65,7 +50,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/time_defending_seekbar"
         android:layout_width="500dp"
-        android:max="40"
+        android:max="24"
         android:progress="0"
         android:layout_marginTop="12dp"
         android:layout_below="@+id/time_defending_text_view"
@@ -81,6 +66,24 @@
         android:layout_below="@+id/textView10"
         android:layout_alignStart="@+id/textView10" />
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/appBarLayout"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <android.support.v7.widget.Toolbar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
     <Button
         android:text="submit"
         android:layout_width="match_parent"
@@ -88,9 +91,22 @@
         android:id="@+id/post_game_submit_button"
         android:background="@android:color/white"
         android:textColor="@android:color/holo_purple"
-        android:layout_marginTop="8dp"
+        android:layout_alignTop="@+id/postGameNotes"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="73dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/postGameNotes"
+        tools:text="Notes..."
+        android:layout_marginTop="27dp"
         android:layout_below="@+id/timeDeadSeekBar"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="73dp" />
 
 
 </RelativeLayout>

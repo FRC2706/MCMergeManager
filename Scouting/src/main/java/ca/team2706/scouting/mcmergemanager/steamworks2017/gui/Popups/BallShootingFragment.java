@@ -106,10 +106,29 @@ public class BallShootingFragment extends DialogFragment{
             }
 
         });
-        view.findViewById(R.id.ballScoringSubmit).setOnClickListener(
+        view.findViewById(R.id.lowGoalButton).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        ballsScored.boiler = false;
+                        ballsScored.numScored = pointsScored;
+                        fuelShootingData.putSerializable(FUEL_SHOT_EVENT_STRING, ballsScored);
+                        listener.editNameDialogComplete(me, fuelShootingData);
+//                        teleopScoutingObject.add(ballsScored);
+
+                        Log.i(getClass().getName(), "quit");
+                        listener.editNameDialogCancel(me);
+
+
+                    }
+                }
+        );
+
+        view.findViewById(R.id.highGoalButton).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ballsScored.boiler = true;
                         ballsScored.numScored = pointsScored;
                         fuelShootingData.putSerializable(FUEL_SHOT_EVENT_STRING, ballsScored);
                         listener.editNameDialogComplete(me, fuelShootingData);
