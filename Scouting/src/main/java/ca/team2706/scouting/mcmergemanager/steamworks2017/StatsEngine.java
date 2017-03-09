@@ -629,34 +629,39 @@ public class StatsEngine implements Serializable{
 
                     // Since you can only hold one gear at a time, the logic for completing a cycle is _much_ simpler. Phew.
 
-
-                    inGearCycle = false;
-                    currGearCycle.endTime = gearDelivevryEvent.timestamp;
-                    double cycleTime = currGearCycle.endTime - currGearCycle.startTime;
-
-                    teamStatsReport.teleop_gearsDelivered_avgPerMatch++;
-                    teamStatsReport.teleop_gears_avgCycleTime += cycleTime;
-                    teamStatsReport.numGearCycles++;
-
-                    if (cycleTime > teamStatsReport.teleop_gears_maxCycleTime)
-                        teamStatsReport.teleop_gears_maxCycleTime = cycleTime;
-
-                    if (cycleTime < teamStatsReport.teleop_gears_minCycleTime)
-                        teamStatsReport.teleop_gears_minCycleTime = cycleTime;
-
-                    switch (gearDelivevryEvent.lift) {
-                        case FEEDER_SIDE:
-                            teamStatsReport.teleop_gearsScored_feederSide++;
-                            break;
-                        case CENTRE:
-                            teamStatsReport.teleop_gearsScored_centre++;
-                            break;
-                        case BOILER_SIDE:
-                            teamStatsReport.teleop_gearsScored_boilerSide++;
-                            break;
+                    if (gearDelivevryEvent.deliveryStatus == GearDelivevryEvent.GearDeliveryStatus.DROPPED_MOVING ||
+                            gearDelivevryEvent.deliveryStatus == GearDelivevryEvent.GearDeliveryStatus.DROPPED_DELIVERING) {
+                        teamStatsReport.teleop_gearsDropped_avgPerMatch++;
                     }
+                    else if (gearDelivevryEvent.deliveryStatus == GearDelivevryEvent.GearDeliveryStatus.DELIVERED) {
+                        inGearCycle = false;
+                        currGearCycle.endTime = gearDelivevryEvent.timestamp;
+                        double cycleTime = currGearCycle.endTime - currGearCycle.startTime;
 
-                    cyclesInThisMatch.cycles.add(currGearCycle.clone());
+                        teamStatsReport.teleop_gearsDelivered_avgPerMatch++;
+                        teamStatsReport.teleop_gears_avgCycleTime += cycleTime;
+                        teamStatsReport.numGearCycles++;
+
+                        if (cycleTime > teamStatsReport.teleop_gears_maxCycleTime)
+                            teamStatsReport.teleop_gears_maxCycleTime = cycleTime;
+
+                        if (cycleTime < teamStatsReport.teleop_gears_minCycleTime)
+                            teamStatsReport.teleop_gears_minCycleTime = cycleTime;
+
+                        switch (gearDelivevryEvent.lift) {
+                            case FEEDER_SIDE:
+                                teamStatsReport.teleop_gearsScored_feederSide++;
+                                break;
+                            case CENTRE:
+                                teamStatsReport.teleop_gearsScored_centre++;
+                                break;
+                            case BOILER_SIDE:
+                                teamStatsReport.teleop_gearsScored_boilerSide++;
+                                break;
+                        }
+
+                        cyclesInThisMatch.cycles.add(currGearCycle.clone());
+                    }
                 }
 
                 else if (event instanceof DefenseEvent) {

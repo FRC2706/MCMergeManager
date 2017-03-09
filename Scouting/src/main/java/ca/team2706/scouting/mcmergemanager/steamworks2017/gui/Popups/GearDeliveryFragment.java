@@ -65,6 +65,7 @@ public class GearDeliveryFragment extends DialogFragment {
                     @Override
                     public void onClick(View v) {
                         gearDelivevryEvent.lift = GearDelivevryEvent.Lift.BOILER_SIDE;
+                        gearDelivevryEvent.deliveryStatus = GearDelivevryEvent.GearDeliveryStatus.DELIVERED;
 
                         gearDeliveryData.putSerializable(GEAR_DELIVERY_EVENT_STRING, gearDelivevryEvent);
                         listener.editNameDialogComplete(me, gearDeliveryData);
@@ -80,6 +81,7 @@ public class GearDeliveryFragment extends DialogFragment {
                     @Override
                     public void onClick(View v) {
                         gearDelivevryEvent.lift = GearDelivevryEvent.Lift.CENTRE;
+                        gearDelivevryEvent.deliveryStatus = GearDelivevryEvent.GearDeliveryStatus.DELIVERED;
 
                         gearDeliveryData.putSerializable(GEAR_DELIVERY_EVENT_STRING, gearDelivevryEvent);
                         // this is the gearDeliveryData we want to hand back to the activity
@@ -96,13 +98,13 @@ public class GearDeliveryFragment extends DialogFragment {
                     @Override
                     public void onClick(View v) {
                         gearDelivevryEvent.lift = GearDelivevryEvent.Lift.FEEDER_SIDE;
+                        gearDelivevryEvent.deliveryStatus = GearDelivevryEvent.GearDeliveryStatus.DELIVERED;
 
                         gearDeliveryData.putSerializable(GEAR_DELIVERY_EVENT_STRING, gearDelivevryEvent);
                         listener.editNameDialogComplete(me, gearDeliveryData);
 
                         Log.i(getClass().getName(), "quit");
                         listener.editNameDialogCancel(me);
-
                     }
                 }
         );

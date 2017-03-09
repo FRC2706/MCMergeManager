@@ -1,5 +1,6 @@
 package ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects;
 
+
 /**
  * Created by dwall on 23/01/17.
  */
@@ -22,11 +23,13 @@ public class GearDelivevryEvent extends Event {
 
 
     public GearDelivevryEvent(){
-
+        deliveryStatus = GearDeliveryStatus.DELIVERED;
+        lift = Lift.NONE;
     }
 
-    public GearDelivevryEvent(double timestamp, Lift lift) {
+    public GearDelivevryEvent(double timestamp, Lift lift, GearDeliveryStatus deliveryStatus) {
         super(timestamp);
         this.lift = lift;
+        this.deliveryStatus = deliveryStatus;
     }
 }

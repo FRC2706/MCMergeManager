@@ -136,7 +136,6 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
     public static TeleopScoutingObject teleopScoutingObject;
     private PostGameObject postGameObject = new PostGameObject();
-    private GearDelivevryEvent gearDelivevryEvent = new GearDelivevryEvent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +183,11 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
         gearDrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GearDelivevryEvent gearDelivevryEvent = new GearDelivevryEvent();
+                gearDelivevryEvent.timestamp = 135 - remainTime;
                 gearDelivevryEvent.deliveryStatus = GearDelivevryEvent.GearDeliveryStatus.DROPPED_MOVING;
+                teleopScoutingObject.add(gearDelivevryEvent);
+
                 gearDropped = true;
                 gearHeld = false;
                 gearImage.setVisibility(View.INVISIBLE);

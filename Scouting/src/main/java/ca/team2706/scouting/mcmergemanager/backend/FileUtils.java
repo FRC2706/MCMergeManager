@@ -327,8 +327,6 @@ public class FileUtils {
             Toast.makeText(App.getContext(), "Warning: match data may be corrupted or malformed.", Toast.LENGTH_SHORT).show();
         }
 
-
-
         return matchData;
     }
 
