@@ -151,7 +151,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
         // This is so the gear image starts out invisible.
         final ImageView gearImage = (ImageView) findViewById(R.id.gearImageView);
         gearImage.setVisibility(View.INVISIBLE);
-
+  
 
         TextView numberBallsHolding = (TextView) findViewById(R.id.numberBallsHolding);
 

@@ -72,6 +72,13 @@ public class AutoScouting extends AppCompatActivity {
         else {
             autoScoutingObject2017.start_fuel = false;}
 
+        final CheckBox autoGearDeliveredCheckBox = (CheckBox) findViewById(R.id.autoGearDelivered);
+        if (autoGearDeliveredCheckBox.isChecked()) {
+            autoScoutingObject2017.gear_delivered = 2;
+        }
+        else {
+            autoScoutingObject2017.gear_delivered = 0;}
+
         Intent intent = new Intent(this, TeleopScouting.class);
         intent.putExtra("PreGameData", getIntent().getSerializableExtra("PreGameData"));
         intent.putExtra("AutoScoutingData", autoScoutingObject2017);
