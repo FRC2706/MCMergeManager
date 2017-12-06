@@ -12,14 +12,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -66,41 +64,6 @@ public class BlueAllianceUtilsV3 {
         return sPermissionsChecked;
     }
 
-
-    public static void fetchMatchScheduleAndResults(final DataRequester dataRequester) {
-        // check if we have internet connectivity
-        ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (activeNetwork == null) { // not connected to the internet
-            return;
-        }
-
-        new Thread() {
-            public void run() {
-                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-                String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
-
-                Request request = new Request.Builder()
-                        .url(BASEURL + "event/" + TBA_event + "/matches")
-                        .header("X-TBA-Auth-Key", AUTHKEY)
-                        .build();
-                MatchSchedule schedule;
-
-                try {
-                    Response response = client.newCall(request).execute();
-
-                    schedule = MatchSchedule.newFromJsonSchedule(response.body().string());
-                } catch(IOException e) {
-                    Log.d("Error match scedule", e.toString());
-                    return;
-                }
-
-                System.out.println(schedule.toString());
-                dataRequester.updateMatchSchedule(schedule);
-            }
-        }.start();
-    }
-
     public static void fetchTeamsRegisteredAtEvent(final DataRequester requester) {
         // Check if device is connected to the internet
         ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -137,6 +100,41 @@ public class BlueAllianceUtilsV3 {
         }.start();
     }
 
+
+    public static void fetchMatchScheduleAndResults(final DataRequester dataRequester) {
+        // check if we have internet connectivity
+        ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork == null) { // not connected to the internet
+            return;
+        }
+
+        new Thread() {
+            public void run() {
+                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+                String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
+
+                Request request = new Request.Builder()
+                        .url(BASEURL + "event/" + TBA_event + "/matches")
+                        .header("X-TBA-Auth-Key", AUTHKEY)
+                        .build();
+                MatchSchedule schedule;
+
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    schedule = MatchSchedule.newFromJsonSchedule(response.body().string());
+                } catch(IOException e) {
+                    Log.d("Error match scedule", e.toString());
+                    return;
+                }
+
+                System.out.println(schedule.toString());
+                dataRequester.updateMatchSchedule(schedule);
+            }
+        }.start();
+    }
+
     public static void test() {
         new Thread() {
             public void run() {
@@ -162,4 +160,5 @@ public class BlueAllianceUtilsV3 {
             }
         }.start();
     }
+
 }

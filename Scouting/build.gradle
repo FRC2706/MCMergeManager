@@ -10,12 +10,15 @@ apply plugin: 'com.android.application'
 
 repositories {
     jcenter()
+    maven {
+        url 'https://maven.google.com/'
+        name 'Google'
+    }
 }
 
 android {
     compileSdkVersion 23
     buildToolsVersion '26.0.2'
-
     defaultConfig {
         applicationId "ca.team2706.scouting.mcmergemanager"
         minSdkVersion 21
