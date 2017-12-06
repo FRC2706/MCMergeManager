@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity
 
         if (sMatchSchedule != null) {
             // bundle the match gearDeliveryData into an intent
-            Intent intent = new Intent(this, MatchScheduleActivity.class);
+            Intent intent = new Intent(this, MatchScheduleActivity2.class);
             intent.putExtra(getResources().getString(R.string.EXTRA_MATCH_SCHEDULE), sMatchSchedule.toString());
             startActivity(intent);
         } else {
