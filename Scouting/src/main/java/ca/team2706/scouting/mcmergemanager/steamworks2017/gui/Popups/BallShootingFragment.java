@@ -142,7 +142,7 @@ public class BallShootingFragment extends DialogFragment{
                 }
         );
 
-        view.findViewById(R.id.ballFailButton).setOnClickListener(
+        view.findViewById(R.id.ballShootFail).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

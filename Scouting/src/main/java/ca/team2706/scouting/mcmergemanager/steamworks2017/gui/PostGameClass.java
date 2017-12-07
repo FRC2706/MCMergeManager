@@ -13,6 +13,7 @@ import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.gui.PreGameActivity;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.AutoScoutingObject;
+import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Comment;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.DefenseEvent;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.PostGameObject;
@@ -93,6 +94,8 @@ public class PostGameClass extends AppCompatActivity {
             }
         });
 
+        final Comment comment = new Comment();
+
         Button fab = (Button) findViewById(R.id.post_game_submit_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +104,7 @@ public class PostGameClass extends AppCompatActivity {
                 notesText = notes.getText().toString();
                 if (!notesText.equals(noEntry)) {
                     postGameObject.notes = notes.getText().toString();
-
+                    comment.setComment(notesText);
                 }
 
                 returnHome();
@@ -110,11 +113,14 @@ public class PostGameClass extends AppCompatActivity {
 
 
 
-        notesText = notes.getText().toString();
-        if (!notesText.equals(noEntry)) {
-            postGameObject.notes = notes.getText().toString();
 
-        }
+
+//        notesText = notes.getText().toString();
+//
+//        if (!notesText.equals(noEntry)) {
+//            postGameObject.notes = notes.getText().toString();
+//            comment.setComment(notesText);
+//        }
     }
 
         public void returnHome(){

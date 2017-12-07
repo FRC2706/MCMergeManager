@@ -38,6 +38,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
     public static final String GEAR_DELIVERY_EVENT_STRING = "FuelPickupEvent";
     public static final String FUEL_SHOT_EVENT_STRING = "FuelShotEvent";
 
+
     public void editNameDialogComplete(DialogFragment dialogFragment, Bundle data) {
 
 
@@ -122,6 +123,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
         }
 
     }
+
 
 
     private Handler m_handler;
@@ -231,7 +233,6 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
                 if (remainTime == 0) {
                     tvGameTime.setText("Game Over! Please Save and Return");
                     postGameObject.climbType = postGameObject.climbType.NO_CLIMB;
-
                 } else {
                     remainTime--;
                     int minuets = remainTime / 60;
@@ -241,7 +242,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
                         remainSecString = "0" + remainSec;
                     else
                         remainSecString = remainSec + "";
-
+// woo
                     tvGameTime.setText(minuets + ":" + remainSecString);
 
                     // set an alarm to run this again in 1 second

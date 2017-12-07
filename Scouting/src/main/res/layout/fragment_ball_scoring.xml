@@ -54,10 +54,11 @@
         android:textColor="@android:color/holo_purple" />
 
     <Button
-        android:text="FAIlure"
+
+        android:text="Miss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ballFailButton"
+        android:id="@+id/ballShootFail"
         android:layout_weight="0.04"
         android:background="@android:color/white"
         android:textColor="@android:color/holo_purple" />
