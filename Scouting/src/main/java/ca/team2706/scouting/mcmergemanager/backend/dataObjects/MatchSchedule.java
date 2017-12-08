@@ -65,7 +65,7 @@ public class MatchSchedule implements Serializable {
 
     public static MatchSchedule newFromJsonSchedule(String jsonSchedule) {
         MatchSchedule matchSchedule = new MatchSchedule();
-        matchSchedule.parseTBASchedule(jsonSchedule);
+        matchSchedule.initialParseTBASchedule(jsonSchedule);
         return matchSchedule;
     }
 
@@ -153,11 +153,15 @@ public class MatchSchedule implements Serializable {
         }
     }
 
-    private static JSONArray initialParseTBASchedule(String jsonSchedule) {
+    /*
+    Used when parsing the original file from TBA,
+    if you try using this after initial parse will fail
+     */
+    private void initialParseTBASchedule(String jsonSchedule) {
         if(jsonSchedule == null)
-            return new JSONArray();
+            return;
 
-        String matchSchedule = jsonSchedule;
+        matchScheduleJSONstr = jsonSchedule;
 
         JSONArray jsonArr;
         try {
@@ -170,10 +174,9 @@ public class MatchSchedule implements Serializable {
             boolean testEvent = eventName.equals(App.getContext().getResources().getString(R.string.TBA_TEST_EVENT));
 
             // loop over individual matches
-            for(int i = 0; i < (jsonArr.length( )); i++) {
-                JSONObject jsonMatch = jsonArr.getJSONObject(i);
-
-                Match match = new Match();
+            for(int i=0;i<(jsonArr.length( ));i++)
+            {
+                JSONObject jsonMatch=jsonArr.getJSONObject(i);
 
                 // I'm only interested in qualification matches
                 String comp_level = jsonMatch.getString("comp_level");
@@ -181,6 +184,7 @@ public class MatchSchedule implements Serializable {
                     continue;
                 }
 
+                Match match = new Match();
 
                 match.setMatchNo(jsonMatch.getInt("match_number"));
 
@@ -230,6 +234,7 @@ public class MatchSchedule implements Serializable {
             // something went wrong
             Log.e("MCMergeManager", "Failed to parse the match schedule from thebluealliance. Maybe the gearDeliveryData is not valid json?");
         }
+
     }
 
     private void parseTBASchedule(String jsonSchedule) {
@@ -259,57 +264,11 @@ public class MatchSchedule implements Serializable {
                 match.blue1 = Integer.parseInt(s[1]);
                 match.blue2 = Integer.parseInt(s[2]);
                 match.blue3 = Integer.parseInt(s[3]);
-                match.blueScore = Integer.parseInt(s[4]);
-                match.red1 = Integer.parseInt(s[5]);
-                match.red2 = Integer.parseInt(s[6]);
-                match.red3 = Integer.parseInt(s[7]);
+                match.blueScore = Integer.parseInt(s[7]);
+                match.red1 = Integer.parseInt(s[4]);
+                match.red2 = Integer.parseInt(s[5]);
+                match.red3 = Integer.parseInt(s[6]);
                 match.redScore = Integer.parseInt(s[8]);
-
-                // I'm only interested in qualification matches
-//                String comp_level = jsonMatch.getString("comp_level");
-//                if (!comp_level.equals("qm")) {
-//                    continue;
-//                }
-//
-//
-//                match.setMatchNo(jsonMatch.getInt("match_number"));
-//
-//                JSONObject jsonBlueAlliance = jsonMatch.getJSONObject("alliances").getJSONObject("blue");
-//                JSONObject jsonRedAlliance = jsonMatch.getJSONObject("alliances").getJSONObject("red");
-//
-//                try {
-//                    match.setBlueScore(jsonBlueAlliance.getInt("score"));
-//                    match.setRedScore(jsonRedAlliance.getInt("score"));
-//                } catch (Exception e) {
-//                    match.setBlueScore(-1);
-//                    match.setRedScore(-1);
-//                }
-//
-//                // Just for testing the Match Prediction, match #3 does not have a score
-//                // if we're in the test event from the previous year.
-//                if (testEvent && match.getMatchNo() == 3) {
-//                    match.setBlueScore(-1);
-//                    match.setRedScore(-1);
-//                }
-//
-//
-//                JSONArray blueTeams = jsonBlueAlliance.getJSONArray("team_keys");
-//                match.setBlue1(Integer.parseInt(blueTeams.getString(0).substring(3))); // TBA gives it to us as "frc2706", so skip the first 3 characters
-//                match.setBlue2(Integer.parseInt(blueTeams.getString(1).substring(3)));
-//                match.setBlue3(Integer.parseInt(blueTeams.getString(2).substring(3)));
-//
-//                JSONArray redTeams = jsonRedAlliance.getJSONArray("team_keys");
-//                match.setRed1(Integer.parseInt(redTeams.getString(0).substring(3)));
-//                match.setRed2(Integer.parseInt(redTeams.getString(1).substring(3)));
-//                match.setRed3(Integer.parseInt(redTeams.getString(2).substring(3)));
-//
-//
-//                // Fill in the list of teams at this event
-//                for(int teamNo : match.getTeamNos()) {
-//                    if (!teamListInt.contains(teamNo)) {
-//                        teamListInt.add(teamNo);
-//                    }
-//                }
 
                 matches.add(match);
             }

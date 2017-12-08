@@ -64,6 +64,7 @@ public class BlueAllianceUtilsV3 {
         return sPermissionsChecked;
     }
 
+    // Gets the list of all teams attending the event
     public static void fetchTeamsRegisteredAtEvent(final DataRequester requester) {
         // Check if device is connected to the internet
         ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -100,7 +101,7 @@ public class BlueAllianceUtilsV3 {
         }.start();
     }
 
-
+    // Used to get data to show the upcoming match schedules and the past matches with the score
     public static void fetchMatchScheduleAndResults(final DataRequester dataRequester) {
         // check if we have internet connectivity
         ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -115,7 +116,7 @@ public class BlueAllianceUtilsV3 {
                 String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
 
                 Request request = new Request.Builder()
-                        .url(BASEURL + "event/" + TBA_event + "/matches")
+                        .url(BASEURL + "event/" + TBA_event + "/matches/simple")
                         .header("X-TBA-Auth-Key", AUTHKEY)
                         .build();
                 MatchSchedule schedule;
@@ -131,32 +132,6 @@ public class BlueAllianceUtilsV3 {
 
                 System.out.println(schedule.toString());
                 dataRequester.updateMatchSchedule(schedule);
-            }
-        }.start();
-    }
-
-    public static void test() {
-        new Thread() {
-            public void run() {
-
-                OkHttpClient client = new OkHttpClient();
-
-                // Build the request for the file
-                Request request = new Request.Builder()
-                        .url(BASEURL + "/status")
-                        .header("X-TBA-Auth-Key", AUTHKEY)
-                        .build();
-
-                try {
-                    // Send request
-                    Response response = client.newCall(request).execute();
-
-                    System.out.println(response.body().string());
-
-                    response.close();
-                } catch(IOException e) {
-                    Log.d("Error getting tbaV3", e.toString());
-                }
             }
         }.start();
     }
