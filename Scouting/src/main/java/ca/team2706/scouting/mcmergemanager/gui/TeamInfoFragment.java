@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
+import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtilsV3;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Cycle;
@@ -68,30 +69,33 @@ public class TeamInfoFragment extends Fragment
 
             Runnable getStuff = new Runnable() {
                 public void run() {
-                    BlueAllianceUtils blueAllianceUtils = new BlueAllianceUtils(getActivity());
-                    textViewPerformanceString =  blueAllianceUtils.getBlueAllianceDataForTeam(m_teamNumber);
-                    Activity activity = getActivity();
-                    if(activity != null) {
-                        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-                        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                        if (activeNetwork != null) { // not connected to the internet
-                            nicknameString = BlueAllianceUtils.getBlueAllianceData("nickname", "https://www.thebluealliance.com/api/v2/team/frc" + m_teamNumber + "?X-TBA-App-Id=frc2706:mergemanager:v01/");
-                        }
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //stuff that updates ui
-                                TextView textViewPerformance = (TextView) m_view.findViewById(R.id.textViewPerformance);
-                                textViewPerformance.setText(textViewPerformanceString);
-
-                                TextView nicknameTV = (TextView) m_view.findViewById(R.id.nicknameTV);
-                                nicknameTV.setText(nicknameString);
-
-                            }
-                        });
-                    }
-
+                    textViewPerformanceString = BlueAllianceUtilsV3.getBlueAllianceDateForTeam(m_teamNumber);
                 }
+//                public void run() {
+//                    BlueAllianceUtils blueAllianceUtils = new BlueAllianceUtils(getActivity());
+//                    textViewPerformanceString =  blueAllianceUtils.getBlueAllianceDataForTeam(m_teamNumber);
+//                    Activity activity = getActivity();
+//                    if(activity != null) {
+//                        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+//                        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+//                        if (activeNetwork != null) { // not connected to the internet
+//                            nicknameString = BlueAllianceUtils.getBlueAllianceData("nickname", "https://www.thebluealliance.com/api/v2/team/frc" + m_teamNumber + "?X-TBA-App-Id=frc2706:mergemanager:v01/");
+//                        }
+//                        getActivity().runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                //stuff that updates ui
+//                                TextView textViewPerformance = (TextView) m_view.findViewById(R.id.textViewPerformance);
+//                                textViewPerformance.setText(textViewPerformanceString);
+//
+//                                TextView nicknameTV = (TextView) m_view.findViewById(R.id.nicknameTV);
+//                                nicknameTV.setText(nicknameString);
+//
+//                            }
+//                        });
+//                    }
+//
+//                }
             };
             Thread getStuffThread = new Thread(getStuff);
             getStuffThread.start();

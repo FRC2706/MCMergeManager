@@ -136,4 +136,29 @@ public class BlueAllianceUtilsV3 {
         }.start();
     }
 
+    public static String getBlueAllianceDateForTeam(int team_number) {
+        // check if we have internet connectivity
+        ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork == null) { // not connected to the internet
+            return null;
+        }
+
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
+
+        Request request = new Request.Builder()
+                .url(BASEURL + "team/" + team_number)
+                .header("X-TBA-Auth-Key", AUTHKEY)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+
+            return response.body().string();
+        } catch(IOException e) {
+            Log.d("OKKHTP error", e.toString());
+            return "";
+        }
+    }
 }
