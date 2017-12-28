@@ -22,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtilsV3;
@@ -70,6 +72,26 @@ public class TeamInfoFragment extends Fragment
             Runnable getStuff = new Runnable() {
                 public void run() {
                     textViewPerformanceString = BlueAllianceUtilsV3.getBlueAllianceDateForTeam(m_teamNumber);
+
+                    Activity activity = getActivity();
+                    if(activity != null) {
+                        // Get the nickname of the team
+                        if(BlueAllianceUtilsV3.checkInternetPermissions(activity)) {
+                            nicknameString = BlueAllianceUtilsV3.getBlueAllicanceData("nickname", "team/frc" + m_teamNumber);
+                        }
+
+                        // Update the ui text
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TextView textViewPerformance = (TextView) m_view.findViewById(R.id.textViewPerformance);
+                                textViewPerformance.setText(textViewPerformanceString);
+
+                                TextView nicknameTV = (TextView) m_view.findViewById(R.id.nicknameTV);
+                                nicknameTV.setText(nicknameString);
+                            }
+                        });
+                    }
                 }
 //                public void run() {
 //                    BlueAllianceUtils blueAllianceUtils = new BlueAllianceUtils(getActivity());

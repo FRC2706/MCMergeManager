@@ -12,6 +12,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import ca.team2706.scouting.mcmergemanager.R;
@@ -69,7 +73,7 @@ public class BlueAllianceUtilsV3 {
         // Check if device is connected to the internet
         ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if(activeNetwork == null)
+        if (activeNetwork == null)
             return;
 
         new Thread() {
@@ -90,7 +94,7 @@ public class BlueAllianceUtilsV3 {
                     schedule.addToListOfTeamsAtEvent(response.body().string());
 
                     response.close();
-                } catch(IOException e) {
+                } catch (IOException e) {
                     Log.d("Error getting teams: ", e.toString());
                     return;
                 }
@@ -125,7 +129,7 @@ public class BlueAllianceUtilsV3 {
                     Response response = client.newCall(request).execute();
 
                     schedule = MatchSchedule.newFromJsonSchedule(response.body().string());
-                } catch(IOException e) {
+                } catch (IOException e) {
                     Log.d("Error match scedule", e.toString());
                     return;
                 }
@@ -136,7 +140,37 @@ public class BlueAllianceUtilsV3 {
         }.start();
     }
 
+    // Returns a string of a piece of data
+    // key - is the key of the piece of data being looked for
+    // extraurl - the extra part of the string needed to get the response from server
+    public static String getBlueAllicanceData(String key, String extraUrl) {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
+
+        Request request = new Request.Builder()
+                .url(BASEURL + extraUrl)
+                .header("X-TBA-Auth-Key", AUTHKEY)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+
+            JSONObject json = new JSONObject(response.body().string());
+            return json.getString(key);
+        } catch (JSONException e) {
+            Log.d("Json error", e.toString());
+        } catch (IOException e) {
+            Log.d("okhttp error", e.toString());
+        }
+
+        return null;
+    }
+
+    // TODO: There must be an easier way to actually get this data, seems to inefficient to me
     public static String getBlueAllianceDateForTeam(int team_number) {
+        // Used to build the final string
+        StringBuilder sb = new StringBuilder();
+
         // check if we have internet connectivity
         ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -147,18 +181,54 @@ public class BlueAllianceUtilsV3 {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
         String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
 
+        // First get the keys of every event the team has been to
         Request request = new Request.Builder()
-                .url(BASEURL + "team/" + team_number)
+                .url(BASEURL + "team/frc" + team_number + "/events/keys")
                 .header("X-TBA-Auth-Key", AUTHKEY)
                 .build();
 
+        JSONArray keys;
         try {
-            Response response = client.newCall(request).execute();
+            Response responseKeys = client.newCall(request).execute();
 
-            return response.body().string();
-        } catch(IOException e) {
+            keys = new JSONArray(responseKeys.body().string());
+        } catch (IOException e) {
             Log.d("OKKHTP error", e.toString());
-            return "";
+            return "FAiled";
+        } catch (JSONException e) {
+            Log.d("Json errer", e.toString());
+            return "Failed";
         }
+
+        // Loop though every event and add data to string buidler
+        for (int i = 0; i < keys.length(); i++) {
+
+            try {
+                // Only look for events since 2012
+                if(keys.getString(i).charAt(2) != '1' || keys.getString(i).charAt(3) < '1')
+                    continue;
+
+                // Check if the event is in 2018
+                request = new Request.Builder()
+                        .url(BASEURL + "team/frc" + team_number + "/event/" + keys.getString(i) + "/status")
+                        .header("X-TBA-Auth-Key", AUTHKEY)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+
+                // Find the data in the
+                JSONObject json = new JSONObject(response.body().string());
+                JSONObject qualStats = json.getJSONObject("qual");
+                JSONObject ranking = qualStats.getJSONObject("ranking");
+
+                sb.append(ranking.getString("rank") + "/" + qualStats.getString("num_teams") + " - " + keys.getString(i) + "\n");
+            } catch(IOException e) {
+                Log.d("OKKHTP error", e.toString());
+            } catch(JSONException e) {
+                Log.d("JSON - probably-fine", e.toString());
+            }
+        }
+
+        return sb.toString();
     }
 }
