@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="Purple2706">#663399</color>
+    <color name="purple_pressed">#7942af</color>
     <color name="red_alliance">#ffff595d</color>
     <color name="blue_alliance">#ff668bea</color>
     <color name="neutral_alliance">#ffeae639</color>
@@ -10,4 +11,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFF</color>
     <color name="black">#000</color>
+    <color name="background">#e5e5e5</color>
 </resources>

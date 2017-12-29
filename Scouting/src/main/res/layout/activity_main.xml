@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"/>
 
 
-    <TextView
+    <!--<TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Syncing Data with :"
         android:id="@+id/sync_settings_tv"
         android:textColor="@color/white"
         android:background="@color/Purple2706"
-        android:textSize="@dimen/text_margin" />
+        android:textSize="@dimen/text_margin" />-->
 
     <FrameLayout
         android:orientation="vertical"
