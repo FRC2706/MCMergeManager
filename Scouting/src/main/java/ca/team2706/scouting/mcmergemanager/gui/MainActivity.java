@@ -30,6 +30,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.commons.net.ftp.FTPFile;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Console;
 import java.util.ArrayList;
@@ -44,10 +46,12 @@ import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
 import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.FTPRequester;
+import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Comment;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.CommentSingleton;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeamNumber;
@@ -243,15 +247,40 @@ public class MainActivity extends AppCompatActivity
         CommentSingleton commentSingleton = CommentSingleton.getInstance();
 
        set = commentSingleton.getTeamNumbers();
-        try {
-            set.add(teamNum);
 
-        } catch (Exception e){
-            Toast.makeText(context, e.getMessage(),
-                    Toast.LENGTH_LONG).show();
+       commentSingleton.addTeamNumber(teamNumber, set);
+
+        // Construct a JSONOBJ
+
+
+        // rip apart the JSON string, and stuff the data into this object
+
+
+
+        // For learning
+
+        String jsonStr = "{\"name\":\"Merge Robotics\",\"number\":2706,\"opr\":0,\"dpr\":0,\"comments\":[{\"body\":\"Test textoentuauht\"}, {\"body\":\"comment2\"}],\"pictures\":[]}";
+
+        // Parse it into a JSONObject
+
+        JSONObject jsonobj = new JSONObject();
+        JSONObject newJSon = new JSONObject();
+        try {
+            jsonobj = new JSONObject(jsonStr);
+        }catch (Exception e){
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
-        commentSingleton.addTeamNumber(teamNumber, set);
+        CommentList commentList = new CommentList(jsonobj);
+        try {
+            newJSon = commentList.getJson();
+            Log.d("JSon String: ", newJSon.toString());
+
+        } catch (JSONException e){
+            Log.d("JSON Error in getJson: ", e.getMessage());
+        }
+
+
 
     }
 
