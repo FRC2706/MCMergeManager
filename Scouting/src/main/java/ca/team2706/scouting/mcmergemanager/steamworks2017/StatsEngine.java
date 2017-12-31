@@ -268,7 +268,7 @@ public class StatsEngine implements Serializable{
      * Schedule toughness is a measure of your opponents' wins over your allies' wins.
      * A toughness of 1.0 is a neutral schedule.
      */
-    private double computeScheduleToughness(int teamNo) {
+    private double computeScheduleToughnessByWLT(int teamNo) {
         if (records == null)
             computeRecords();
 
@@ -309,16 +309,62 @@ public class StatsEngine implements Serializable{
         } catch (NullPointerException e) {
             //nothing
         }
-        if (alliesWins == 0) {
-            if (opponentsWins == 0)
-                return 1.0;
-            else
-                return Double.POSITIVE_INFINITY;
-        }
+        if (alliesWins == 0 || opponentsWins == 0)
+            return 1.0;
 
         return (((double) opponentsWins * 2) / (alliesWins * 3));
     }
 
+    /**
+     * Schedule toughness is a measure of your opponents' wins over your allies' wins.
+     * A toughness of 1.0 is a neutral schedule.
+     */
+    private double computeScheduleToughnessByOPR(int teamNo) {
+        if (OPRs == null)
+            computeOPRs();
+
+        double alliesOPRs = 0;
+        double opponentsOPRs = 0;
+
+        try {
+            for (MatchSchedule.Match match : matchSchedule.filterByTeam(teamNo).getMatches()) {
+                // am I blue or red?
+                if (match.getBlue1() == teamNo || match.getBlue2() == teamNo || match.getBlue3() == teamNo) {
+                    if (match.getBlue1() != teamNo)
+                        alliesOPRs += OPRs.get(match.getBlue1());
+
+                    if (match.getBlue2() != teamNo)
+                        alliesOPRs += OPRs.get(match.getBlue2());
+
+                    if (match.getBlue3() != teamNo)
+                        alliesOPRs += OPRs.get(match.getBlue3());
+
+                    opponentsOPRs += OPRs.get(match.getRed1());
+                    opponentsOPRs += OPRs.get(match.getRed2());
+                    opponentsOPRs += OPRs.get(match.getRed3());
+                } else {
+                    if (match.getRed1() != teamNo)
+                        alliesOPRs += OPRs.get(match.getRed1());
+
+                    if (match.getRed2() != teamNo)
+                        alliesOPRs += OPRs.get(match.getRed2());
+
+                    if (match.getRed3() != teamNo)
+                        alliesOPRs += OPRs.get(match.getRed3());
+
+                    opponentsOPRs += OPRs.get(match.getBlue1());
+                    opponentsOPRs += OPRs.get(match.getBlue2());
+                    opponentsOPRs += OPRs.get(match.getBlue3());
+                }
+            }
+        } catch (NullPointerException e) {
+            //nothing
+        }
+        if (alliesOPRs == 0 || opponentsOPRs == 0)
+            return 1.0;
+
+        return (opponentsOPRs * 2) / (alliesOPRs * 3);
+    }
 
     /**
      *
@@ -411,7 +457,8 @@ public class StatsEngine implements Serializable{
         if (DPRs.get(teamNo) != null)
             teamStatsReport.DPR = DPRs.get(teamNo);
 
-        teamStatsReport.scheduleToughness = computeScheduleToughness(teamNo);
+        teamStatsReport.scheduleToughnessByWLT = computeScheduleToughnessByWLT(teamNo);
+        teamStatsReport.scheduleToughnessByOPR = computeScheduleToughnessByOPR(teamNo);
 
         // Deal with RepairTimeObjects to see how much of the event teams spent
         // repairing their robot.
@@ -451,6 +498,8 @@ public class StatsEngine implements Serializable{
         if (matchData == null)
             throw new IllegalStateException("matchData is null");
 
+        teamStatsReport.climb_minTime = Double.MAX_VALUE;
+
         for(MatchData.Match match : teamStatsReport.teamMatchData.matches) {
 
             // Process all the events during this match in a big state machine.
@@ -467,6 +516,7 @@ public class StatsEngine implements Serializable{
 
             boolean inGearCycle=false;
             Cycle currGearCycle = new Cycle(Cycle.CycleType.GEAR);
+
 
             // Events in the list are already sorted in chronological order, so just loop over them!
             // loop over all events
@@ -689,6 +739,10 @@ public class StatsEngine implements Serializable{
                         teamStatsReport.climb_avgTime += match.postGameObject.climb_time;
                         climbCycle.success = true;
                         cyclesInThisMatch.cycles.add(climbCycle);
+
+                        if (match.postGameObject.climb_time < teamStatsReport.climb_minTime)
+                            teamStatsReport.climb_minTime = match.postGameObject.climb_time;
+
                         break;
                     case FAIL:
                         teamStatsReport.climbFailures++;
@@ -741,11 +795,15 @@ public class StatsEngine implements Serializable{
                 cyclesInThisMatch.cycles.add(currGearCycle);
             }
 
-            teamStatsReport.avgDeadness += match.postGameObject.time_dead;
+            if (match.postGameObject.time_dead > 0) {
+                teamStatsReport.avgDeadness += match.postGameObject.time_dead;
 
-            if(match.postGameObject.time_dead > teamStatsReport.highestDeadness)
-                teamStatsReport.highestDeadness = match.postGameObject.time_dead;
-
+                if (match.postGameObject.time_dead > teamStatsReport.highestDeadness)
+                    teamStatsReport.highestDeadness = match.postGameObject.time_dead;
+            }
+            else {
+                teamStatsReport.numMatchesNoDeadness++;
+            }
 
             teamStatsReport.avgTimeSpentPlayingDef += match.postGameObject.time_defending;
 
@@ -854,7 +912,8 @@ public class StatsEngine implements Serializable{
                 teamStatsReport.favouritePickupLocation = "(trying to be PC?)";
             }
 
-
+            if(teamStatsReport.climb_minTime == Double.MAX_VALUE)
+                teamStatsReport.climb_minTime = 0;
 
         } // end averages
 
