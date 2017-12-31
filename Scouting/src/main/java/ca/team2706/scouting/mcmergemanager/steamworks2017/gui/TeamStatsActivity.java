@@ -55,10 +55,16 @@ public class TeamStatsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.OPRtv)).setText(String.format("OPR: %.2f", m_teamStatsReport.OPR));
         ((TextView) findViewById(R.id.DPRtv)).setText( String.format("DPR: %.2f", m_teamStatsReport.DPR) );
 
-        if (m_teamStatsReport.scheduleToughness < 1.0)
-            ((TextView) findViewById(R.id.schedToughnessTV)).setText( String.format("Schedule Toughness: %.2f (easy)", m_teamStatsReport.scheduleToughness) );
+        if (m_teamStatsReport.scheduleToughnessByWLT < 1.0)
+            ((TextView) findViewById(R.id.schedToughnessWltTV)).setText( String.format("Schedule Toughness (by WLT): %.2f (easy)", m_teamStatsReport.scheduleToughnessByWLT) );
         else
-            ((TextView) findViewById(R.id.schedToughnessTV)).setText( String.format("Schedule Toughness: %.2f (hard)", m_teamStatsReport.scheduleToughness) );
+            ((TextView) findViewById(R.id.schedToughnessWltTV)).setText( String.format("Schedule Toughness (by WLT): %.2f (hard)", m_teamStatsReport.scheduleToughnessByWLT) );
+
+        if (m_teamStatsReport.scheduleToughnessByOPR < 1.0)
+            ((TextView) findViewById(R.id.schedToughnessOprTV)).setText( String.format("Schedule Toughness (by OPR): %.2f (easy)", m_teamStatsReport.scheduleToughnessByOPR) );
+        else
+            ((TextView) findViewById(R.id.schedToughnessOprTV)).setText( String.format("Schedule Toughness (by OPR): %.2f (hard)", m_teamStatsReport.scheduleToughnessByOPR) );
+
 
         CheckBox badManners = (CheckBox) findViewById(R.id.badManners);
         badManners.setChecked(m_teamStatsReport.badManners);
@@ -137,11 +143,14 @@ public class TeamStatsActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.teleopTimePlayingDTV)).setText(String.format("\t%.1f s",
                                                                             m_teamStatsReport.avgTimeSpentPlayingDef) );
 
-            ((TextView) findViewById(R.id.avgDeadnessTV)).setText(String.format("%.2f%%",
+            ((TextView) findViewById(R.id.avgDeadnessTV)).setText(String.format("%.2f s",
                                                                             m_teamStatsReport.avgDeadness) );
 
-            ((TextView) findViewById(R.id.highestDeadnessTV)).setText(String.format("\t%.2f%%",
+            ((TextView) findViewById(R.id.highestDeadnessTV)).setText(String.format("%.2f s",
                                                                             m_teamStatsReport.highestDeadness) );
+
+            ((TextView) findViewById(R.id.numDeadnessMatchesTV)).setText(String.format("%d",
+                    m_teamStatsReport.numMatchesNoDeadness) );
 
             ((TextView) findViewById(R.id.climbsTV)).setText(String.format("%d / %d (%.2f)",
                                                                             m_teamStatsReport.climbSuccesses,
@@ -150,6 +159,9 @@ public class TeamStatsActivity extends AppCompatActivity {
 
             ((TextView) findViewById(R.id.climbTimeTV)).setText(String.format("\t%.1f s",
                                                                             m_teamStatsReport.climb_avgTime) );
+
+            ((TextView) findViewById(R.id.minClimbTimeTV)).setText(String.format("\t%.1f s",
+                    m_teamStatsReport.climb_minTime) );
 
             ((TextView) findViewById(R.id.failedClimbsTV)).setText(String.format("%d / %d (%.2f)",
                                                                             m_teamStatsReport.climbFailures,

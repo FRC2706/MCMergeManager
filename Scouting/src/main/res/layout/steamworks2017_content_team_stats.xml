@@ -63,8 +63,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Schedule Toughness: 1.0"
-            android:id="@+id/schedToughnessTV" />
+            android:text="Schedule Toughness (by WLT): 1.0"
+            android:id="@+id/schedToughnessWltTV" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Schedule Toughness (by OPR): 1.0"
+            android:id="@+id/schedToughnessOprTV" />
 
         <CheckBox
             android:text="Bad Manners"
@@ -322,7 +329,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Successful Climbs:  "
+                android:text="Matches with no\n\tdeadness:  "
+                android:id="@+id/textView39"
+                android:layout_row="14"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/numDeadnessMatchesTV"
+                android:layout_row="14"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Successful Climbs: "
                 android:id="@+id/climbs"
                 android:layout_row="16"
                 android:layout_column="0" />
@@ -358,9 +383,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="    Fastest: "
+                android:id="@+id/minClimbTime"
+                android:layout_row="18"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0 s"
+                android:id="@+id/minClimbTimeTV"
+                android:layout_row="18"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="    Failed: "
                 android:id="@+id/failedClimbs"
-                android:layout_row="18"
+                android:layout_row="19"
                 android:layout_column="0" />
 
             <TextView
@@ -369,7 +412,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0 / 0 (0)"
                 android:id="@+id/failedClimbsTV"
-                android:layout_row="18"
+                android:layout_row="19"
                 android:layout_column="1" />
 
 

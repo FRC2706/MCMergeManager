@@ -20,8 +20,9 @@ public class TeamStatsReport implements Serializable {
     public double DPR;  // Defensive Power Rating, a standard stat in FRC
     // could also include CCWM, and PMR, see http://www.chiefdelphi.com/media/papers/2174
 
-    public double scheduleToughness;    // Whether, on average, their opponents were stronger than their allies, or the other way around.
-    // ie.: Are they seeded artificially high or artificially low by schedule luck?
+    public double scheduleToughnessByWLT;    // Whether, on average, their opponents were stronger than their allies, or the other way around.
+                                             // ie.: Are they seeded artificially high or artificially low by schedule luck?
+    public double scheduleToughnessByOPR;
 
     public List<TeamDataObject> repairTimeObjects;
     public double repair_time_percent;
@@ -117,6 +118,7 @@ public class TeamStatsReport implements Serializable {
     // Defense and deadness
     public double avgTimeSpentPlayingDef;
     public double avgDeadness;      // an int representing % of match spent wich mech problems
+    public int numMatchesNoDeadness;
     public double highestDeadness;  // the highest % deadness in a single match.
 
 
@@ -125,6 +127,7 @@ public class TeamStatsReport implements Serializable {
     public int      climbFailures;
     public int      climbAttepmts;
     public double   climb_avgTime;
+    public double   climb_minTime;  // Their single, fastest climb
 
 
     public String notes = "";
