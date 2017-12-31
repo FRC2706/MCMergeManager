@@ -9,38 +9,40 @@ import android.widget.EditText;
 
 import ca.team2706.scouting.mcmergemanager.R;
 
-public class GetTeamNumberDialog {
+/**
+ * Created by Merge on 2017-11-15.
+ * Mostly copied over from GetTeamNumberDialog.java
+ */
+
+public class CommentTextEditor {
     private Activity launchActivity;
     private EditText editText;
-
     private String title;
     private String inputHint;
-    private int inputType;
-
+    private String inputResult;
     public boolean accepted = false;
     public boolean canceled = false;
-    public String inputResult = "-1";
 
-    public GetTeamNumberDialog(String title, String inputHint, int inputType, Activity launchActivity) {
+    public CommentTextEditor(String title, String inputHint, Activity launchActivity) {
         this.title = title;
         this.inputHint = inputHint;
-        this.inputType = inputType;
         this.launchActivity = launchActivity;
     }
 
-    public int getTeamNumber() {
-        return Integer.parseInt(inputResult);
+    public String getComment(){
+        return inputHint;
     }
 
     public void displayAlertDialog() {
         LayoutInflater inflater = launchActivity.getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.layout_custom_dialog, null);
+        View alertLayout = inflater.inflate(R.layout.layout_write_comment, null);
         AlertDialog.Builder alert = new AlertDialog.Builder(launchActivity);
 
         alert.setTitle(title);
         alert.setView(alertLayout);
         alert.setCancelable(false);
 
+        //this stuff gets the edittext from the view and sets the hint and the inputtype
         editText =  (EditText) alertLayout.findViewById(R.id.inputHint);
         editText.setHint(inputHint);
 
@@ -63,6 +65,7 @@ public class GetTeamNumberDialog {
         AlertDialog dialog = alert.create();
         dialog.show();
     }
-
 }
+
+
 
