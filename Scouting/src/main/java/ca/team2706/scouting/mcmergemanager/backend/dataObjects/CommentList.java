@@ -52,7 +52,7 @@ public class CommentList {
      *  Create new comment list for @param teamNumber
      */
 
-    public void CommentList(int teamNumber) {
+    public CommentList(int teamNumber) {
         this.teamNumber = teamNumber;
         this.comments = new ArrayList<>();
     }
