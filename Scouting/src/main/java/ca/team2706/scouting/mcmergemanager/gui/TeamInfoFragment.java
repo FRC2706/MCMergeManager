@@ -5,8 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.app.Fragment;
@@ -18,18 +16,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
-import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtilsV3;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Cycle;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeamStatsReport;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeamStatsActivity;
 
@@ -71,13 +64,13 @@ public class TeamInfoFragment extends Fragment
 
             Runnable getStuff = new Runnable() {
                 public void run() {
-                    textViewPerformanceString = BlueAllianceUtilsV3.getBlueAllianceDateForTeam(m_teamNumber);
+                    textViewPerformanceString = BlueAllianceUtils.getBlueAllianceDateForTeam(m_teamNumber);
 
                     Activity activity = getActivity();
-                    if(activity != null) {
+                    if (activity != null) {
                         // Get the nickname of the team
-                        if(BlueAllianceUtilsV3.checkInternetPermissions(activity)) {
-                            nicknameString = BlueAllianceUtilsV3.getBlueAllicanceData("nickname", "team/frc" + m_teamNumber);
+                        if (BlueAllianceUtils.checkInternetPermissions(activity)) {
+                            nicknameString = BlueAllianceUtils.getBlueAllicanceData("nickname", "team/frc" + m_teamNumber);
                         }
 
                         // Update the ui text
@@ -93,31 +86,6 @@ public class TeamInfoFragment extends Fragment
                         });
                     }
                 }
-//                public void run() {
-//                    BlueAllianceUtils blueAllianceUtils = new BlueAllianceUtils(getActivity());
-//                    textViewPerformanceString =  blueAllianceUtils.getBlueAllianceDataForTeam(m_teamNumber);
-//                    Activity activity = getActivity();
-//                    if(activity != null) {
-//                        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-//                        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-//                        if (activeNetwork != null) { // not connected to the internet
-//                            nicknameString = BlueAllianceUtils.getBlueAllianceData("nickname", "https://www.thebluealliance.com/api/v2/team/frc" + m_teamNumber + "?X-TBA-App-Id=frc2706:mergemanager:v01/");
-//                        }
-//                        getActivity().runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                //stuff that updates ui
-//                                TextView textViewPerformance = (TextView) m_view.findViewById(R.id.textViewPerformance);
-//                                textViewPerformance.setText(textViewPerformanceString);
-//
-//                                TextView nicknameTV = (TextView) m_view.findViewById(R.id.nicknameTV);
-//                                nicknameTV.setText(nicknameString);
-//
-//                            }
-//                        });
-//                    }
-//
-//                }
             };
             Thread getStuffThread = new Thread(getStuff);
             getStuffThread.start();
@@ -154,77 +122,6 @@ public class TeamInfoFragment extends Fragment
                 }
             });
 
-        }
-        if(args.getBoolean("accepted")) {
-
-            Toast.makeText(getActivity(),"Downloading... Please Wait",Toast.LENGTH_LONG).show();
-
-            LayoutInflater myinflater = getActivity().getLayoutInflater();
-            View alertLayout = myinflater.inflate(R.layout.progressbar, null);
-            alert = new AlertDialog.Builder(getActivity());
-            alert.setTitle("Downloading...");
-            alert.setView(alertLayout);
-            alert.setCancelable(false);
-            final AlertDialog dialog = alert.create();
-            dialog.show();
-            final ProgressBar progress = (ProgressBar) alertLayout.findViewById(R.id.progressBar);
-            final TextView team = (TextView) alertLayout.findViewById(R.id.textViewTeam);
-            progress.setMax(100);
-            progress.setProgress(0);
-
-
-            Runnable downloadStuff = new Runnable() {
-                public void run() {
-                    BlueAllianceUtils blueAllianceUtils = new BlueAllianceUtils(getActivity());
-                    for(int i = 0; i < 3; i++)
-                        switch(i) {
-
-                            case 0:
-                                getActivity().runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        team.setText("2015");
-                                    }
-                                });
-
-                                blueAllianceUtils.downloadBlueAllianceDataForEvent(args.getString("inputResult"), args.getString("selectedYear"), progress, dialog, 2015);
-
-                                break;
-                            case 1:
-                                getActivity().runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        team.setText("2014");
-                                        progress.setProgress(0);
-                                    }
-                                });
-                                blueAllianceUtils.downloadBlueAllianceDataForEvent(args.getString("inputResult"), args.getString("selectedYear"), progress,dialog,2014);
-
-                                break;
-                            case 2:
-                                getActivity().runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        team.setText("2013");
-                                        progress.setProgress(0);
-                                    }
-                                });
-
-                                blueAllianceUtils.downloadBlueAllianceDataForEvent(args.getString("inputResult"), args.getString("selectedYear"), progress, dialog,2013);
-
-
-                                getActivity().runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        dialog.dismiss();
-                                    }
-                                });
-
-
-                                break;
-                        }
-
-                }
-            };
-            Thread downloadStuffThread = new Thread(downloadStuff);
-            downloadStuffThread.start();
-            args.putBoolean("accepted", false);
         }
 
 

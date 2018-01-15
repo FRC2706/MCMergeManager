@@ -29,10 +29,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import org.apache.commons.net.ftp.FTPFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -41,7 +39,6 @@ import java.util.TimerTask;
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.App;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
-import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtilsV3;
 import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
@@ -104,11 +101,9 @@ public class MainActivity extends AppCompatActivity
         updateDataSyncLabel();
 
         // fetch the match gearDeliveryData from TheBlueAlliance to update the scores.
-        // TODO: replace with tba v3
-        BlueAllianceUtilsV3.checkInternetPermissions(this);
-//        BlueAllianceUtils.fetchTeamsRegisteredAtEvent(this);
-        BlueAllianceUtilsV3.fetchTeamsRegisteredAtEvent(this);
-        BlueAllianceUtilsV3.fetchMatchScheduleAndResults(this);
+        BlueAllianceUtils.checkInternetPermissions(this);
+        BlueAllianceUtils.fetchTeamsRegisteredAtEvent(this);
+        BlueAllianceUtils.fetchMatchScheduleAndResults(this);
 
         // Make sure all files are there, and visible to the USB Media Scanner.
         FileUtils.checkLocalFileStructure(this);
