@@ -27,6 +27,18 @@
         <item>2014</item>
     </string-array>
 
+    <string-array name="climb_type">
+        <item>Round bar</item>
+        <item>Square bar</item>
+        <item>Used ramp</item>
+        <item>Assisted</item>
+        <item>Only platform</item>
+        <item>Didn't try</item>
+        <item>Failed attempt</item>
+    </string-array>
+
+
+
     <!-- EXTRAS -->
     <string name="EXTRA_TEAM_NO">ca.team2706.scouting.teamNo</string>
     <string name="EXTRA_MATCH_NO">ca.team2706.scouting.matchno</string>
