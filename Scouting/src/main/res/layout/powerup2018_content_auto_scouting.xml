@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/no_auto_checkbox"
         android:layout_below="@+id/no_auto_checkbox"
-        android:layout_marginTop="54dp"
+        android:layout_marginTop="27dp"
         android:text="Auto Malfunction"
         android:textSize="20sp" />
 
@@ -69,9 +69,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/auto_malfunction_checkbox"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="37dp"
         android:text="Go to teleop"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/auto_comment"
