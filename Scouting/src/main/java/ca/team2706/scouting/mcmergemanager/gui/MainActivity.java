@@ -210,6 +210,28 @@ public class MainActivity extends AppCompatActivity
         (new Timer()).schedule(new CheckSchedulePopupHasExited(), 250);
     }
 
+
+    int teamNumber;
+    String comment;
+    public CommentTextEditor commentTextEditor;
+    public void onWriteCommentButtonClick (View v) {
+
+        // Get the comment
+        commentTextEditor = new CommentTextEditor("Write your comment.", "Comment", this);
+        commentTextEditor.displayAlertDialog();
+
+        // Get the team number (After for lazy layout reasons)
+        enterATeamNumberPopup = new GetTeamNumberDialog("Team Number", "Team Number", 1, this);
+        enterATeamNumberPopup.displayAlertDialog();
+
+
+        // Assign the team number and get the comment
+        teamNumber = enterATeamNumberPopup.getTeamNumber();
+        comment = commentTextEditor.getComment();
+
+        // TODO To add saving with commentList
+    }
+
     public void onRepairTimeRecordClicked(View view) {
         Intent intent = new Intent(this, RepairTimeCollection.class);
         intent.putExtra(getResources().getString(R.string.EXTRA_MATCH_SCHEDULE), sMatchSchedule.toString());
@@ -404,6 +426,8 @@ public class MainActivity extends AppCompatActivity
         FileUtils.checkLocalFileStructure(this);
         FileUtils.syncFiles(this);
     }
+
+
 
 
 }
