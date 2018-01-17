@@ -39,7 +39,6 @@ public class TeamInfoTab extends Fragment {
 
         view = inflater.inflate(R.layout.team_info_tab, container, false);
 
-        bindImageButton();
         bindSearchBoxAndButton();
 
         // So, uhh, this is hacky as shit, but lets MainActivity call us when the teams list at this event
@@ -60,105 +59,6 @@ public class TeamInfoTab extends Fragment {
     public View edit;
     public AlertDialog.Builder alert;
 
-
-    public void bindImageButton() {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        ImageButton button = (ImageButton) view.findViewById(R.id.imageButton);
-
-        button.setOnClickListener(new View.OnClickListener() {
-
-
-            @Override
-
-            public void onClick(View view) {
-
-                LayoutInflater inflater = getActivity().getLayoutInflater();
-                View alertLayout = inflater.inflate(R.layout.layout_download_alert, null);
-                alert = new AlertDialog.Builder(getActivity());
-                Log.e("this far", "so close");
-                alert.setTitle("Download Competition");
-                alert.setView(alertLayout);
-                alert.setCancelable(false);
-                final Bundle args = new Bundle();
-                Spinner spinner = (Spinner) alertLayout.findViewById(R.id.year_spinner);
-
-                // Create an ArrayAdapter using the string array and a default spinner layout
-                int selectedCurrent = spinner.getSelectedItemPosition();
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                        R.array.year_array, android.R.layout.simple_spinner_item);
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        switch (position) {
-                            case 0:
-                                args.putString("selectedYear", "2016");
-                                break;
-                            case 1:
-                                args.putString("selectedYear", "2015");
-                                break;
-                            case 2:
-                                args.putString("selectedYear", "2014");
-                                break;
-                            case 3:
-                                args.putString("selectedYear", "2013");
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                    }
-                });
-
-                // Specify the layout to use when the list of choices appears
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                // Apply the adapter to the spinner
-                spinner.setAdapter(adapter);
-                //this stuff gets the edittext from the view and sets the hint and the inputtype
-                edit = alertLayout.findViewById(R.id.inputHint);
-                if (edit instanceof EditText) {
-                    editText = (EditText) edit;
-                    editText.setHint("Competition ID - See Help for more");
-
-                }
-
-
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        canceled = true;
-                    }
-                });
-
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                accepted = true;
-                                Log.e("accepted", "" + accepted);
-                                inputResult = editText.getText().toString();
-                                TeamInfoFragment fragment1 = new TeamInfoFragment();
-
-                                args.putString("inputResult", inputResult);
-                                args.putBoolean("accepted", accepted);
-                                fragment1.setArguments(args);
-
-                                // Add the fragment to the 'fragment_container' FrameLayout
-                                getActivity().getFragmentManager().beginTransaction()
-                                        .replace(R.id.fragment_container, fragment1).commit();
-                            }
-                        }
-                );
-                AlertDialog dialog = alert.create();
-                dialog.show();
-            }
-
-
-        });
-    }
 
     public void bindSearchBoxAndButton() {
 
