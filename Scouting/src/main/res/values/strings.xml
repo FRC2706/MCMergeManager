@@ -37,7 +37,19 @@
         <item>Failed attempt</item>
     </string-array>
 
+    <string-array name="cube_pickup_from">
+        <item>Pile (pyramid)</item>
+        <item>Portal</item>
+        <item>Exchange</item>
+        <item>Ground</item>
+    </string-array>
 
+    <string-array name="cube_delivery">
+        <item>Switch</item>
+        <item>Scale</item>
+        <item>Exchange</item>
+        <item>Dropped it</item>
+    </string-array>
 
     <!-- EXTRAS -->
     <string name="EXTRA_TEAM_NO">ca.team2706.scouting.teamNo</string>
