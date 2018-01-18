@@ -20,6 +20,10 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 import ca.team2706.scouting.mcmergemanager.R;
@@ -40,10 +44,18 @@ import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
-    @Override
+    private static JSONArray eventKeys;
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+
+        try {
+            eventKeys = new JSONArray(FileUtils.readFile(FileUtils.EVENT_KEYS_FILENAME, this));
+        } catch(JSONException e) {
+            Log.d("Error parsing file", e.toString());
+        }
     }
 
 
@@ -174,6 +186,40 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 || TeamSettingsPreferenceFragment.class.getName().equals(fragmentName);
     }
 
+    // Returns the list of the events
+    private static CharSequence[] getEvents(JSONArray arr) {
+        // The length of the charsequence array should be the same as the length of the json array
+        CharSequence[] events = new CharSequence[arr.length()];
+
+        try {
+            for (int i = 0; i < arr.length(); i++) {
+                events[i] = arr.getJSONObject(i).getString("name");
+            }
+        } catch(JSONException e) {
+            Log.d("Error parsing json", e.toString());
+            return null;
+        }
+
+        return events;
+    }
+
+    // Returns the list of the keys
+    private static CharSequence[] getKeys(JSONArray arr) {
+        // The length of the charsequence array should be the same as the length of the json array
+        CharSequence[] keys = new CharSequence[arr.length()];
+
+        try {
+            for (int i = 0; i < arr.length(); i++) {
+                keys[i] = arr.getJSONObject(i).getString("name");
+            }
+        } catch(JSONException e) {
+            Log.d("Error parsing json", e.toString());
+            return null;
+        }
+
+        return keys;
+    }
+
     /**
      * This fragment shows general preferences only. It is used when the
      * activity is showing a two-pane settings UI.
@@ -188,8 +234,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             // populate the list of event codes from TheBlueAlliance
             ListPreference eventsLP = (ListPreference) findPreference(getResources().getString(R.string.PROPERTY_event));
-            eventsLP.setEntries(getResources().getString(R.string.TBA_EVENT_NAMES).split(":") );
-            eventsLP.setEntryValues(getResources().getString(R.string.TBA_EVENT_CODES).split(":"));
+            eventsLP.setEntries(getKeys(eventKeys));
+            eventsLP.setEntryValues(getEvents(eventKeys));
+//            eventsLP.setEntries(getResources().getString(R.string.TBA_EVENT_NAMES).split(":") );
+//            eventsLP.setEntryValues(getResources().getString(R.string.TBA_EVENT_CODES).split(":"));
+
 
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences

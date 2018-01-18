@@ -201,7 +201,7 @@ public class BlueAllianceUtils {
 
             try {
                 // Only look for events since 2012
-                if (keys.getString(i).charAt(2) != '1' || keys.getString(i).charAt(3) < '1')
+                if (keys.getString(i).charAt(2) != '1' || keys.getString(i).charAt(3) < '4')
                     continue;
 
                 // Get the rank of the team
@@ -234,6 +234,35 @@ public class BlueAllianceUtils {
             } catch (JSONException e) {
                 Log.d("JSON - probably-fine", e.toString());
             }
+        }
+
+        return sb.toString();
+    }
+
+    // Used to get a list of events for the user to choose which event they are at
+    public static String getEventKeysFromYear(int year) {
+        StringBuilder sb = new StringBuilder();
+
+        // check if we have internet connectivity
+        ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork == null) { // not connected to the internet
+            return null;
+        }
+
+        // Get a list of the events for a certain year
+        Request request = new Request.Builder()
+                .url(BASE_URL + "events/" + year + "/simple")
+                .header("X-TBA-Auth-Key", AUTH_KEY)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+
+            // Add the json file string to be sent back to settings page
+            sb.append(response.body().string());
+        } catch(IOException e) {
+            Log.d("OKHTTP err0r ", e.toString());
         }
 
         return sb.toString();
