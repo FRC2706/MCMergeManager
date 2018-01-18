@@ -22,25 +22,25 @@ public class AutoScouting extends AppCompatActivity {
         setContentView(R.layout.steamworks2017_activity_auto_scouting);
         // initiate  views
 
-        simpleSeekBar=(SeekBar)findViewById(R.id.autoBallSeekBar);
+//        simpleSeekBar=(SeekBar)findViewById(R.id.autoBallSeekBar);
+//        simpleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            int progressChangedValue = 0;
+//
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                progressChangedValue = progress;
+//            }
+//
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//                // TODO Auto-generated method stub
+//            }
+//
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//                TextView tv = (TextView) findViewById(R.id.autoBallScoredTextView);
+//                tv.setText(progressChangedValue*5 + " points were scored");
+//                pointsScored = progressChangedValue*5;
+//            }
+//        });
         // perform seek bar change listener event used for getting the progress value
-        simpleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int progressChangedValue = 0;
-
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progressChangedValue = progress;
-            }
-
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                TextView tv = (TextView) findViewById(R.id.autoBallScoredTextView);
-                tv.setText(progressChangedValue*5 + " points were scored");
-                pointsScored = progressChangedValue*5;
-            }
-        });
     }
 
     public void toTeleop(View view) {

@@ -25,6 +25,16 @@
         android:text="Cross baseline?"
         android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/auto_pickup_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/auto_title"
+        android:layout_below="@+id/baseline_checkbox"
+        android:layout_marginTop="11dp"
+        android:text="Pickup"
+        android:textSize="20sp" />
+
     <Spinner
         android:id="@+id/auto_pickup_spinner"
         android:layout_width="match_parent"
@@ -69,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/auto_malfunction_checkbox"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="11dp"
         android:text="Go to teleop"
         android:textSize="20sp" />
 
@@ -83,6 +93,16 @@
         android:inputType="textPersonName"
         android:text="Comments..."
         android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/auto_pickup_text"
+        android:layout_below="@+id/auto_pickup_spinner"
+        android:layout_marginTop="20dp"
+        android:text="Delivered"
+        android:textSize="20sp" />
 
 
 </RelativeLayout>
