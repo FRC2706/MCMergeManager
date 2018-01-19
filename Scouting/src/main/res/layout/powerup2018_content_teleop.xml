@@ -31,9 +31,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/teleop_header"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="17dp"
         android:text="Power cube cycle"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
     <Spinner
@@ -61,18 +61,17 @@
         android:layout_alignStart="@+id/teleop_header"
         android:layout_marginStart="18dp"
         android:text="Pickup from:"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/delivery_title_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/pickup_title_textView"
-        android:layout_alignBottom="@+id/pickup_title_textView"
-        android:layout_alignStart="@+id/cube_delivery_spinner"
-        android:layout_marginStart="39dp"
+        android:layout_above="@+id/cube_delivery_spinner"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@+id/match_timer_textView"
         android:text="Delivered to:"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/go_to_postgame_button"
@@ -81,7 +80,8 @@
         android:layout_above="@+id/comments_editText"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="41dp"
-        android:text="Started climbing" />
+        android:text="Started climbing"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/match_timer_textView"
@@ -89,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/go_to_postgame_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="20dp"
         android:text="2:15"
-        android:textSize="30sp" />
+        android:textSize="28sp" />
 </RelativeLayout>
