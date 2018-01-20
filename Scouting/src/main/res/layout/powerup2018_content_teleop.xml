@@ -3,17 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/teleop_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
-        android:text="Teleop"
-        android:textSize="26sp" />
-
     <EditText
         android:id="@+id/comments_editText"
         android:layout_width="wrap_content"
@@ -29,16 +18,15 @@
         android:id="@+id/pickup_prompt_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/teleop_header"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
-        android:text="Power cube cycle"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:layout_marginTop="60dp"
+        android:text="Teleop"
+        android:textSize="24sp" />
 
     <Spinner
         android:id="@+id/cube_pickup_spinner"
-        android:layout_width="180dp"
+        android:layout_width="150dp"
         android:layout_height="45dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/pickup_prompt_textView"
@@ -47,7 +35,7 @@
 
     <Spinner
         android:id="@+id/cube_delivery_spinner"
-        android:layout_width="180dp"
+        android:layout_width="150dp"
         android:layout_height="45dp"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/cube_pickup_spinner"
@@ -59,7 +47,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/cube_delivery_spinner"
         android:layout_alignStart="@+id/teleop_header"
-        android:layout_marginStart="18dp"
         android:text="Pickup from:"
         android:textSize="20sp" />
 
@@ -68,8 +55,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/cube_delivery_spinner"
-        android:layout_marginStart="20dp"
-        android:layout_toEndOf="@+id/match_timer_textView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="18dp"
         android:text="Delivered to:"
         android:textSize="20sp" />
 
