@@ -15,15 +15,6 @@
         android:measureWithLargestChild="false"
         android:weightSum="1">
 
-        <ImageButton
-            android:layout_width="55dp"
-            android:layout_height="46dp"
-            android:id="@+id/imageButton"
-            android:gravity="left"
-            android:src="@drawable/download"
-            android:scaleType="fitXY"
-            />
-
         <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

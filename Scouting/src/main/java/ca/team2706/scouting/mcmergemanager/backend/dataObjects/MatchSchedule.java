@@ -65,7 +65,7 @@ public class MatchSchedule implements Serializable {
 
     public static MatchSchedule newFromJsonSchedule(String jsonSchedule) {
         MatchSchedule matchSchedule = new MatchSchedule();
-        matchSchedule.parseTBASchedule(jsonSchedule);
+        matchSchedule.initialParseTBASchedule(jsonSchedule);
         return matchSchedule;
     }
 
@@ -132,19 +132,32 @@ public class MatchSchedule implements Serializable {
         for(int teamNo : teamListInt)
             teamListSerializedStrBldr.append(teamNo + ",");
 
+        // Add matches
+        JSONArray arr = new JSONArray();
+        for(Match m : matches) {
+            arr.put(m.toString());
+        }
+
         try {
-            jsonObject.put(JSONKEY_matchScheduleJSONstr, matchScheduleJSONstr);
+            jsonObject.put(JSONKEY_matchScheduleJSONstr, arr);
             jsonObject.put(JSONKEP_teamListInt, teamListSerializedStrBldr.toString());
         } catch (JSONException e) {
             Log.e("MCMergeManager", "Failed to serialize MatchSchedule.",e);
         }
 
-        return jsonObject.toString();
+        try {
+            return jsonObject.toString();
+        }catch(Exception e) {
+            Log.d("ERror", e.toString());
+            return "";
+        }
     }
 
-
-    private void parseTBASchedule(String jsonSchedule) {
-
+    /*
+    Used when parsing the original file from TBA,
+    if you try using this after initial parse will fail
+     */
+    private void initialParseTBASchedule(String jsonSchedule) {
         if(jsonSchedule == null)
             return;
 
@@ -194,12 +207,12 @@ public class MatchSchedule implements Serializable {
                 }
 
 
-                JSONArray blueTeams = jsonBlueAlliance.getJSONArray("teams");
+                JSONArray blueTeams = jsonBlueAlliance.getJSONArray("team_keys");
                 match.setBlue1(Integer.parseInt(blueTeams.getString(0).substring(3))); // TBA gives it to us as "frc2706", so skip the first 3 characters
                 match.setBlue2(Integer.parseInt(blueTeams.getString(1).substring(3)));
                 match.setBlue3(Integer.parseInt(blueTeams.getString(2).substring(3)));
 
-                JSONArray redTeams = jsonRedAlliance.getJSONArray("teams");
+                JSONArray redTeams = jsonRedAlliance.getJSONArray("team_keys");
                 match.setRed1(Integer.parseInt(redTeams.getString(0).substring(3)));
                 match.setRed2(Integer.parseInt(redTeams.getString(1).substring(3)));
                 match.setRed3(Integer.parseInt(redTeams.getString(2).substring(3)));
@@ -221,35 +234,70 @@ public class MatchSchedule implements Serializable {
             // something went wrong
             Log.e("MCMergeManager", "Failed to parse the match schedule from thebluealliance. Maybe the gearDeliveryData is not valid json?");
         }
+
     }
 
+    private void parseTBASchedule(String jsonSchedule) {
 
-    private void parseTBATeamsList(String jsonTeamsList) {
-
-        if(jsonTeamsList == null)
+        if(jsonSchedule == null)
             return;
+
+        matchScheduleJSONstr = jsonSchedule;
 
         JSONArray jsonArr;
         try {
-            jsonArr = new JSONArray(jsonTeamsList);
+            jsonArr = new JSONArray(jsonSchedule);
 
-            // loop over individual teams
-            for(int i=0;i<(jsonArr.length( ));i++)
-            {
-                JSONObject jsonTeam = jsonArr.getJSONObject(i);
+            // Just for testing the Match Prediction, match #3 does not have a score
+            // if we're in the test event from the previous year.
+            SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+            String eventName = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
+            boolean testEvent = eventName.equals(App.getContext().getResources().getString(R.string.TBA_TEST_EVENT));
 
-                try {
-                    teamListInt.add( Integer.valueOf(jsonTeam.getString("team_number")) );
-                } catch (JSONException e) {
-                    continue;
-                }
+            // loop over individual matches
+            for(int i = 0; i < (jsonArr.length( )); i++) {
+                String[] s = jsonArr.getString(i).split(",");
+
+                Match match = new Match();
+
+                match.matchNo = Integer.parseInt(s[0]);
+                match.blue1 = Integer.parseInt(s[1]);
+                match.blue2 = Integer.parseInt(s[2]);
+                match.blue3 = Integer.parseInt(s[3]);
+                match.blueScore = Integer.parseInt(s[7]);
+                match.red1 = Integer.parseInt(s[4]);
+                match.red2 = Integer.parseInt(s[5]);
+                match.red3 = Integer.parseInt(s[6]);
+                match.redScore = Integer.parseInt(s[8]);
+
+                matches.add(match);
             }
 
-            Collections.sort(teamListInt);
+            Collections.sort(matches);
 
         } catch(JSONException e) {
             // something went wrong
             Log.e("MCMergeManager", "Failed to parse the match schedule from thebluealliance. Maybe the gearDeliveryData is not valid json?");
+        }
+    }
+
+
+    private void parseTBATeamsList(String jsonTeamsList) {
+        if(jsonTeamsList == null)
+            return;
+
+        JSONArray jsonArray;
+        try {
+            jsonArray = new JSONArray(jsonTeamsList);
+
+            // Loop over each team
+            for(int i = 0; i < jsonArray.length(); i++) {
+                teamListInt.add(Integer.valueOf(jsonArray.get(i).toString().substring(3)));
+            }
+
+            Collections.sort(teamListInt);
+        } catch(JSONException e) {
+            Log.d("Error parsing json: ", e.toString());
         }
     }
 

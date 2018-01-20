@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity
         updateDataSyncLabel();
 
         FileUtils.checkFileReadWritePermissions(this);
+
+
     }
 
     @Override
@@ -115,7 +117,8 @@ public class MainActivity extends AppCompatActivity
         sRepairTimeObjects = FileUtils.getRepairTimeObjects();
 
         // syncs unposted matches and downloads matchdata for current competition
-        FileUtils.syncFiles(this);
+        if(false)
+            FileUtils.syncFiles(this);
     }
 
     /**
