@@ -42,7 +42,6 @@ public class BlueAllianceUtils {
     private Activity mActivity;
 
     private static boolean sPermissionsChecked = false;
-    private static final OkHttpClient client = new OkHttpClient();
 
     public static boolean checkInternetPermissions(Activity activity) {
         if (activity == null)
@@ -59,6 +58,7 @@ public class BlueAllianceUtils {
                 sPermissionsChecked = false;
         }
 
+        // TODO: this doesnt make sense???
         sPermissionsChecked = true;
         return sPermissionsChecked;
     }
@@ -83,7 +83,7 @@ public class BlueAllianceUtils {
                 MatchSchedule schedule;
 
                 try {
-                    Response response = client.newCall(request).execute();
+                    Response response = FileUtils.client.newCall(request).execute();
 
                     schedule = new MatchSchedule();
                     schedule.addToListOfTeamsAtEvent(response.body().string());
@@ -94,7 +94,6 @@ public class BlueAllianceUtils {
                     return;
                 }
 
-                System.out.println(schedule.toString());
                 requester.updateMatchSchedule(schedule);
             }
         }.start();
@@ -121,7 +120,7 @@ public class BlueAllianceUtils {
                 MatchSchedule schedule;
 
                 try {
-                    Response response = client.newCall(request).execute();
+                    Response response = FileUtils.client.newCall(request).execute();
 
                     schedule = MatchSchedule.newFromJsonSchedule(response.body().string());
                 } catch (IOException e) {
@@ -129,7 +128,6 @@ public class BlueAllianceUtils {
                     return;
                 }
 
-                System.out.println(schedule.toString());
                 dataRequester.updateMatchSchedule(schedule);
             }
         }.start();
@@ -148,7 +146,7 @@ public class BlueAllianceUtils {
                 .build();
 
         try {
-            Response response = client.newCall(request).execute();
+            Response response = FileUtils.client.newCall(request).execute();
 
             JSONObject json = new JSONObject(response.body().string());
             return json.getString(key);
@@ -174,9 +172,6 @@ public class BlueAllianceUtils {
             return null;
         }
 
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-        String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
-
         // First get the keys of every event the team has been to
         Request request = new Request.Builder()
                 .url(BASE_URL + "team/frc" + team_number + "/events/keys")
@@ -185,7 +180,7 @@ public class BlueAllianceUtils {
 
         JSONArray keys;
         try {
-            Response responseKeys = client.newCall(request).execute();
+            Response responseKeys = FileUtils.client.newCall(request).execute();
 
             keys = new JSONArray(responseKeys.body().string());
         } catch (IOException e) {
@@ -210,10 +205,10 @@ public class BlueAllianceUtils {
                         .header("X-TBA-Auth-Key", AUTH_KEY)
                         .build();
 
-                Response response1 = client.newCall(request).execute();
+                Response eventStatusResponse = FileUtils.client.newCall(request).execute();
 
                 // Find the data in the data gotten from tbav3
-                JSONObject jsonEventStatus = new JSONObject(response1.body().string());
+                JSONObject jsonEventStatus = new JSONObject(eventStatusResponse.body().string());
                 JSONObject qualStats = jsonEventStatus.getJSONObject("qual");
                 JSONObject ranking = qualStats.getJSONObject("ranking");
 
@@ -225,9 +220,9 @@ public class BlueAllianceUtils {
                         .header("X-TBA-Auth-Key", AUTH_KEY)
                         .build();
 
-                Response response2 = client.newCall(request).execute();
+                Response teamNameResponse = FileUtils.client.newCall(request).execute();
 
-                JSONObject json = new JSONObject(response2.body().string());
+                JSONObject json = new JSONObject(teamNameResponse.body().string());
                 sb.append(json.getString("name") + "\n");
             } catch (IOException e) {
                 Log.d("OKKHTP error", e.toString());

@@ -116,9 +116,18 @@ public class MainActivity extends AppCompatActivity
 
         sRepairTimeObjects = FileUtils.getRepairTimeObjects();
 
-        // syncs unposted matches and downloads matchdata for current competition
-        if(false)
-            FileUtils.syncFiles(this);
+        // TODO: test remove
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("post comment: " + FileUtils.postCommentToServer(2706, "testing"));
+                System.out.println("teams list: " + FileUtils.getJsonArrayFromServer(FileUtils.TEAMS_LIST).toString());
+                System.out.println("competitions list: " + FileUtils.getJsonArrayFromServer(FileUtils.COMPETITION_LIST).toString());
+                System.out.println("team stats: " + FileUtils.getJsonObjectFromServer(FileUtils.TEAM_STATS + 2706).toString());
+//              FileUtils.getJsonObjectFromServer(FileUtils.COMPETITON_STAT + "2017onto1");
+//              FileUtils.getJsonObjectFromServer(FileUtils.GET_MATCH_A + "2017onto1" + FileUtils.GET_MATCH_B + 1);
+            }
+        }).start();
     }
 
     /**
@@ -431,8 +440,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onClick(View v) {
-        FileUtils.checkLocalFileStructure(this);
-        FileUtils.syncFiles(this);
+        // TODO: sync the match files on the phone
     }
 
 

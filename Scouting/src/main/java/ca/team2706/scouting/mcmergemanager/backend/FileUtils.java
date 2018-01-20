@@ -14,20 +14,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,14 +24,10 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,6 +41,10 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.FuelPickupEvent;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * This is a helper class to hold common code for accessing shared scouting data files.
@@ -72,6 +60,9 @@ public class FileUtils {
     public static String sLocalCommentFilePath;
 
     public static String sRemoteTeamPhotosFilePath;
+
+    public static final OkHttpClient client = new OkHttpClient();
+    public static final String SERVER_URL = "http://beancode.org:9999/";
 
     /* Static initializer */
     static {
@@ -631,44 +622,6 @@ public class FileUtils {
 
     }
 
-
-    /*
-        gets a competition data from the swagger server
-        if compID is 0 will take from current event, if other number will get that competition
-     */
-    public static void getMatchesFromServer(final Context context) {
-        RequestQueue queue = Volley.newRequestQueue(context);
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-        final String url = "http://ftp.team2706.ca:3000/competitions/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>") + "/matches.json";
-
-        System.out.println(url);
-
-        // prepare the Request
-        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        // display response
-                        saveJsonFile(response);
-                        System.out.println(response.toString() + "\nWriting should have gone well");
-
-                        loadMatchDataFile();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.toString());
-                        error.printStackTrace();
-                    }
-                }
-        );
-
-        // add it to the RequestQueue
-        queue.add(getRequest);
-    }
-
-
     /*
     @param CommentList Class
     Saves the JSON to a file
@@ -810,124 +763,69 @@ public class FileUtils {
         return false;
     }
 
-    /*
-        Takes the selected event that you are at
-     */
-    public static void postMatchToServer(final Context context, final JSONObject jsonBody) {
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+    public static final String TEAMS_LIST = "teams/list";
+    public static final String TEAM_STATS = "teams/show?team="; // Add the team number at the end
+    public static final String COMPETITION_LIST = "competitions/list";
+    public static final String COMPETITON_STAT = "competitions/show?competition=";  // Add the competition code after
+    public static final String GET_MATCH_A = "matches/show?competition=";  // Requires part b afterwards to choose which match
+    public static final String GET_MATCH_B = "&match=";
 
-        final String url = "http://ftp.team2706.ca:3000/competitions/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>") + "/matches.json";
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
-            // Prepares POST data...
-            jsonBody.put("competition_id",SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set"));
-            final String mRequestBody = jsonBody.toString();
-            System.out.println(jsonBody.toString());
-            // Volley request...
-            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.i("VOLLEY", response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("VOLLEY error from: " + url + " - ", error.toString());
-                    FileUtils.appendToMatchDataFile(new MatchData.Match(jsonBody), FileType.UNSYNCHED);
-                    error.printStackTrace();
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
-                                mRequestBody, "utf-8");
-                        return null;
-                    }
-                }
-            };
-            requestQueue.add(request);
-        } catch (Exception e) {
-            Log.d("Somethin interesting", e.toString());
-        }
-    }
-
-    public static void postMatchToServer(final Context context, int compID) {
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-        final String url = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPHostname), "<Not Set>") + "/competitions/" + compID + "/matches.json";
-        RequestQueue queue = Volley.newRequestQueue(context);
+    // Gets a json array from the server
+    public static JSONArray getJsonArrayFromServer(String url) {
+        Request request = new Request.Builder()
+                .url(SERVER_URL + url)
+                .build();
 
         try {
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
-            // Prepares POST data...
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("competition_id", compID);
-            jsonBody.put("number", 1);
-            jsonBody.put("team_number", 1);
-            JSONArray arr = new JSONArray();
-            JSONObject obj = new JSONObject();
-            obj.put("objective_id", FuelPickupEvent.objectiveId);
-            arr.put(obj);
-            jsonBody.put("events", arr);
-            System.out.println(jsonBody.toString());
-            final String mRequestBody = jsonBody.toString();
-            // Volley request...
-            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.i("VOLLEY", response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("VOLLEY error from: " + url + " - ", error.toString());
-                    error.printStackTrace();
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
+            Response response = client.newCall(request).execute();
 
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
-                                mRequestBody, "utf-8");
-                        return null;
-                    }
-                }
-            };
-            requestQueue.add(request);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return new JSONArray(response.body().string());
+        } catch(JSONException e) {
+            Log.d("JSON error", e.toString());
+        } catch(IOException e) {
+            Log.d("Okhttp error", e.toString());
         }
+
+        // If their was an error earlier return nothing
+        return null;
     }
 
-    public static void syncFiles(Context context) {
+    // Gets a json object from the server
+    public static JSONObject getJsonObjectFromServer(String url) {
+        Request request = new Request.Builder()
+                .url(SERVER_URL + url)
+                .build();
 
-        MatchData matchData = loadMatchDataFile(FileType.UNSYNCHED);
-        clearTeamDataFile(FileType.UNSYNCHED);
+        try {
+            Response response = client.newCall(request).execute();
 
-        // probably need to throw some sort of error catching magic
-        if(matchData.matches != null)
-            for (MatchData.Match match : matchData.matches) {
-                postMatchToServer(context, match.toJson());
+            return new JSONObject(response.body().string());
+        } catch(JSONException e) {
+            Log.d("JSON error", e.toString());
+        } catch(IOException e) {
+            Log.d("Okhttp error", e.toString());
+        }
+
+        return null;
+    }
+
+    // Post a comment to the server, returns true if successful
+    public static boolean postCommentToServer(int team_number, String message) {
+        Request request = new Request.Builder()
+                .url(SERVER_URL + "comments/create?team=" + team_number + "&body=" + message)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+
+            // If server returns succes then the comment posted
+            if(new String(response.body().string()).equals("success")) {
+                return true;
             }
+        } catch(IOException e) {
+            Log.d("Okhttp3 error", e.toString());
+        }
 
-        // delete file on phone and redownload
-        getMatchesFromServer(context);
+        return false;
     }
-
 }
