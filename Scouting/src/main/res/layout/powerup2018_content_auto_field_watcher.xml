@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/auto_fieldwatcher_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        android:text="Auto- Field Watcher"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/auto_fieldwatcher_bs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/auto_fieldwatcher_bs_b"
+        android:layout_below="@+id/auto_fieldwatcher_title"
+        android:layout_marginTop="30dp"
+        android:text="Blue switch"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/auto_fieldwatcher_bs_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/auto_fieldwatcher_bs"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="21dp"
+        android:text="Blue alliance"
+        android:textSize="12sp"
+        android:textColor="#FFFFFF"
+        android:background="#2950D9"/>
+
+    <Button
+        android:id="@+id/auto_fieldwatcher_bs_n"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/auto_fieldwatcher_bs_b"
+        android:layout_below="@+id/auto_fieldwatcher_bs_b"
+        android:layout_marginTop="18dp"
+        android:text="neutral" />
+
+    <Button
+        android:id="@+id/auto_fieldwatcher_bs_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/auto_fieldwatcher_bs_b"
+        android:layout_below="@+id/auto_fieldwatcher_bs_n"
+        android:layout_marginTop="20dp"
+        android:text="Red Alliance"
+        android:textSize="12sp"
+        android:textColor="#FFFFFF"
+        android:background="#D93629"/>
+
+    <TextView
+        android:id="@+id/auto_fieldwatcher_rs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/auto_fieldwatcher_bs"
+        android:layout_alignBottom="@+id/auto_fieldwatcher_bs"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="17dp"
+        android:text="Red Switch"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/auto_fieldwatcher_rs_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/auto_fieldwatcher_bs_b"
+        android:layout_alignBottom="@+id/auto_fieldwatcher_bs_b"
+        android:layout_alignEnd="@+id/auto_fieldwatcher_rs"
+        android:background="#2950D9"
+        android:text="Blue alliance"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/auto_fieldwatcher_rs_n"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/auto_fieldwatcher_bs_n"
+        android:layout_alignBottom="@+id/auto_fieldwatcher_bs_n"
+        android:layout_alignStart="@+id/auto_fieldwatcher_rs_b"
+        android:text="Neutral" />
+
+    <Button
+        android:id="@+id/auto_fieldwatcher_rs_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/auto_fieldwatcher_bs_r"
+        android:layout_alignBottom="@+id/auto_fieldwatcher_bs_r"
+        android:layout_alignEnd="@+id/auto_fieldwatcher_rs_b"
+        android:text="Red Alliance"
+        android:textSize="12sp"
+        android:textColor="#FFFFFF"
+        android:background="#D93629"/>
+
+    <TextView
+        android:id="@+id/auto_fieldwatcher_scale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/auto_fieldwatcher_bs_r"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Scale"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/auto_fieldwatcher_scale_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/auto_fieldwatcher_scale_n"
+        android:layout_alignBottom="@+id/auto_fieldwatcher_scale_n"
+        android:layout_alignStart="@+id/auto_fieldwatcher_bs_r"
+        android:background="#2950D9"
+        android:text="Blue Alliance"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/auto_fieldwatcher_scale_n"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/auto_fieldwatcher_scale"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="Neutral"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/auto_fieldwatcher_scale_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/auto_fieldwatcher_scale_n"
+        android:layout_alignBottom="@+id/auto_fieldwatcher_scale_n"
+        android:layout_alignEnd="@+id/auto_fieldwatcher_rs_n"
+        android:background="#D93629"
+        android:text="Red Alliance"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
+  
+    <EditText
+        android:id="@+id/auto_fieldwatcher_comments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="13dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Comments..." />
+
+    <Button
+        android:id="@+id/auto_fieldwatcher_go_teleop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/auto_fieldwatcher_comments"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:onClick="toTeleop"
+        android:text="Go to teleop" />
+
+</RelativeLayout>
