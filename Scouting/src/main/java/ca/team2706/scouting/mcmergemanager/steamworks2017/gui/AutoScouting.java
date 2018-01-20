@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
-import android.widget.TextView;
+
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.AutoScoutingObject;
 
@@ -19,7 +19,7 @@ public class AutoScouting extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.steamworks2017_activity_auto_scouting);
+        setContentView(R.layout.powerup2018_activity_auto_scouting);
         // initiate  views
 
 //        simpleSeekBar=(SeekBar)findViewById(R.id.autoBallSeekBar);
