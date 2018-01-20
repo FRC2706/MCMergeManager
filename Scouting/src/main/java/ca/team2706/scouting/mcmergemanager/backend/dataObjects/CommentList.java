@@ -59,20 +59,18 @@ public class CommentList {
 
     /** Constructor
      *  Create this object from some JSON data */
-    public CommentList(JSONObject jsonData) {
+    public CommentList(JSONObject jsonData) throws JSONException{
         // Construct a JSONOBJ
-        try {
+
             this.teamNumber = (int) jsonData.get(JSONKEY_TEAMNO);
             JSONArray jsonArray = jsonData.getJSONArray(JSONKEY_COMMENT);
 
-            for (int i = 0; i < jsonArray.length(); i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 comments.add(jsonObject.get("body").toString());
             }
 
-        } catch(Exception e){
-            Log.d("JSON Parsing error: ", e.getMessage());
-        }
+
 
     }
 
@@ -84,6 +82,10 @@ public class CommentList {
 
     public void addComment(String comment) {
         comments.add(comment);
+    }
+
+    public int getTeamNumber(){
+        return teamNumber;
     }
 
     // Pack the comments and team number into JSON and return them
