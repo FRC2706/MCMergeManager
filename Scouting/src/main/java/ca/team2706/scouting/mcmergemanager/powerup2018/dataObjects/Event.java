@@ -1,4 +1,4 @@
-package ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects;
+package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects;
 
 import java.io.Serializable;
 
