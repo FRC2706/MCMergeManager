@@ -52,9 +52,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         setupActionBar();
 
         try {
-            eventKeys = new JSONArray(FileUtils.readFile(FileUtils.EVENT_KEYS_FILENAME, this));
+            eventKeys = FileUtils.getArrayOfEvents(this);
         } catch(JSONException e) {
-            Log.d("Error parsing file", e.toString());
+            Log.d("JSON error", e.toString());
         }
     }
 

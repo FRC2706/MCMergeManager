@@ -837,6 +837,7 @@ public class FileUtils {
         return true;
     }
 
+    // Update to 2018
     public static final String EVENT_KEYS_FILENAME = "EventKeys2017.json";
 
     // Saves a list of all the events for a certain year,
@@ -849,6 +850,7 @@ public class FileUtils {
                 // Get the object from the server
                 JSONArray eventKeys;
                 try {
+                    // TODO: Update the year to 2018
                     eventKeys = new JSONArray(BlueAllianceUtils.getEventKeysFromYear(year));
                 } catch (JSONException e) {
                     Log.d("JSON exception", e.toString());
@@ -889,6 +891,10 @@ public class FileUtils {
         }).start();
     }
 
+    public static JSONArray getArrayOfEvents(Context context) throws JSONException {
+        return new JSONArray(readFile(EVENT_KEYS_FILENAME, context));
+    }
+
     // Returns the string content of a file
     public static String readFile(String filename, Context context) {
         String fileContents;
@@ -910,8 +916,6 @@ public class FileUtils {
                 Log.d("Error reading file", e.toString());
                 return null;
             }
-        } else {    // Try and get the file from the internet
-            getEventListAndSave(2017, context);
         }
 
         return null;
