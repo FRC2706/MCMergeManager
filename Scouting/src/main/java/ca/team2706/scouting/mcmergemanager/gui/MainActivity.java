@@ -42,6 +42,7 @@ import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
 import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
@@ -229,8 +230,15 @@ public class MainActivity extends AppCompatActivity
         teamNumber = enterATeamNumberPopup.getTeamNumber();
         comment = commentTextEditor.getComment();
 
-        // TODO To add saving with commentList
+        CommentList commentList = new CommentList(1114);
+
+        commentList.addComment("testing comment");
+
+        FileUtils.saveTeamComments(commentList);
+
+        
     }
+
 
     public void onRepairTimeRecordClicked(View view) {
         Intent intent = new Intent(this, RepairTimeCollection.class);

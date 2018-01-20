@@ -42,6 +42,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ import java.util.Date;
 import java.util.List;
 
 import ca.team2706.scouting.mcmergemanager.R;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.NoteObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
@@ -67,6 +69,7 @@ public class FileUtils {
     public static String sLocalToplevelFilePath;
     public static String sLocalEventFilePath;
     public static String sLocalTeamPhotosFilePath;
+    public static String sLocalCommentFilePath;
 
     public static String sRemoteTeamPhotosFilePath;
 
@@ -83,6 +86,7 @@ public class FileUtils {
 //        sLocalToplevelFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + App.getContext().getString(R.string.FILE_TOPLEVEL_DIR);
         sLocalEventFilePath = sLocalToplevelFilePath + "/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
         sLocalTeamPhotosFilePath = sLocalToplevelFilePath + "/" + "Team Photos";
+        sLocalCommentFilePath = sLocalToplevelFilePath + "/" + "TeamComments";
 
         sRemoteTeamPhotosFilePath = "/" + App.getContext().getString(R.string.FILE_TOPLEVEL_DIR) + "/"  + "Team Photos";
     }
@@ -154,6 +158,7 @@ public class FileUtils {
         makeDirectory(sLocalToplevelFilePath);
         makeDirectory(sLocalEventFilePath);
         makeDirectory(sLocalTeamPhotosFilePath);
+        makeDirectory(sLocalCommentFilePath);
 
         new Thread()
         {
@@ -663,6 +668,94 @@ public class FileUtils {
         queue.add(getRequest);
     }
 
+
+    /*
+    @param CommentList Class
+    Saves the JSON to a file
+     */
+
+    public static final String COMMENT_FILE_PATH= "comments.json";
+
+    public static void saveTeamComments(CommentList commentList){
+
+        JSONObject jsonObject = getTeamComments(commentList.getTeamNumber());
+
+        if(jsonObject == null) {
+
+            try {
+                jsonObject = commentList.getJson();
+
+            } catch (JSONException e) {
+                Log.d("JSON Error", e.getMessage());
+                Log.d("JSON might be null", "");
+
+            }
+        } else {
+            try {
+                CommentList cl = new CommentList(jsonObject);
+                for (int i = 0; i < cl.getComments().size(); i++) {
+                    commentList.addComment(cl.getComments().get(i));
+                }
+                jsonObject = commentList.getJson();
+
+            } catch (Exception e) {
+                Log.d("ERROR", e.getMessage());
+            }
+
+
+        }
+
+        String outFileName = sLocalCommentFilePath + "/"  + commentList.getTeamNumber() + COMMENT_FILE_PATH;
+
+        File file = new File(outFileName);
+
+        try {
+            file.delete();
+
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+
+            bw.append(jsonObject.toString());
+
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            Log.d("File writing error ", e.toString());
+        } catch (NullPointerException e){
+            // This should never be triggered, but is here for testing purposes
+            Log.d("Json is null.", e.toString());
+
+        }
+
+    }
+
+    public static JSONObject getTeamComments(int teamNumber){
+        String json = null;
+        JSONObject jsonObject = null;
+
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalCommentFilePath + "/"  + teamNumber + COMMENT_FILE_PATH));
+
+            while ((json = bufferedReader.readLine()) != null) {
+                stringBuilder.append(json);
+            }
+
+            jsonObject = new JSONObject(stringBuilder.toString());
+
+
+        } catch (IOException e) {
+            Log.d("IO Error", e.getMessage());
+            return null;
+        }
+        catch (JSONException e){
+            Log.d("JSON Error", e.getMessage());
+            return null;
+
+        }
+        return jsonObject;
+
+    }
+
     private static void saveJsonFile(JSONArray jsonArray) {
         if(!clearTeamDataFile(FileType.SYNCHED)) {
             Log.d("Deleting file failed", "something probably went wrong");
@@ -670,6 +763,9 @@ public class FileUtils {
 
         String outFileName = sLocalEventFilePath +"/"+ App.getContext().getResources().getString(R.string.matchScoutingDataFileName);
         File file = new File(outFileName);
+
+
+
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
