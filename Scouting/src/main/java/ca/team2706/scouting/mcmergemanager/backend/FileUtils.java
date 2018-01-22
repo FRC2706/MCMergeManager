@@ -38,11 +38,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -69,6 +66,8 @@ public class FileUtils {
     public static String sLocalCommentFilePath;
 
     public static String sRemoteTeamPhotosFilePath;
+
+    public static final String COMMENT_FILE = "comments.json";
 
     /* Static initializer */
     static {
@@ -663,17 +662,13 @@ public class FileUtils {
         queue.add(getRequest);
     }
 
-
-    /*
-    @param CommentList Class
-    Saves the JSON to a file
+    /**
+     * Saves the JSON to a file
+     * @param commentList
      */
-
-    public static final String COMMENT_FILE_PATH= "comments.json";
-
     public static void saveTeamComments(CommentList commentList){
 
-        JSONObject jsonObject = getTeamComments(commentList.getTeamNumber());
+        JSONObject jsonObject = loadTeamCommentsFromFile(commentList.getTeamNumber());
 
         if(jsonObject == null) {
 
@@ -700,7 +695,7 @@ public class FileUtils {
 
         }
 
-        String outFileName = sLocalCommentFilePath + "/"  + commentList.getTeamNumber() + COMMENT_FILE_PATH;
+        String outFileName = sLocalCommentFilePath + "/"  + commentList.getTeamNumber() + COMMENT_FILE;
 
         File file = new File(outFileName);
 
@@ -723,13 +718,19 @@ public class FileUtils {
 
     }
 
-    public static JSONObject getTeamComments(int teamNumber){
-        String json = null;
-        JSONObject jsonObject = null;
+    /**
+     * Load the comments for a given team from file.
+     *
+     * @param teamNumber
+     * @return Comments for the given team. May be null if the file failed to load.
+     */
+    public static JSONObject loadTeamCommentsFromFile(int teamNumber){
+        String json;
+        JSONObject jsonObject;
 
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalCommentFilePath + "/"  + teamNumber + COMMENT_FILE_PATH));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalCommentFilePath + "/"  + teamNumber + COMMENT_FILE));
 
             while ((json = bufferedReader.readLine()) != null) {
                 stringBuilder.append(json);
