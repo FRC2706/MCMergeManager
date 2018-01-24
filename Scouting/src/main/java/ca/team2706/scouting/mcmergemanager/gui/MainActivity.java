@@ -29,7 +29,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import org.apache.commons.net.ftp.FTPFile;
 
 import java.util.ArrayList;
@@ -43,6 +42,7 @@ import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
 import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
@@ -52,7 +52,7 @@ import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
 @TargetApi(21)
 public class MainActivity extends AppCompatActivity
         implements DataRequester, PreMatchReportFragment.OnFragmentInteractionListener,
-                    FTPRequester {
+        FTPRequester {
 
     public Context context;
 
@@ -90,6 +90,15 @@ public class MainActivity extends AppCompatActivity
         updateDataSyncLabel();
 
         FileUtils.checkFileReadWritePermissions(this);
+
+        getEventKeys();
+    }
+
+    // Check to see if the event keys has been downloaded yet, if not yet downloaded for this year then download
+    private void getEventKeys() {
+        if (!FileUtils.fileExists(this, FileUtils.EVENT_KEYS_FILENAME)) {
+            FileUtils.getEventListAndSave(2017, this);
+        }
     }
 
     @Override
@@ -110,12 +119,13 @@ public class MainActivity extends AppCompatActivity
         // In case the schedule is empty, make sure we pass along the list of teams registered at event
         // that we fetched at the beginning.
         sMatchData = FileUtils.loadMatchDataFile();
-        if(sMatchData == null) sMatchData = new MatchData();
+        if (sMatchData == null) sMatchData = new MatchData();
 
         sRepairTimeObjects = FileUtils.getRepairTimeObjects();
 
         // syncs unposted matches and downloads matchdata for current competition
-        FileUtils.syncFiles(this);
+        if (false)
+            FileUtils.syncFiles(this);
     }
 
     /**
@@ -127,7 +137,9 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    /** Called when the user clicks the Scout Match button */
+    /**
+     * Called when the user clicks the Scout Match button
+     */
     public void scout(View view) {
 
         // if they've entered a Match Number in the box, pass that along.
@@ -140,8 +152,8 @@ public class MainActivity extends AppCompatActivity
         }
 
         Intent intent = new Intent(this, PreGameActivity.class);
-        intent.putExtra( getString(R.string.EXTRA_MATCH_NO), matchNo);
-        intent.putExtra( getString(R.string.EXTRA_MATCH_SCHEDULE), sMatchSchedule);
+        intent.putExtra(getString(R.string.EXTRA_MATCH_NO), matchNo);
+        intent.putExtra(getString(R.string.EXTRA_MATCH_SCHEDULE), sMatchSchedule);
         startActivity(intent);
     }
 
@@ -202,11 +214,41 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        enterATeamNumberPopup = new GetTeamNumberDialog("View the Schedule for one Team","Team Number", 1, this);
+        enterATeamNumberPopup = new GetTeamNumberDialog("View the Schedule for one Team", "Team Number", 1, this);
         enterATeamNumberPopup.displayAlertDialog();
 
         (new Timer()).schedule(new CheckSchedulePopupHasExited(), 250);
     }
+
+
+    int teamNumber;
+    String comment;
+    public CommentTextEditor commentTextEditor;
+
+    public void onWriteCommentButtonClick(View v) {
+
+        // Get the comment
+        commentTextEditor = new CommentTextEditor("Write your comment.", "Comment", this);
+        commentTextEditor.displayAlertDialog();
+
+        // Get the team number (After for lazy layout reasons)
+        enterATeamNumberPopup = new GetTeamNumberDialog("Team Number", "Team Number", 1, this);
+        enterATeamNumberPopup.displayAlertDialog();
+
+
+        // Assign the team number and get the comment
+        teamNumber = enterATeamNumberPopup.getTeamNumber();
+        comment = commentTextEditor.getComment();
+
+        CommentList commentList = new CommentList(1114);
+
+        commentList.addComment("testing comment");
+
+        FileUtils.saveTeamComments(commentList);
+
+        
+    }
+
 
     public void onRepairTimeRecordClicked(View view) {
         Intent intent = new Intent(this, RepairTimeCollection.class);
@@ -236,7 +278,7 @@ public class MainActivity extends AppCompatActivity
             return; // the popup is non-blocking, so they'll have to click "Take Picture" again.
         }
 
-        enterATeamNumberPopup = new GetTeamNumberDialog("Team Number","Team Number", 1, this);
+        enterATeamNumberPopup = new GetTeamNumberDialog("Team Number", "Team Number", 1, this);
         enterATeamNumberPopup.displayAlertDialog();
 
         (new Timer()).schedule(new CheckPicturePopupHasExited(), 250);
@@ -257,7 +299,7 @@ public class MainActivity extends AppCompatActivity
         sMatchSchedule = matchSchedule;
 
         // Notify the TeamInfoTab that the list of teams at this event has updated.
-        if(mTeamInfoTab != null)
+        if (mTeamInfoTab != null)
             mTeamInfoTab.rebuildAutocompleteList();
 
     }
@@ -272,11 +314,11 @@ public class MainActivity extends AppCompatActivity
         // look up the human-readable event_name that matches this event_code.
         String event_name = "";
         String[] event_codes = getString(R.string.TBA_EVENT_CODES).split(":");
-        for(int i=0; i<event_codes.length; i++)
-            if(event_codes[i].equals(event_code))
+        for (int i = 0; i < event_codes.length; i++)
+            if (event_codes[i].equals(event_code))
                 event_name = getString(R.string.TBA_EVENT_NAMES).split(":")[i];
 
-        String label = "Event: "+event_name+" ["+event_code+"]";
+        String label = "Event: " + event_name + " [" + event_code + "]";
 
         TextView tv = (TextView) findViewById(R.id.sync_settings_tv);
         tv.setText(label);
@@ -302,13 +344,12 @@ public class MainActivity extends AppCompatActivity
 
                 Uri teamPhotoUri = FileUtils.getNameForNewPhoto(teamNumber);
                 String teamPhotoPath = teamPhotoUri.getPath();
-                Log.i(getResources().getString(R.string.app_name), "Saving to \""+teamPhotoPath+"\"");
+                Log.i(getResources().getString(R.string.app_name), "Saving to \"" + teamPhotoPath + "\"");
 
                 TakePicture pic = new TakePicture(teamPhotoPath, me);
                 pic.capturePicture();
                 DisplayAlertDialog.accepted = false;
-            }
-            else if (!enterATeamNumberPopup.canceled) {
+            } else if (!enterATeamNumberPopup.canceled) {
                 // schedule me to run again
                 (new Timer()).schedule(new CheckPicturePopupHasExited(), 250);
             }
@@ -334,8 +375,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
 
                 DisplayAlertDialog.accepted = false;
-            }
-            else if (!enterATeamNumberPopup.canceled) {
+            } else if (!enterATeamNumberPopup.canceled) {
                 // schedule me to run again
                 (new Timer()).schedule(new CheckSchedulePopupHasExited(), 250);
             }
@@ -343,37 +383,41 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void downloadFileCallback(String localFilename, String remoteFilename){
+    public void downloadFileCallback(String localFilename, String remoteFilename) {
         //Here in case we need it later
     }
-    public void uploadFileCallback(String localFilename, String remoteFilename){
+
+    public void uploadFileCallback(String localFilename, String remoteFilename) {
         //Here in case we need it later
     }
-    public void syncCallback(int changedFiles){
+
+    public void syncCallback(int changedFiles) {
         //Here in case we need it later
     }
-    public void dirCallback(FTPFile[] listing){
+
+    public void dirCallback(FTPFile[] listing) {
         //Here in case we need it later
     }
-    public void updateSyncBar(String Caption, int Progress, Activity activity, boolean isRunning){
+
+    public void updateSyncBar(String Caption, int Progress, Activity activity, boolean isRunning) {
         final String caption = Caption;
         final int progress = Progress;
         final Activity activ = activity;
         final boolean isRunningf = isRunning;
-        activity.runOnUiThread(new Runnable(){
-            public void run(){
-                TextView tv =(TextView)activ.findViewById(R.id.syncCaption);
-                ProgressBar pb = (ProgressBar)activ.findViewById(R.id.syncBar);
-                Button bu = (Button)activ.findViewById(R.id.syncButon);
-                if(isRunningf){
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                TextView tv = (TextView) activ.findViewById(R.id.syncCaption);
+                ProgressBar pb = (ProgressBar) activ.findViewById(R.id.syncBar);
+                Button bu = (Button) activ.findViewById(R.id.syncButon);
+                if (isRunningf) {
                     bu.setText("syncing...");
-                }else{
+                } else {
                     bu.setText("Sync Photos");
                 }
-                if(caption.startsWith("^")){
+                if (caption.startsWith("^")) {
                     pb.setIndeterminate(true);
                     tv.setText("Getting File Listing...");
-                }else{
+                } else {
                     pb.setIndeterminate(false);
                     tv.setText(caption);
                 }
@@ -381,19 +425,20 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
-    public void syncPhotos(View v){
-        try{
+
+    public void syncPhotos(View v) {
+        try {
 
             String ftpHostname = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPHostname), null);
             String ftpUsername = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPUsername), null);
             String ftpPassword = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPPassword), null);
-            if(ftpUsername==null||ftpHostname==null||ftpPassword==null) return;
+            if (ftpUsername == null || ftpHostname == null || ftpPassword == null) return;
             sFtpClient = new FTPClient(ftpHostname, ftpUsername, ftpPassword, FileUtils.sLocalTeamPhotosFilePath, FileUtils.sRemoteTeamPhotosFilePath);
             sFtpClient.connect();
             sFtpClient.syncAllFiles(this, this);
-        }catch(Exception e){
+        } catch (Exception e) {
             // empty
-            Log.e("MCMergeManager: ","", e);
+            Log.e("MCMergeManager: ", "", e);
         }
 
     }

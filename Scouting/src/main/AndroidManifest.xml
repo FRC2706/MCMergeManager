@@ -14,11 +14,11 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+        android:name=".backend.App"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name=".backend.App">
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.apps.drive.APP_ID"
             android:value="id=661008047959" />
@@ -33,9 +33,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".steamworks2017.gui.PostGameClass"
-            android:label="@string/app_name">
-        </activity>
+        <activity
+            android:name=".steamworks2017.gui.PostGameClass"
+            android:label="@string/app_name" />
         <activity
             android:name=".steamworks2017.gui.TeleopScouting"
             android:label="@string/title_activity_new_teleop_scouting"
@@ -80,7 +80,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.team2706.scouting.mcmergemanager.gui.MainActivity" />
         </activity>
-
         <activity
             android:name=".gui.CyclesDisplayActivity"
             android:label="@string/title_activity_cycles_display"
@@ -90,8 +89,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.team2706.scouting.mcmergemanager.gui.MainActivity" />
         </activity>
-  
-      <activity
+        <activity
             android:name=".gui.RepairTimeCollection"
             android:label="@string/title_activity_repair_time_collection"
             android:parentActivityName=".gui.MainActivity"
@@ -101,4 +99,5 @@
                 android:value="ca.team2706.scouting.mcmergemanager.gui.MainActivity" />
         </activity>
     </application>
+
 </manifest>
