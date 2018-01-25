@@ -27,7 +27,6 @@
         <item>2014</item>
     </string-array>
 
-
     <string-array name="auto_pickup_spinner">
         <item>Started with cube</item>
         <item>Ground</item>
@@ -40,8 +39,6 @@
         <item>Exchange</item>
         <item>Dropped power cube</item>
     </string-array>
-
-
 
 
     <!-- EXTRAS -->
