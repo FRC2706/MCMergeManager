@@ -61,8 +61,6 @@ public class FileUtils {
 
     public static String sRemoteTeamPhotosFilePath;
 
-    public static final OkHttpClient client = new OkHttpClient();
-    public static final String SERVER_URL = "http://beancode.org:9999/";
 
     /* Static initializer */
     static {
@@ -760,72 +758,6 @@ public class FileUtils {
                 }
                 break;
         }
-        return false;
-    }
-
-    public static final String TEAMS_LIST = "teams/list";
-    public static final String TEAM_STATS = "teams/show?team="; // Add the team number at the end
-    public static final String COMPETITION_LIST = "competitions/list";
-    public static final String COMPETITON_STAT = "competitions/show?competition=";  // Add the competition code after
-    public static final String GET_MATCH_A = "matches/show?competition=";  // Requires part b afterwards to choose which match
-    public static final String GET_MATCH_B = "&match=";
-
-    // Gets a json array from the server
-    public static JSONArray getJsonArrayFromServer(String url) {
-        Request request = new Request.Builder()
-                .url(SERVER_URL + url)
-                .build();
-
-        try {
-            Response response = client.newCall(request).execute();
-
-            return new JSONArray(response.body().string());
-        } catch(JSONException e) {
-            Log.d("JSON error", e.toString());
-        } catch(IOException e) {
-            Log.d("Okhttp error", e.toString());
-        }
-
-        // If their was an error earlier return nothing
-        return null;
-    }
-
-    // Gets a json object from the server
-    public static JSONObject getJsonObjectFromServer(String url) {
-        Request request = new Request.Builder()
-                .url(SERVER_URL + url)
-                .build();
-
-        try {
-            Response response = client.newCall(request).execute();
-
-            return new JSONObject(response.body().string());
-        } catch(JSONException e) {
-            Log.d("JSON error", e.toString());
-        } catch(IOException e) {
-            Log.d("Okhttp error", e.toString());
-        }
-
-        return null;
-    }
-
-    // Post a comment to the server, returns true if successful
-    public static boolean postCommentToServer(int team_number, String message) {
-        Request request = new Request.Builder()
-                .url(SERVER_URL + "comments/create?team=" + team_number + "&body=" + message)
-                .build();
-
-        try {
-            Response response = client.newCall(request).execute();
-
-            // If server returns succes then the comment posted
-            if(new String(response.body().string()).equals("success")) {
-                return true;
-            }
-        } catch(IOException e) {
-            Log.d("Okhttp3 error", e.toString());
-        }
-
         return false;
     }
 }

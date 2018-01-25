@@ -36,8 +36,8 @@ import okhttp3.Response;
 
 public class BlueAllianceUtils {
 
-    public static final String BASE_URL = "http://www.thebluealliance.com/api/v3/";
-    public static final String AUTH_KEY = "8GLetjJXz2pNCZuY0NnwejAw0ULn9TzbsYeLkYyzeKwDeRsK9MiDnxEGgy6UksW1";
+    private static final String BASE_URL = "http://www.thebluealliance.com/api/v3/";
+    private static final String AUTH_KEY = "8GLetjJXz2pNCZuY0NnwejAw0ULn9TzbsYeLkYyzeKwDeRsK9MiDnxEGgy6UksW1";
 
     private Activity mActivity;
 
@@ -83,7 +83,7 @@ public class BlueAllianceUtils {
                 MatchSchedule schedule;
 
                 try {
-                    Response response = FileUtils.client.newCall(request).execute();
+                    Response response = WebServerUtils.client.newCall(request).execute();
 
                     schedule = new MatchSchedule();
                     schedule.addToListOfTeamsAtEvent(response.body().string());
@@ -120,7 +120,7 @@ public class BlueAllianceUtils {
                 MatchSchedule schedule;
 
                 try {
-                    Response response = FileUtils.client.newCall(request).execute();
+                    Response response = WebServerUtils.client.newCall(request).execute();
 
                     schedule = MatchSchedule.newFromJsonSchedule(response.body().string());
                 } catch (IOException e) {
@@ -136,7 +136,7 @@ public class BlueAllianceUtils {
     // Returns a string of a piece of data
     // key - is the key of the piece of data being looked for
     // extraurl - the extra part of the string needed to get the response from server
-    public static String getBlueAllicanceData(String key, String extraUrl) {
+    public static String getBlueAllianceData(String key, String extraUrl) {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
         String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
 
@@ -146,7 +146,7 @@ public class BlueAllianceUtils {
                 .build();
 
         try {
-            Response response = FileUtils.client.newCall(request).execute();
+            Response response = WebServerUtils.client.newCall(request).execute();
 
             JSONObject json = new JSONObject(response.body().string());
             return json.getString(key);
@@ -180,7 +180,7 @@ public class BlueAllianceUtils {
 
         JSONArray keys;
         try {
-            Response responseKeys = FileUtils.client.newCall(request).execute();
+            Response responseKeys = WebServerUtils.client.newCall(request).execute();
 
             keys = new JSONArray(responseKeys.body().string());
         } catch (IOException e) {
@@ -205,7 +205,7 @@ public class BlueAllianceUtils {
                         .header("X-TBA-Auth-Key", AUTH_KEY)
                         .build();
 
-                Response eventStatusResponse = FileUtils.client.newCall(request).execute();
+                Response eventStatusResponse = WebServerUtils.client.newCall(request).execute();
 
                 // Find the data in the data gotten from tbav3
                 JSONObject jsonEventStatus = new JSONObject(eventStatusResponse.body().string());
@@ -220,7 +220,7 @@ public class BlueAllianceUtils {
                         .header("X-TBA-Auth-Key", AUTH_KEY)
                         .build();
 
-                Response teamNameResponse = FileUtils.client.newCall(request).execute();
+                Response teamNameResponse = WebServerUtils.client.newCall(request).execute();
 
                 JSONObject json = new JSONObject(teamNameResponse.body().string());
                 sb.append(json.getString("name") + "\n");
