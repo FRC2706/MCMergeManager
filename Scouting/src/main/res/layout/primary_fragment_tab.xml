@@ -4,115 +4,131 @@
     android:layout_height="fill_parent">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="371dp"
+            android:layout_height="400dp"
             android:orientation="vertical">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/button5"
                     android:layout_width="fill_parent"
                     android:layout_height="58dp"
-                    android:text="Team Schedule"
-                    android:id="@+id/button5"
                     android:layout_gravity="right"
                     android:layout_weight="7.10"
+                    android:clickable="false"
                     android:onClick="onShowTeamScheduleClicked"
-                    android:clickable="false" />
+                    android:text="Team Schedule" />
 
                 <Button
+                    android:id="@+id/button4"
                     android:layout_width="match_parent"
                     android:layout_height="58dp"
-                    android:text="Full Schedule"
-                    android:id="@+id/button4"
                     android:layout_gravity="right"
                     android:layout_weight="7.10"
+                    android:clickable="false"
                     android:onClick="onShowScheduleClicked"
-                    android:clickable="false" />
+                    android:text="Full Schedule" />
             </LinearLayout>
+
             <LinearLayout
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:layout_width="0px"
-                android:layout_height="0px"/>
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
+
             <EditText
+                android:id="@+id/matchNoET"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/matchNoET"
-                android:hint="Match #"
                 android:layout_gravity="center_horizontal"
-                android:textColor="?attr/colorPrimaryDark"
-                android:gravity="center" />
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Match #"
+                android:inputType="number"
+                android:textColor="?attr/colorPrimaryDark" />
 
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="150dp"
-                android:text="Scout Match"
                 android:background="?attr/colorPrimaryDark"
-                android:textStyle="bold"
+                android:enabled="true"
                 android:onClick="scout"
+                android:text="Scout Match"
                 android:textSize="28sp"
-                android:enabled="true" />
+                android:textStyle="bold" />
 
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="58dp">
+                android:layout_height="58dp"
+                android:orientation="horizontal">
 
-                <Button android:id="@+id/takePictureBtn"
+                <Button
+                    android:id="@+id/takePictureBtn"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Take Picture"
                     android:onClick="takePicture"
-                    />
+                    android:text="Take Picture" />
 
                 <Button
-                    android:text="Sync Photos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Button" />
+
+                <Button
                     android:id="@+id/syncButon"
-                    android:onClick="syncPhotos" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="syncPhotos"
+                    android:text="Sync Photos" />
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:orientation="vertical"
                     android:weightSum="1">
 
                     <ProgressBar
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_height="wrap_content"
                         android:id="@+id/syncBar"
-                        android:layout_width="match_parent" />
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
                     <TextView
-                        android:text="Start a sync here"
+                        android:id="@+id/syncCaption"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/syncCaption"
-                        android:layout_weight="0.19" />
+                        android:layout_weight="0.19"
+                        android:text="Start a sync here" />
                 </LinearLayout>
 
             </LinearLayout>
 
             <Button
-                android:text="Record Repair Time"
+                android:id="@+id/button6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/button6"
-                android:onClick="onRepairTimeRecordClicked" />
+                android:onClick="onRepairTimeRecordClicked"
+                android:text="Record Repair Time" />
+
+            <Button
+                android:id="@+id/button7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onWriteCommentButtonClick"
+                android:text="Write Comment"
+                android:visibility="visible" />
 
         </LinearLayout>
 
@@ -120,7 +136,7 @@
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fragment_container1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="144dp">
 
             <Button
                 android:id="@+id/button"
@@ -128,6 +144,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="onClick"
                 android:text="Sync Match Data" />
+
         </FrameLayout>
     </LinearLayout>
 </ScrollView>

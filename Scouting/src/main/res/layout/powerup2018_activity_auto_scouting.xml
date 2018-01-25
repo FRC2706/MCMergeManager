@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/autoBallTextView" />
 
-    <include layout="@layout/steamworks2017_content_auto_scouting"
+    <include layout="@layout/powerup2018_content_auto_scouting"
         android:id="@+id/include" />
 
 

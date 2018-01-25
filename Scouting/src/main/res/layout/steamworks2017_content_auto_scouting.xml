@@ -11,7 +11,7 @@
     android:id="@+id/relativeLayoutMap"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".steamworks2017.gui.AutoScouting"
-    tools:showIn="@layout/steamworks2017_activity_auto_scouting">
+    tools:showIn="@layout/powerup2018_activity_auto_scouting">
 
     <TextView
         android:layout_width="wrap_content"

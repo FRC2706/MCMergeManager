@@ -2,50 +2,47 @@ package ca.team2706.scouting.mcmergemanager.backend;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.ConnectException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 import ca.team2706.scouting.mcmergemanager.R;
-import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
+import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+
+/**
+ * Created by daniel on 15/11/17.
+ *
+ * Used to get data from the blue alliance servers, uses v3 of the api.
+ * All methods are static so you do not need to create an object.
+ */
 
 public class BlueAllianceUtils {
+
+    public static final String BASE_URL = "http://www.thebluealliance.com/api/v3/";
+    public static final String AUTH_KEY = "8GLetjJXz2pNCZuY0NnwejAw0ULn9TzbsYeLkYyzeKwDeRsK9MiDnxEGgy6UksW1";
 
     private Activity mActivity;
 
     private static boolean sPermissionsChecked = false;
-
-    /* ~~~ Constructor ~~~ */
-    public BlueAllianceUtils(Activity activity) {
-        mActivity = activity;
-
-        checkInternetPermissions(activity);
-    }
-
+    private static final OkHttpClient client = new OkHttpClient();
 
     public static boolean checkInternetPermissions(Activity activity) {
         if (activity == null)
@@ -66,292 +63,45 @@ public class BlueAllianceUtils {
         return sPermissionsChecked;
     }
 
-    @NonNull
-    private static String readUrl(String urlString) throws Exception {
-        if(!sPermissionsChecked)
-            throw new IllegalStateException("BlueAllianceUtils: make sure you call BlueAllianceUtils.checkInternetPermissions() and the user has clicked \"Yes\" before trying to contact thebluealliance.com!");
-
-        BufferedReader reader = null;
-
-        try {
-            URLConnection conn;
-            URL url = new URL(urlString);
-            conn = url.openConnection();
-            HttpURLConnection httpConn = (HttpURLConnection) conn;
-            httpConn.setRequestMethod("GET");
-            httpConn.connect();
-
-            int httpRespCode = httpConn.getResponseCode();
-            if (httpRespCode == HttpURLConnection.HTTP_OK) {
-                reader = new BufferedReader(new InputStreamReader(httpConn.getInputStream()));
-
-
-                StringBuffer buffer = new StringBuffer();
-                int read;
-                char[] chars = new char[1024];
-                while ((read = reader.read(chars)) != -1)
-                    buffer.append(chars, 0, read);
-
-                return buffer.toString();
-            } else {
-                throw new ConnectException("TBA connection returned code: " + httpRespCode);
-            }
-        } finally {
-            if (reader != null)
-                reader.close();
-        }
-    }
-
-
-    /**
-     * Gets you the formatted string of Blue Alliance gearDeliveryData for a particular team.
-     * If we already have gearDeliveryData on this team in
-     * /MCMergeManager/<TeamName>/<EventName>/thebluealliance.json
-     * then it will return that gearDeliveryData, otherwise it will do an internet fetch and store the results
-     * in the file for future offline searches.
-     * <p/>
-     * This should trigger on searching for a team on the Team Info tab.
-     */
-    public String getBlueAllianceDataForTeam(int teamNumber) {
-
-        ArrayList<String> downloadArray;
-        String joined2016 = "";
-        String joined2015 = "";
-        String joined2014 = "";
-        String joined2013 = "";
-        String joined = "";
-
-        String combine;
-        ArrayList<String> store2016 = new ArrayList<>();
-        ArrayList<String> store2015 = new ArrayList<>();
-        ArrayList<String> store2014 = new ArrayList<>();
-        ArrayList<String> store2013 = new ArrayList<>();
-
-        /* if (we already have gearDeliveryData on them in the json file) {
-            String gearDeliveryData = extract the gearDeliveryData from json format and build a pretty-print string
-            return gearDeliveryData; //TODO
-        }*/
-
-        ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (activeNetwork == null) { // not connected to the internet
-            try {
-                downloadArray = new ArrayList<>();
-
-                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(mActivity);
-                boolean done = false;
-
-                String[] parts = SP.getString("Download Data", null).split("\\.");
-                for (int g = 0; g < parts.length; g++) {
-                    if (parts[g].contains(Integer.toString(teamNumber))) {
-                        Log.d(App.getContext().getResources().getString(R.string.app_name), "Team Data Found");
-                        downloadArray.add(parts[g]);
-
-                        done = true;
-                    }
-                }
-                if (!done) {
-                    mActivity.runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast.makeText(App.getContext(), "No Internet and this team is not downloaded!", Toast.LENGTH_LONG).show();
-                        }
-                    });
-
-                } else {
-                    String returning = TextUtils.join("\n", downloadArray);
-                    String regex = "\\b" + teamNumber;
-                    returning = returning.replaceAll(regex, "");
-
-                    return returning;
-                }
-            } catch (java.lang.NullPointerException e) {
-                mActivity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(App.getContext(), "No Internet and nothing has been downloaded!", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-
-            // if (! file exitst(/MCMergeManager/<TeamName>/<EventName>/thebluealliance.json) )
-        } else {
-            ArrayList<String> comps2016 = getBlueAllianceDataArrayAsArray("event_code", "https://www.thebluealliance.com/api/v2/team/frc" + teamNumber + "/2016/events?X-TBA-App-Id=frc2706:mergemanager:v01/");
-            ArrayList<String> compsName2016 = getBlueAllianceDataArrayAsArray("name", "https://www.thebluealliance.com/api/v2/team/frc" + teamNumber + "/2016/events?X-TBA-App-Id=frc2706:mergemanager:v01/");
-            for (int i = 0; i < comps2016.size(); i++) {
-                ArrayList<String> test = getBlueAllianceDataDoubleArrayAsArray(1, "https://www.thebluealliance.com/api/v2/event/2016" + comps2016.get(i) + "/rankings?X-TBA-App-Id=frc2706:mergemanager:v01/");
-                for (int p = 0; p < test.size(); p++) {
-                    if (test.get(p).equals(Integer.toString(teamNumber))) { // Or use equals() if it actually returns an Object.
-                        // Found at index i. Break or return if necessary.
-
-                        int compAmount = test.size();
-                        compAmount -= 1;
-//                        combine = "2016 " + compsName2015.get(i) + " seeded " + Integer.toString(p) + "/" + compAmount;
-                        combine = Integer.toString(p) + "/" + compAmount + " - 2016 " + compsName2016.get(i);
-
-                        store2015.add(combine);
-                        joined2015 = TextUtils.join("\n", store2015);
-                    }
-                }
-            }
-
-            ArrayList<String> comps2015 = getBlueAllianceDataArrayAsArray("event_code", "https://www.thebluealliance.com/api/v2/team/frc" + teamNumber + "/2015/events?X-TBA-App-Id=frc2706:mergemanager:v01/");
-            ArrayList<String> compsName2015 = getBlueAllianceDataArrayAsArray("name", "https://www.thebluealliance.com/api/v2/team/frc" + teamNumber + "/2015/events?X-TBA-App-Id=frc2706:mergemanager:v01/");
-            for (int i = 0; i < comps2015.size(); i++) {
-                ArrayList<String> test = getBlueAllianceDataDoubleArrayAsArray(1, "https://www.thebluealliance.com/api/v2/event/2015" + comps2015.get(i) + "/rankings?X-TBA-App-Id=frc2706:mergemanager:v01/");
-                for (int p = 0; p < test.size(); p++) {
-                    if (test.get(p).equals(Integer.toString(teamNumber))) { // Or use equals() if it actually returns an Object.
-                        // Found at index i. Break or return if necessary.
-
-                        int compAmount = test.size();
-                        compAmount -= 1;
-//                        combine = "2015 " + compsName2015.get(i) + " seeded " + Integer.toString(p) + "/" + compAmount;
-                        combine = "\t\t" + Integer.toString(p) + "/" + compAmount + " - 2015 " + compsName2015.get(i);
-
-                        store2015.add(combine);
-                        joined2015 = TextUtils.join("\n", store2015);
-                    }
-                }
-            }
-
-            ArrayList<String> comps2014 = getBlueAllianceDataArrayAsArray("event_code", "https://www.thebluealliance.com/api/v2/team/frc" + teamNumber + "/2014/events?X-TBA-App-Id=frc2706:mergemanager:v01/");
-            ArrayList<String> compsName2014 = getBlueAllianceDataArrayAsArray("name", "https://www.thebluealliance.com/api/v2/team/frc" + teamNumber + "/2014/events?X-TBA-App-Id=frc2706:mergemanager:v01/");
-            for (int i = 0; i < comps2014.size(); i++) {
-                ArrayList<String> test = getBlueAllianceDataDoubleArrayAsArray(1, "https://www.thebluealliance.com/api/v2/event/2014" + comps2014.get(i) + "/rankings?X-TBA-App-Id=frc2706:mergemanager:v01/");
-                for (int p = 0; p < test.size(); p++) {
-
-                    if (test.get(p).equals(Integer.toString(teamNumber))) { // Or use equals() if it actually returns an Object.
-                        // Found at index i. Break or return if necessary.
-
-                        int compAmount = test.size();
-                        compAmount -= 1;
-//                        combine = "2014 " + compsName2014.get(i) + " seeded " + Integer.toString(p) + "/" + compAmount;
-                        combine = Integer.toString(p) + "/" + compAmount + " - 2014 " + compsName2014.get(i);
-
-                        store2014.add(combine);
-                        joined2014 = TextUtils.join("\n", store2014);
-
-                    }
-                }
-
-            }
-
-            ArrayList<String> comps2013 = getBlueAllianceDataArrayAsArray("event_code", "https://www.thebluealliance.com/api/v2/team/frc" + teamNumber + "/2013/events?X-TBA-App-Id=frc2706:mergemanager:v01/");
-            ArrayList<String> compsName2013 = getBlueAllianceDataArrayAsArray("name", "https://www.thebluealliance.com/api/v2/team/frc" + teamNumber + "/2013/events?X-TBA-App-Id=frc2706:mergemanager:v01/");
-            for (int i = 0; i < comps2013.size(); i++) {
-                ArrayList<String> test = getBlueAllianceDataDoubleArrayAsArray(1, "https://www.thebluealliance.com/api/v2/event/2013" + comps2013.get(i) + "/rankings?X-TBA-App-Id=frc2706:mergemanager:v01/");
-                for (int p = 0; p < test.size(); p++) {
-
-
-                    if (test.get(p).equals(Integer.toString(teamNumber))) { // Or use equals() if it actually returns an Object.
-                        // Found at index i. Break or return if necessary.
-
-                        int compAmount = test.size();
-                        compAmount -= 1;
-//                        combine = "2013 " + compsName2013.get(i) + " seeded " + Integer.toString(p) + "/" + compAmount;
-                        combine = "\t\t" + Integer.toString(p) + "/" + compAmount + " - 2013 " + compsName2013.get(i);
-
-                        store2013.add(combine);
-                        joined2013 = TextUtils.join("\n", store2013);
-                    }
-
-                }
-            }
-            joined = joined2015 + "\n" + joined2014 + "\n" + joined2013;
-            //  }
-
-        }
-        return joined;
-    }
-
-
-
-    /**
-     * Call a BlueAlliance URL and a key and it will give you the parsed JSON back
-     */
-    public static String getBlueAllianceData(final String key, final String url) {
-        String keyedJson = "";
-        try {
-            JSONObject issueObj = new JSONObject(readUrl(url));
-            keyedJson = issueObj.getString(key);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return keyedJson;
-    }
-
-    /**
-     * <Some Description>
-     */
-    public static String getBlueAllianceDataArrayAsString(final String key, final String url) {
-        String keyedJson = "";
-
-        try {
-            ArrayList<String> array1 = new ArrayList<>();
-            JSONArray issueArray = new JSONArray(readUrl(url));
-
-            for (int i = 0; i < issueArray.length(); i++) {
-                JSONObject jsonobject = issueArray.getJSONObject(i);
-                String keyData = jsonobject.getString(key);
-                array1.add(keyData);
-                keyedJson = TextUtils.join(", ", array1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return keyedJson;
-    }
-
-    /**
-     * <Some Description>
-     */
-    public static ArrayList<String> getBlueAllianceDataDoubleArrayAsArray(final int key, final String url) {
-        ArrayList<String> array1 = new ArrayList<>();
-        try {
-            JSONArray issueArray = new JSONArray(readUrl(url));
-            for (int i = 0; i < issueArray.length(); i++) {
-                JSONArray halfArray = issueArray.getJSONArray(i);
-                String keyData = halfArray.getString(key);
-                array1.add(keyData);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return array1;
-    }
-
-
-    public static void fetchMatchScheduleAndResults(final DataRequester requester) {
-
-        // check if we have internet connectivity
-        ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (activeNetwork == null) { // not connected to the internet
-            return;
-        }
-
-        new Thread()
-        {
-            public void run() {
-                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-                String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
-                String scheduleStr;
-                try {
-                    scheduleStr = readUrl("https://www.thebluealliance.com/api/v2/event/"+TBA_event+"/matches?X-TBA-App-Id=frc2706:mergemanager:v01/");
-                } catch (Exception e) {
-                    Log.e(App.getContext().getResources().getString(R.string.app_name), "Error fetching schedule gearDeliveryData from thebluealliance. ",e);
-                    return;
-                }
-
-                MatchSchedule schedule = MatchSchedule.newFromJsonSchedule(scheduleStr);
-
-                // return gearDeliveryData to the requester
-                requester.updateMatchSchedule(schedule);
-            }
-        }.start();
-    }
-
-
+    // Gets the list of all teams attending the event
     public static void fetchTeamsRegisteredAtEvent(final DataRequester requester) {
+        // Check if device is connected to the internet
+        ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork == null)
+            return;
 
+        new Thread() {
+            public void run() {
+                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+                String TBA_Event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
+
+                Request request = new Request.Builder()
+                        .url(BASE_URL + "event/" + TBA_Event + "/teams/keys")
+                        .header("X-TBA-Auth-Key", AUTH_KEY)
+                        .build();
+                MatchSchedule schedule;
+
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    schedule = new MatchSchedule();
+                    schedule.addToListOfTeamsAtEvent(response.body().string());
+
+                    response.close();
+                } catch (IOException e) {
+                    Log.d("Error getting teams: ", e.toString());
+                    return;
+                }
+
+                System.out.println(schedule.toString());
+                requester.updateMatchSchedule(schedule);
+            }
+        }.start();
+    }
+
+    // Used to get data to show the upcoming match schedules and the past matches with the score
+    public static void fetchMatchScheduleAndResults(final DataRequester dataRequester) {
         // check if we have internet connectivity
         ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -359,128 +109,162 @@ public class BlueAllianceUtils {
             return;
         }
 
-        new Thread()
-        {
+        new Thread() {
             public void run() {
                 SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
                 String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
-                String teamsListStr;
+
+                Request request = new Request.Builder()
+                        .url(BASE_URL + "event/" + TBA_event + "/matches/simple")
+                        .header("X-TBA-Auth-Key", AUTH_KEY)
+                        .build();
+                MatchSchedule schedule;
+
                 try {
-                    teamsListStr = readUrl("https://www.thebluealliance.com/api/v2/event/"+TBA_event+"/teams?X-TBA-App-Id=frc2706:mergemanager:v01/");
+                    Response response = client.newCall(request).execute();
 
-
-                } catch (Exception e) {
-                    Log.e(App.getContext().getResources().getString(R.string.app_name), "Error fetching schedule gearDeliveryData from thebluealliance. ",e);
+                    schedule = MatchSchedule.newFromJsonSchedule(response.body().string());
+                } catch (IOException e) {
+                    Log.d("Error match scedule", e.toString());
                     return;
                 }
 
-                MatchSchedule schedule = new MatchSchedule();
-                schedule.addToListOfTeamsAtEvent(teamsListStr);
-
-                // return gearDeliveryData to the requester
-                requester.updateMatchSchedule(schedule);
+                System.out.println(schedule.toString());
+                dataRequester.updateMatchSchedule(schedule);
             }
         }.start();
-
     }
 
-    /**
-     * Fetches Blue Alliance gearDeliveryData for all teams who are registered for a particular event and saves the gearDeliveryData in
-     * /MCMergeManager/<TeamName>/<EventName>/thebluealliance.json
-     * so that the gearDeliveryData is still accessible later, even if there's no internet connection later.
-     * <p/>
-     * This should trigger on a button, or maybe a settin+gs-menu item in Settings.
-     */
-    public void downloadBlueAllianceDataForEvent(String eventName, String year, final ProgressBar progressBar, final AlertDialog dialog, int dataYear) {
+    // Returns a string of a piece of data
+    // key - is the key of the piece of data being looked for
+    // extraurl - the extra part of the string needed to get the response from server
+    public static String getBlueAllicanceData(String key, String extraUrl) {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
+
+        Request request = new Request.Builder()
+                .url(BASE_URL + extraUrl)
+                .header("X-TBA-Auth-Key", AUTH_KEY)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+
+            JSONObject json = new JSONObject(response.body().string());
+            return json.getString(key);
+        } catch (JSONException e) {
+            Log.d("Json error", e.toString());
+        } catch (IOException e) {
+            Log.d("okhttp error", e.toString());
+        }
+
+        return null;
+    }
+
+    // Returns the past competition data for a team
+    // TODO: There must be an easier way to actually get this data, seems to inefficient to me
+    public static String getBlueAllianceDateForTeam(int team_number) {
+        // Used to build the final string
+        StringBuilder sb = new StringBuilder();
+
+        // check if we have internet connectivity
         ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork == null) { // not connected to the internet
-            return;
+            return null;
         }
 
-        //Get all teams at event
-        final ArrayList<String> downloadedCompArray = getBlueAllianceDataArrayAsArray("team_number", "https://www.thebluealliance.com/api/v2/event/" + year + eventName + "/teams?X-TBA-App-Id=frc2706:mergemanager:v01/");
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        String TBA_event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
 
-        for (
-            //For each team
-                int o = 0;
-                o < downloadedCompArray.size(); o++)
+        // First get the keys of every event the team has been to
+        Request request = new Request.Builder()
+                .url(BASE_URL + "team/frc" + team_number + "/events/keys")
+                .header("X-TBA-Auth-Key", AUTH_KEY)
+                .build();
 
-        {
-            mActivity.runOnUiThread(new Runnable() {
-                public void run() {
-                    Log.v(App.getContext().getResources().getString(R.string.app_name), "ProgressBar Current Size: " + progressBar.getProgress());
-                    progressBar.setProgress(progressBar.getProgress() + (int) (100.0 / downloadedCompArray.size()));
-                }
-            });
-            boolean looped = false;
-            String joe = downloadedCompArray.get(o);
+        JSONArray keys;
+        try {
+            Response responseKeys = client.newCall(request).execute();
 
-            //Get Competitions they went to
-            ArrayList<String> comps2015 = getBlueAllianceDataArrayAsArray("event_code", "https://www.thebluealliance.com/api/v2/team/frc" + joe + "/" + dataYear + "/events?X-TBA-App-Id=frc2706:mergemanager:v01/");
+            keys = new JSONArray(responseKeys.body().string());
+        } catch (IOException e) {
+            Log.d("OKKHTP error", e.toString());
+            return "FAiled";
+        } catch (JSONException e) {
+            Log.d("Json errer", e.toString());
+            return "Failed";
+        }
 
-            //Get Names of Competitions they went to
-            ArrayList<String> compsName2015 = getBlueAllianceDataArrayAsArray("name", "https://www.thebluealliance.com/api/v2/team/frc" + joe + "/" + dataYear + "/events?X-TBA-App-Id=frc2706:mergemanager:v01/");
+        // Loop though every event and add data to string buidler
+        for (int i = 0; i < keys.length(); i++) {
 
-            for (int i = 0; i < comps2015.size(); i++) {
-                //For each competition
+            try {
+                // Only look for events since 2012
+                if (keys.getString(i).charAt(2) != '1' || keys.getString(i).charAt(3) < '4')
+                    continue;
 
-                //Get their ranking
-                ArrayList<String> test = getBlueAllianceDataDoubleArrayAsArray(1, "https://www.thebluealliance.com/api/v2/event/" + dataYear + comps2015.get(i) + "/rankings?X-TBA-App-Id=frc2706:mergemanager:v01/");
-                for (int p = 0; p < test.size(); p++) {
-                    if (test.get(p).equals(Integer.toString(Integer.parseInt(joe)))) {
-                        // Found at index i. Break or return if necessary.
+                // Get the rank of the team
+                request = new Request.Builder()
+                        .url(BASE_URL + "team/frc" + team_number + "/event/" + keys.getString(i) + "/status")
+                        .header("X-TBA-Auth-Key", AUTH_KEY)
+                        .build();
 
-                        int compAmount = test.size();
-                        compAmount -= 1;
-                        String combine = dataYear + " "/* //TODO year */ + compsName2015.get(i) + " seeded " + Integer.toString(p) + "/" + compAmount + " " + joe;
+                Response response1 = client.newCall(request).execute();
 
-                        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-                        SharedPreferences.Editor editor = SP.edit();
-                        boolean done = false;
+                // Find the data in the data gotten from tbav3
+                JSONObject jsonEventStatus = new JSONObject(response1.body().string());
+                JSONObject qualStats = jsonEventStatus.getJSONObject("qual");
+                JSONObject ranking = qualStats.getJSONObject("ranking");
 
-                        String[] parts = SP.getString("Download Data", "").split("\\.");
+                sb.append(ranking.getString("rank") + "/" + qualStats.getString("num_teams") + " - ");
 
-                        for (int g = 0; g < parts.length; g++) {
-                            if (combine.equals(parts[g])) {
-                                Log.d(App.getContext().getResources().getString(R.string.app_name), "Download Data: Found Duplicate");
-                                if (!looped)
-                                    done = true;
+                // Get the event location
+                request = new Request.Builder()
+                        .url(BASE_URL + "event/" + keys.getString(i) + "/simple")
+                        .header("X-TBA-Auth-Key", AUTH_KEY)
+                        .build();
 
-                                break;
-                            }
-                        }
-                        if (!done) {
-                            editor.putString("Download Data", SP.getString("Download Data", "") + combine + ".").apply();
-                            if (comps2015.size() > 1) {
-                                looped = true;
-                            }
-                        }
-                    }
-                }
+                Response response2 = client.newCall(request).execute();
+
+                JSONObject json = new JSONObject(response2.body().string());
+                sb.append(json.getString("name") + "\n");
+            } catch (IOException e) {
+                Log.d("OKKHTP error", e.toString());
+            } catch (JSONException e) {
+                Log.d("JSON - probably-fine", e.toString());
             }
         }
 
-        Log.i(App.getContext().getResources().getString(R.string.app_name), "Download Data: Download Finished.");
+        return sb.toString();
     }
 
-    /**
-     * <Some Description>
-     */
-    public static ArrayList<String> getBlueAllianceDataArrayAsArray(final String key, final String url) {
-        ArrayList<String> array1 = new ArrayList<>();
+    // Used to get a list of events for the user to choose which event they are at
+    public static String getEventKeysFromYear(int year) {
+        StringBuilder sb = new StringBuilder();
+
+        // check if we have internet connectivity
+        ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork == null) { // not connected to the internet
+            return null;
+        }
+
+        // Get a list of the events for a certain year
+        Request request = new Request.Builder()
+                .url(BASE_URL + "events/" + year + "/simple")
+                .header("X-TBA-Auth-Key", AUTH_KEY)
+                .build();
 
         try {
-            JSONArray issueArray = new JSONArray(readUrl(url));
-            for (int i = 0; i < issueArray.length(); i++) {
-                JSONObject jsonobject = issueArray.getJSONObject(i);
-                String keyData = jsonobject.getString(key);
-                array1.add(keyData);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return array1;
-    }
+            Response response = client.newCall(request).execute();
 
+            // Add the json file string to be sent back to settings page
+            sb.append(response.body().string());
+        } catch(IOException e) {
+            Log.d("OKHTTP err0r ", e.toString());
+        }
+
+        return sb.toString();
+    }
 }
