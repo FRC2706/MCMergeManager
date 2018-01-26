@@ -20,9 +20,9 @@
         android:layout_height="11dp" />
 
     <SeekBar
+        android:id="@+id/numBallsPickupSeekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/numBallsPickupSeekBar"
         android:max="40"
         android:progress="0" />
 
