@@ -3,19 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/teleop_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
-        android:text="Teleop"
-        android:textSize="26sp" />
-
     <EditText
-        android:id="@+id/comments_editText"
+        android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -25,71 +14,61 @@
         android:inputType="textPersonName"
         android:text="Comments..." />
 
-    <TextView
-        android:id="@+id/pickup_prompt_textView"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/teleop_header"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:text="Power cube cycle"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <Spinner
-        android:id="@+id/cube_pickup_spinner"
-        android:layout_width="180dp"
-        android:layout_height="45dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/pickup_prompt_textView"
-        android:layout_marginTop="57dp"
-        android:entries="@array/cube_pickup_from" />
+        android:layout_alignParentTop="true"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
 
-    <Spinner
-        android:id="@+id/cube_delivery_spinner"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar2"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="48dp"
+        android:text="Vault"
+        android:textSize="35sp" />
+
+    <CheckBox
+        android:id="@+id/checkBox2"
         android:layout_width="180dp"
-        android:layout_height="45dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/cube_pickup_spinner"
-        android:entries="@array/cube_delivery" />
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="15dp"
+        android:text="Put cubes in properly" />
+
+    <CheckBox
+        android:id="@+id/checkBox4"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/checkBox2"
+        android:layout_below="@+id/checkBox2"
+        android:layout_marginTop="18dp"
+        android:text="Useful powerup" />
 
     <TextView
-        android:id="@+id/pickup_title_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/cube_delivery_spinner"
-        android:layout_alignStart="@+id/teleop_header"
-        android:layout_marginStart="18dp"
-        android:text="Pickup from:"
-        android:textSize="18sp" />
+        android:id="@+id/textView2"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:layout_alignStart="@+id/checkBox4"
+        android:layout_below="@+id/checkBox4"
+        android:layout_marginTop="53dp"
+        android:text="Efficiency"
+        android:textSize="35sp" />
 
-    <TextView
-        android:id="@+id/delivery_title_textView"
-        android:layout_width="wrap_content"
+    <SeekBar
+        android:id="@+id/seekBar2"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/pickup_title_textView"
-        android:layout_alignBottom="@+id/pickup_title_textView"
-        android:layout_alignStart="@+id/cube_delivery_spinner"
-        android:layout_marginStart="39dp"
-        android:text="Delivered to:"
-        android:textSize="18sp" />
+        android:layout_alignStart="@+id/textView2"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="21dp"
+        android:max="100" />
 
-    <Button
-        android:id="@+id/go_to_postgame_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/comments_editText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="41dp"
-        android:text="Started climbing" />
-
-    <TextView
-        android:id="@+id/match_timer_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/go_to_postgame_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp"
-        android:text="2:15"
-        android:textSize="30sp" />
 </RelativeLayout>

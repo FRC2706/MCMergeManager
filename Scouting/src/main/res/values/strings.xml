@@ -50,6 +50,7 @@
         <item>Exchange</item>
         <item>Dropped it</item>
     </string-array>
+.
 
     <!-- EXTRAS -->
     <string name="EXTRA_TEAM_NO">ca.team2706.scouting.teamNo</string>
