@@ -87,8 +87,8 @@ public class BlueAllianceUtils {
 
                     schedule = new MatchSchedule();
                     schedule.addToListOfTeamsAtEvent(response.body().string());
-
                     response.close();
+
                 } catch (IOException e) {
                     Log.d("Error getting teams: ", e.toString());
                     return;
@@ -99,6 +99,39 @@ public class BlueAllianceUtils {
             }
         }.start();
     }
+
+    // TODO This needs to be finished, Untested
+    // Gets the list of all teams attending the event
+    // This is necessary because the other fetch method does not return a string.
+    public static String fetchTeamsRegisteredAtEventString() {
+        // Check if device is connected to the internet
+        ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork == null)
+            return null;
+
+                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+                String TBA_Event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
+
+                Request request = new Request.Builder()
+                        .url(BASE_URL + "event/" + TBA_Event + "/teams/keys")
+                        .header("X-TBA-Auth-Key", AUTH_KEY)
+                        .build();
+
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    String teams =  response.body().toString();
+                    return teams;
+
+
+                } catch (IOException e) {
+                    Log.d("Error getting teams: ", e.toString());
+                    return null;
+                }
+    }
+
+
 
     // Used to get data to show the upcoming match schedules and the past matches with the score
     public static void fetchMatchScheduleAndResults(final DataRequester dataRequester) {
