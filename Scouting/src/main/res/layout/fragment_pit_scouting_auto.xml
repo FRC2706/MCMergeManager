@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/pit_scouting_auto_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="What can they do in autonomous?"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_auto_baseline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cross Baseline"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_auto_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Switch"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_auto_scale"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scale"
+        android:textSize="20sp" />
+
+
+</LinearLayout>
