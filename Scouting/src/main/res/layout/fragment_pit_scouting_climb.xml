@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/pit_scouting_climb_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="How do they climb?"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="21dp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_climb_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Can climb with bar"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_climb_assist_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Can climb with bar and can assist"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_climb_assist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Can't climb but can assist"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_climb_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Can't climb"
+        android:textSize="20sp" />
+
+
+</LinearLayout>
