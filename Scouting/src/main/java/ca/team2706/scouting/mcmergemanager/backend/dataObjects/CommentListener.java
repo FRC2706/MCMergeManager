@@ -22,12 +22,10 @@ public class CommentListener {
         // This is a static class that should never be instantiated
     }
 
-    public static CommentList getComment(View v, int keyCode, KeyEvent event, int teamNum, EditText comment, Context c, CommentList commentList){
+    public static CommentList getComment(View v, int keyCode, KeyEvent event, int teamNum, EditText comment, Context c, CommentList commentList) {
 
 //        EditText teamNumber = (EditText)v.findViewById(R.id.teamNumber);
 //        EditText teamText = (EditText)v.findViewById(R.id.comment);
-
-
 
 
 //        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER &&  teamNum.getId() == R.id.teamNumber)
@@ -47,12 +45,11 @@ public class CommentListener {
 //            }
 //            return cl;
 //        }
-        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER &&  comment.getId() == R.id.comment) {
-            
+        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && comment.getId() == R.id.comment) {
+
 
         }
 
-
-
+        return null;
     }
 }
