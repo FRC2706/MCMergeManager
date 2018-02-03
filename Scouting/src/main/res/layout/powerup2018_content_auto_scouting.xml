@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/auto_title"
+        android:id="@+id/autoTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -16,61 +16,113 @@
         android:textSize="30sp" />
 
     <CheckBox
-        android:id="@+id/baseline_checkbox"
+        android:id="@+id/baselineCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/auto_title"
+        android:layout_below="@+id/autoTitle"
         android:layout_marginStart="28dp"
         android:layout_marginTop="30dp"
         android:text="Cross baseline?"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/auto_pickup_text"
+        android:id="@+id/autoPickupText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/auto_title"
-        android:layout_below="@+id/baseline_checkbox"
-        android:layout_marginTop="11dp"
+        android:layout_below="@+id/baselineCheckbox"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
         android:text="Pickup"
         android:textSize="20sp" />
 
-    <Spinner
-        android:id="@+id/auto_pickup_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/baseline_checkbox"
-        android:layout_marginTop="46dp"
-        android:entries="@array/auto_pickup_spinner" />
-
-    <Spinner
-        android:id="@+id/auto_delivery_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/auto_pickup_spinner"
-        android:layout_marginTop="54dp"
-        android:entries="@array/auto_delivery_spinner" />
-
     <CheckBox
-        android:id="@+id/no_auto_checkbox"
+        android:id="@+id/autoStartedCubeCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/baseline_checkbox"
-        android:layout_below="@+id/auto_delivery_spinner"
-        android:layout_marginTop="36dp"
+        android:layout_alignStart="@+id/baselineCheckbox"
+        android:layout_below="@+id/autoPickupText"
+        android:layout_marginTop="12dp"
+        android:text="Started with cube"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/autoGroundCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/autoStartedCubeCheckbox"
+        android:layout_alignBottom="@+id/autoStartedCubeCheckbox"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="40dp"
+        android:text="Ground"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/autoDeliveredText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/autoScaleCheckbox"
+        android:layout_alignStart="@+id/autoPickupText"
+        android:layout_marginBottom="17dp"
+        android:text="Delivered"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/autoScaleCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/autoSwitchCheckbox"
+        android:layout_alignBottom="@+id/autoSwitchCheckbox"
+        android:layout_alignStart="@+id/noAutoCheckbox"
+        android:text="Scale"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/autoSwitchCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/auto_goToTeleop_button"
+        android:text="Switch"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/autoExchangeCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/autoSwitchCheckbox"
+        android:layout_alignBottom="@+id/autoSwitchCheckbox"
+        android:layout_toEndOf="@+id/noAutoCheckbox"
+        android:text="Exchange"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/autoFailedCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/autoExchangeCheckbox"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:text="Failed"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/noAutoCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/autoStartedCubeCheckbox"
+        android:layout_below="@+id/autoFailedCheckbox"
+        android:layout_marginTop="17dp"
         android:text="No Auto"
         android:textSize="20sp" />
 
     <CheckBox
-        android:id="@+id/auto_malfunction_checkbox"
+        android:id="@+id/autoMalfunctionCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/no_auto_checkbox"
-        android:layout_below="@+id/no_auto_checkbox"
-        android:layout_marginTop="27dp"
+        android:layout_alignStart="@+id/noAutoCheckbox"
+        android:layout_below="@+id/noAutoCheckbox"
+        android:layout_marginTop="18dp"
         android:text="Auto Malfunction"
         android:textSize="20sp" />
 
@@ -78,31 +130,10 @@
         android:id="@+id/auto_goToTeleop_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/auto_malfunction_checkbox"
+        android:layout_below="@+id/autoMalfunctionCheckbox"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="11dp"
         android:text="Go to teleop"
-        android:textSize="20sp" />
-
-    <EditText
-        android:id="@+id/auto_comment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Comments..."
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/auto_pickup_text"
-        android:layout_below="@+id/auto_pickup_spinner"
-        android:layout_marginTop="20dp"
-        android:text="Delivered"
         android:textSize="20sp" />
 
 
