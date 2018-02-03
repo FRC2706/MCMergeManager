@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,13 +14,17 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
+import android.text.Selection;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +33,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View.OnKeyListener;
+import android.view.View;
+import android.view.KeyEvent;
 
 import org.apache.commons.net.ftp.FTPFile;
 
@@ -43,6 +51,7 @@ import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
@@ -91,6 +100,47 @@ public class MainActivity extends AppCompatActivity
 
         FileUtils.checkFileReadWritePermissions(this);
 
+  //      View myLayout = findViewById( R.id.primary_tab);
+
+
+//        View v = findViewById(R.id.comments);
+
+
+
+//        final EditText teamNumber = (EditText) findViewById(R.id.teamNumber);
+//
+//        teamNumber.setText("foo");
+
+
+
+//        final EditText comment = (EditText)comment_bar.findViewById(R.id.comment);
+
+//        teamNumber.setOnKeyListener(new OnKeyListener()
+//        {
+//            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+////                teamNum = CommentListener.getTeamNum(keyCode, keyevent, teamNumber, comment);
+//                return true;
+//                }
+//        });
+//
+//        comment.setOnKeyListener(new OnKeyListener()
+//        {
+//            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+//                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber);
+//                return true;
+//            }
+//        });
+    }
+
+    public static int teamNum = -1;
+
+    private int getTeamNumValue(EditText teamNumber, EditText comment){
+        int teamNumInt = 0;
+
+        teamNumInt = Integer.parseInt(teamNumber.getText().toString());
+        Selection.setSelection(comment.getText(),comment.getSelectionStart());
+        comment.requestFocus();
+        return teamNumInt;
 
     }
 
@@ -216,22 +266,20 @@ public class MainActivity extends AppCompatActivity
     public CommentTextEditor commentTextEditor;
     public void onWriteCommentButtonClick (View v) {
 
-        // Get the comment
-        commentTextEditor = new CommentTextEditor("Write your comment.", "Comment", this);
-        commentTextEditor.displayAlertDialog();
-
-        // Get the team number (After for lazy layout reasons)
-        enterATeamNumberPopup = new GetTeamNumberDialog("Team Number", "Team Number", 1, this);
-        enterATeamNumberPopup.displayAlertDialog();
-
-        CommentList commentList = new CommentList(enterATeamNumberPopup.getTeamNumber());
-
-        commentList.addComment(commentTextEditor.getComment());
-
-        FileUtils.saveTeamComments(commentList);
-
-        
+//        // Get the comment
+//        commentTextEditor = new CommentTextEditor("Write your comment.", "Comment", this);
+//        commentTextEditor.displayAlertDialog();
+//
+//        // Get the team number (After for lazy layout reasons)
+//        enterATeamNumberPopup = new GetTeamNumberDialog("Team Number", "Team Number", 1, this);
+//        enterATeamNumberPopup.displayAlertDialog();
+//        CommentList commentList = new CommentList(enterATeamNumberPopup.getTeamNumber());
+//
+//        commentList.addComment(commentTextEditor.getComment());
+//
+//        FileUtils.saveTeamComments(commentList);
     }
+
 
 
     public void onRepairTimeRecordClicked(View view) {

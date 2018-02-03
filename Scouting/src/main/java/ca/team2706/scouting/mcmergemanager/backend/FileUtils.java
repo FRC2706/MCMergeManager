@@ -726,6 +726,8 @@ public class FileUtils {
 
         }
 
+        scanDirectoryTree(sLocalCommentFilePath);
+
     }
 
     public static JSONObject getTeamComments(int teamNumber){
