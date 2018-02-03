@@ -6,7 +6,7 @@ package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects;
 
 public class CubePickupEvent extends Event {
     public enum pickupType{
-        SCALE, SWITCH, EXCHANGE
+        PORTAL, GROUND, EXCHANGE
     }
 
     private pickupType pickupType;
