@@ -1,10 +1,7 @@
 package ca.team2706.scouting.mcmergemanager.backend.dataObjects;
 
-import android.app.Activity;
 import android.content.Context;
-import android.text.Editable;
 import android.text.Selection;
-import android.text.SpannableStringBuilder;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -13,13 +10,13 @@ import android.widget.Toast;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Comment;
 
 /**
  * Created by Merge on 2018-01-26.
  */
 
 public class CommentListener {
+
     private CommentListener(){
         // This is a static class that should never be instantiated
     }
@@ -55,7 +52,6 @@ public class CommentListener {
         }
 
     }
-
     // This method returns the teamNum and moves the cursor
     public static int getTeamNum(int keyCode, KeyEvent event, EditText teamNumber, EditText comment) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && comment.getId() == R.id.teamNumber) {
@@ -69,6 +65,5 @@ public class CommentListener {
             }
         }
         return -1;
-
     }
 }

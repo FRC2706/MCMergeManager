@@ -8,22 +8,15 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.Selection;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.App;
-import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
-import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
@@ -94,10 +87,13 @@ public class PrimaryTab extends Fragment {
             }
         });
 
-      //  View commentView = v.findViewById(R.id.comments);
+        showCommentBar();
 
+        return v;
+    }
+
+    public void showCommentBar(){
         final EditText teamNumber = (EditText) v.findViewById(R.id.teamNumber);
-
 
         final EditText comment = (EditText) v.findViewById(R.id.comment);
 
@@ -110,7 +106,7 @@ public class PrimaryTab extends Fragment {
                     return false;
                 }
                 return true;
-                }
+            }
         });
 
         comment.setOnKeyListener(new OnKeyListener()
@@ -121,7 +117,7 @@ public class PrimaryTab extends Fragment {
             }
         });
 
-        return v;
+
     }
 
 
