@@ -212,8 +212,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    int teamNumber;
-    String comment;
+
     public CommentTextEditor commentTextEditor;
     public void onWriteCommentButtonClick (View v) {
 
@@ -225,14 +224,9 @@ public class MainActivity extends AppCompatActivity
         enterATeamNumberPopup = new GetTeamNumberDialog("Team Number", "Team Number", 1, this);
         enterATeamNumberPopup.displayAlertDialog();
 
+        CommentList commentList = new CommentList(enterATeamNumberPopup.getTeamNumber());
 
-        // Assign the team number and get the comment
-        teamNumber = enterATeamNumberPopup.getTeamNumber();
-        comment = commentTextEditor.getComment();
-
-        CommentList commentList = new CommentList(1114);
-
-        commentList.addComment("testing comment");
+        commentList.addComment(commentTextEditor.getComment());
 
         FileUtils.saveTeamComments(commentList);
 
