@@ -189,9 +189,9 @@ public class MatchData implements Serializable {
                             teleopScoutingObject.add(event);
                             break;
                         case climbID:
-                            if (obj.getBoolean("success") == true)
+                            if (obj.getBoolean("success"))
                                 postGameObject.climbType = PostGameObject.ClimbType.SUCCESS;
-                            else if (obj.getBoolean("success") == false)
+                            else if (!obj.getBoolean("success"))
                                 postGameObject.climbType = PostGameObject.ClimbType.FAIL;
                             postGameObject.climb_time = obj.getDouble("position_y");
                             break;
