@@ -123,11 +123,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 System.out.println("post comment: " + WebServerUtils.postCommentToServer(2706, "testing"));
-                System.out.println("teams list: " + WebServerUtils.getTeamList().toString());
-                System.out.println("competitions list: " + WebServerUtils.getCompetitionList().toString());
-                System.out.println("team stats: " + WebServerUtils.getTeamFromServer(2706).toString());
-                System.out.println("Competition: " + WebServerUtils.getCompetitonFromServer("Canadian Rockies Regional").toString());
-                System.out.println("Get Match: " + WebServerUtils.getMatchFromServer("Canadian Rockies Regional", 1).toString());
+                System.out.println("teams list: " + WebServerUtils.getTeamList());
+                System.out.println("competitions list: " + WebServerUtils.getCompetitionList());
+                System.out.println("team stats: " + WebServerUtils.getTeamFromServer(2706));
+                System.out.println("Competition: " + WebServerUtils.getCompetitonFromServer("Canadian Rockies Regional"));
+                System.out.println("Get Match: " + WebServerUtils.getMatchFromServer("Canadian Rockies Regional", 1));
             }
         }).start();
     }
