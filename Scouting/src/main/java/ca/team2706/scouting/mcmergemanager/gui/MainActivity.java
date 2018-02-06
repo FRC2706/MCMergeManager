@@ -37,6 +37,7 @@ import android.view.View.OnKeyListener;
 import android.view.View;
 import android.view.KeyEvent;
 import org.apache.commons.net.ftp.FTPFile;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
 import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
+import ca.team2706.scouting.mcmergemanager.backend.WebServerUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
@@ -138,9 +140,19 @@ public class MainActivity extends AppCompatActivity
 
         sRepairTimeObjects = FileUtils.getRepairTimeObjects();
 
-        // syncs unposted matches and downloads matchdata for current competition
-        if (false)
-            FileUtils.syncFiles(this);
+        // TODO: test remove
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("post comment: " + WebServerUtils.postCommentToServer(2706, "testing"));
+                System.out.println("teams list: " + WebServerUtils.getTeamList());
+                System.out.println("competitions list: " + WebServerUtils.getCompetitionList());
+                System.out.println("team stats: " + WebServerUtils.getTeamFromServer(2706));
+                System.out.println("Competition: " + WebServerUtils.getCompetitonFromServer("Canadian Rockies Regional"));
+                System.out.println("Get Match: " + WebServerUtils.getMatchFromServer("Canadian Rockies Regional", 1));
+            }
+        }).start();
+
     }
 
     /**
@@ -238,24 +250,6 @@ public class MainActivity extends AppCompatActivity
 
 
     public CommentTextEditor commentTextEditor;
-
-    public void onWriteCommentButtonClick(View v) {
-
-//        // Get the comment
-//        commentTextEditor = new CommentTextEditor("Write your comment.", "Comment", this);
-//        commentTextEditor.displayAlertDialog();
-//
-//        // Get the team number (After for lazy layout reasons)
-//        enterATeamNumberPopup = new GetTeamNumberDialog("Team Number", "Team Number", 1, this);
-//        enterATeamNumberPopup.displayAlertDialog();
-//        CommentList commentList = new CommentList(enterATeamNumberPopup.getTeamNumber());
-//
-//        commentList.addComment(commentTextEditor.getComment());
-//
-//        FileUtils.saveTeamComments(commentList);
-    }
-
-
 
     public void onRepairTimeRecordClicked(View view) {
         Intent intent = new Intent(this, RepairTimeCollection.class);
@@ -451,8 +445,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onClick(View v) {
-        FileUtils.checkLocalFileStructure(this);
-        FileUtils.syncFiles(this);
+        // TODO: sync the match files on the phone
     }
 
 
