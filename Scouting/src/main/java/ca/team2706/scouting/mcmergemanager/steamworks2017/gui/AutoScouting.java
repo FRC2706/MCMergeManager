@@ -46,42 +46,8 @@ public class AutoScouting extends AppCompatActivity {
     public void toTeleop(View view) {
 
 
-        autoScoutingObject2017.numFuelScored = pointsScored;
-
-        final CheckBox checkBox = (CheckBox) findViewById(R.id.crossedBaselineCheckBox);
-        if (checkBox.isChecked()) {
-            autoScoutingObject2017.crossedBaseline = true;
-        }
-        else {
-            autoScoutingObject2017.crossedBaseline = false;
-        }
-
-        final CheckBox cb = (CheckBox) findViewById(R.id.startingGearCheckBox);
-        if (cb.isChecked()) {
-
-            autoScoutingObject2017.start_gear = true;
-        }
-        else {
-            autoScoutingObject2017.start_gear = false;
-        }
-
-        final CheckBox checkiestOfBoxes = (CheckBox) findViewById(R.id.startingBallsCheckBox);
-        if (checkiestOfBoxes.isChecked()) {
-            autoScoutingObject2017.start_fuel = true;
-        }
-        else {
-            autoScoutingObject2017.start_fuel = false;}
-
-        final CheckBox autoGearDeliveredCheckBox = (CheckBox) findViewById(R.id.autoGearDelivered);
-        if (autoGearDeliveredCheckBox.isChecked()) {
-            autoScoutingObject2017.gear_delivered = 2;
-        }
-        else {
-            autoScoutingObject2017.gear_delivered = 0;}
 
         Intent intent = new Intent(this, TeleopScouting.class);
-        intent.putExtra("PreGameData", getIntent().getSerializableExtra("PreGameData"));
-        intent.putExtra("AutoScoutingData", autoScoutingObject2017);
         startActivity(intent);
     }
 
