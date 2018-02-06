@@ -28,7 +28,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,12 +38,7 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.NoteObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.FuelPickupEvent;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * This is a helper class to hold common code for accessing shared scouting data files.
@@ -61,6 +55,7 @@ public class FileUtils {
 
     public static String sRemoteTeamPhotosFilePath;
 
+    public static final String COMMENT_FILE = "comments.json";
 
     /* Static initializer */
     static {
@@ -77,11 +72,11 @@ public class FileUtils {
         sLocalTeamPhotosFilePath = sLocalToplevelFilePath + "/" + "Team Photos";
         sLocalCommentFilePath = sLocalToplevelFilePath + "/" + "TeamComments";
 
-        sRemoteTeamPhotosFilePath = "/" + App.getContext().getString(R.string.FILE_TOPLEVEL_DIR) + "/"  + "Team Photos";
+        sRemoteTeamPhotosFilePath = "/" + App.getContext().getString(R.string.FILE_TOPLEVEL_DIR) + "/" + "Team Photos";
     }
 
     public enum FileType {
-        SYNCHED, UNSYNCHED;
+        SYNCHED, UNSYNCHED
     }
 
     /**
@@ -149,10 +144,9 @@ public class FileUtils {
         makeDirectory(sLocalTeamPhotosFilePath);
         makeDirectory(sLocalCommentFilePath);
 
-        new Thread()
-        {
+        new Thread() {
             public void run() {
-                if(!directoryTreeScanRunning) {
+                if (!directoryTreeScanRunning) {
                     directoryTreeScanRunning = true;
                     scanDirectoryTree(sLocalToplevelFilePath);
                     directoryTreeScanRunning = false;
@@ -187,8 +181,8 @@ public class FileUtils {
             // Call the system media scanner on each file inside
             File[] files = file.listFiles();
 
-            for(File subFile : files) {
-                if(subFile.isDirectory()) {
+            for (File subFile : files) {
+                if (subFile.isDirectory()) {
                     // Recurse!
                     scanDirectoryTree(subFile.getAbsolutePath());
                 } else {
@@ -204,13 +198,13 @@ public class FileUtils {
                         final int width = options.outWidth;
 
                         // if the size of the photo is too large, then downsize
-                        if(options != null && height > 640 && width > 640) {
+                        if (options != null && height > 640 && width > 640) {
                             System.out.println("foto is too large" + subFile.getAbsolutePath());
                             int inSampleSize = 1; // divides image resolution by this
 
                             // increases the samplesize until the future resolution is under 640 pixels
-                            while((height / inSampleSize) > 640 &&
-                                    (width / inSampleSize) > 640){
+                            while ((height / inSampleSize) > 640 &&
+                                    (width / inSampleSize) > 640) {
                                 inSampleSize *= 2;
                             }
 
@@ -230,8 +224,8 @@ public class FileUtils {
                             out.recycle();
 
                         }
-                    } catch(Exception e) {
-                        Log.e("MCMergeManager","Error parsing or downsizing image:", e);
+                    } catch (Exception e) {
+                        Log.e("MCMergeManager", "Error parsing or downsizing image:", e);
                     }
 
 
@@ -239,8 +233,7 @@ public class FileUtils {
                     App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(subFile)));
                 }
             }
-        }
-        else {
+        } else {
             // in case there's a regular file there with the same name
             file.delete();
             // create it
@@ -264,10 +257,10 @@ public class FileUtils {
 
     /**
      * Take one match of data and stick it at the end of the match data file.
-     *
+     * <p>
      * Data format:
      * "matchNo<int>,teamNo<int>,isSpyBot<boolean>,reached<boolean>,{autoDefenseBreached<int>;...},{{autoBallShot_X<int>;autoBallShot_Y<int>;autoBallShot_time<.2double>;autoBallshot_which<int>}:...},{teleopDefenseBreached<int>;...},{{teleopBallShot_X<int>;teleopBallShot_Y<int>;teleopBallShot_time<.2double>;teleopBallshot_which<int>}:...},timeDefending<,2double>,{{ballPickup_selection<int>;ballPickup_time<,2double>}:...},{{scaling_time<.2double>;scaling_comelpted<int>}:...},notes<String>,challenged<boolean>,timeDead<int>"
-     *
+     * <p>
      * Or, in printf / format strings:
      * "%d,%d,%b,%b,{%d;...},{{%d:%d:%.2f:%d};...},{%d;...},{{%d:%d:%.2f:%d};...},%,2f,{{%d;%,2f}:...},{{%.2f;%d}:...},%s,%b,%d"
      */
@@ -277,7 +270,7 @@ public class FileUtils {
 
         String outFileName;
         File outfile;
-        if(fileType == FileType.SYNCHED) {
+        if (fileType == FileType.SYNCHED) {
             outFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileName);
 
             Log.d(App.getContext().getResources().getString(R.string.app_name), "Saving match data to file: " + outFileName);
@@ -298,7 +291,7 @@ public class FileUtils {
             } catch (IOException e) {
                 Log.d("synced file", e.toString());
             }
-        } else if(fileType == FileType.UNSYNCHED) {
+        } else if (fileType == FileType.UNSYNCHED) {
             outFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileNameUNSYNCHED);
 
             Log.d(App.getContext().getResources().getString(R.string.app_name), "Saving match data to file: " + outFileName);
@@ -320,11 +313,11 @@ public class FileUtils {
     /**
      * Clears the file containing unsynched Team Data.
      * Call this after a successful sync with the db server.
-
+     *
      * @return whether or not the delete was successful.
      */
     public boolean clearUnsyncedMatchScoutingDataFile() {
-        File file = new File( App.getContext().getResources().getString(R.string.matchScoutingDataFileNameUNSYNCHED));
+        File file = new File(App.getContext().getResources().getString(R.string.matchScoutingDataFileNameUNSYNCHED));
         return file.delete();
     }
 
@@ -374,7 +367,7 @@ public class FileUtils {
                 MatchData.Match match = new MatchData.Match(obj);
                 matchData.addMatch(match);
             } catch (Exception e) {
-                Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: ",e);
+                Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: ", e);
                 parseFailure = true;
                 continue;
             }
@@ -412,9 +405,9 @@ public class FileUtils {
 
     public static void appendToTeamDataFile(TeamDataObject teamDataObject) {
 
-        String outFileName = sLocalEventFilePath +"/"+ App.getContext().getResources().getString(R.string.teamDataFileName);
+        String outFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.teamDataFileName);
 
-        Log.d(App.getContext().getResources().getString(R.string.app_name), "Saving team data to file: "+outFileName);
+        Log.d(App.getContext().getResources().getString(R.string.app_name), "Saving team data to file: " + outFileName);
 
         File outfile = new File(outFileName);
         try {
@@ -422,7 +415,7 @@ public class FileUtils {
             (new File(outfile.getParent())).mkdirs();
 
             BufferedWriter bw = new BufferedWriter(new FileWriter(outfile, true));
-            bw.append( teamDataObject.toString() + "\n");
+            bw.append(teamDataObject.toString() + "\n");
             bw.flush();
             bw.close();
 
@@ -433,14 +426,14 @@ public class FileUtils {
         }
 
 
-        outFileName = sLocalEventFilePath +"/"+ App.getContext().getResources().getString(R.string.teamDataFileNameUNSYNCHED);
+        outFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.teamDataFileNameUNSYNCHED);
 
-        Log.d(App.getContext().getResources().getString(R.string.app_name), "Saving team data to file: "+outFileName);
+        Log.d(App.getContext().getResources().getString(R.string.app_name), "Saving team data to file: " + outFileName);
 
         outfile = new File(outFileName);
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(outfile, true));
-            bw.append( teamDataObject.toString() );
+            bw.append(teamDataObject.toString());
             bw.flush();
             bw.close();
         } catch (IOException e) {
@@ -453,9 +446,9 @@ public class FileUtils {
 
         List<TeamDataObject> repairTimeObjectList = new ArrayList<>();
 
-        if(teamDataObjects != null) {
-            for(TeamDataObject teamDataObject: teamDataObjects) {
-                if(teamDataObject instanceof RepairTimeObject)
+        if (teamDataObjects != null) {
+            for (TeamDataObject teamDataObject : teamDataObjects) {
+                if (teamDataObject instanceof RepairTimeObject)
                     repairTimeObjectList.add(teamDataObject);
             }
         }
@@ -471,9 +464,9 @@ public class FileUtils {
         return loadTeamDataFile(FileType.SYNCHED);
     }
 
-        /**
-         * Load data from the teamDataFile.
-         */
+    /**
+     * Load data from the teamDataFile.
+     */
     public static List<TeamDataObject> loadTeamDataFile(FileType fileType) {
 
         List<TeamDataObject> teamDataObjects = new ArrayList<>();
@@ -540,9 +533,9 @@ public class FileUtils {
         List<TeamDataObject> toRet = new ArrayList<>();
 
         if (teamDataObjects == null)
-            return  toRet;
+            return toRet;
 
-        for(TeamDataObject teamDataObject : teamDataObjects)
+        for (TeamDataObject teamDataObject : teamDataObjects)
             if (teamDataObject.getTeamNo() == teamNo)
                 toRet.add(teamDataObject);
 
@@ -620,16 +613,14 @@ public class FileUtils {
 
     }
 
-    /*
-    @param CommentList Class
-    Saves the JSON to a file
+    /**
+     * Saves the JSON to a file
+     * @param commentList
+>>>>>>> 6fcee321ecdca58153fce6518be18f416c972f2b
      */
-
-    public static final String COMMENT_FILE_PATH= "comments.json";
-
     public static void saveTeamComments(CommentList commentList){
 
-        JSONObject jsonObject = getTeamComments(commentList.getTeamNumber());
+        JSONObject jsonObject = loadTeamCommentsFromFile(commentList.getTeamNumber());
 
         if(jsonObject == null) {
 
@@ -656,7 +647,7 @@ public class FileUtils {
 
         }
 
-        String outFileName = sLocalCommentFilePath + "/"  + commentList.getTeamNumber() + COMMENT_FILE_PATH;
+        String outFileName = sLocalCommentFilePath + "/"  + commentList.getTeamNumber() + COMMENT_FILE;
 
         File file = new File(outFileName);
 
@@ -679,13 +670,19 @@ public class FileUtils {
 
     }
 
-    public static JSONObject getTeamComments(int teamNumber){
-        String json = null;
-        JSONObject jsonObject = null;
+    /**
+     * Load the comments for a given team from file.
+     *
+     * @param teamNumber
+     * @return Comments for the given team. May be null if the file failed to load.
+     */
+    public static JSONObject loadTeamCommentsFromFile(int teamNumber){
+        String json;
+        JSONObject jsonObject;
 
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalCommentFilePath + "/"  + teamNumber + COMMENT_FILE_PATH));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalCommentFilePath + "/"  + teamNumber + COMMENT_FILE));
 
             while ((json = bufferedReader.readLine()) != null) {
                 stringBuilder.append(json);
@@ -708,20 +705,17 @@ public class FileUtils {
     }
 
     private static void saveJsonFile(JSONArray jsonArray) {
-        if(!clearTeamDataFile(FileType.SYNCHED)) {
+        if (!clearTeamDataFile(FileType.SYNCHED)) {
             Log.d("Deleting file failed", "something probably went wrong");
         }
 
-        String outFileName = sLocalEventFilePath +"/"+ App.getContext().getResources().getString(R.string.matchScoutingDataFileName);
+        String outFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileName);
         File file = new File(outFileName);
-
-
-
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
 
-            for (int i = 0; i < jsonArray.length(); i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 bw.append(jsonArray.get(i).toString() + "\n");
             }
 
@@ -736,14 +730,14 @@ public class FileUtils {
 
     private static boolean clearTeamDataFile(FileType fileType) {
         File file;
-        switch(fileType) {
+        switch (fileType) {
             case UNSYNCHED:
                 file = new File(sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileNameUNSYNCHED));
                 try {
                     file.delete();
                     file.createNewFile();
                     return true;
-                } catch(IOException e) {
+                } catch (IOException e) {
                     Log.d("Creating new file err", e.toString());
                 }
                 break;
@@ -753,11 +747,125 @@ public class FileUtils {
                     file.delete();
                     file.createNewFile();
                     return true;
-                } catch(IOException e) {
+                } catch (IOException e) {
                     Log.d("Creating new file err", e.toString());
                 }
                 break;
         }
         return false;
     }
+
+    // Checks to see if a file with a certain filename exists
+    public static boolean fileExists(Context context, String filename) {
+        File file = new File(context.getFilesDir(), filename);
+
+        if (file == null || !file.exists())
+            return false;
+        return true;
+    }
+
+    // Update to 2018
+    public static final String EVENT_KEYS_FILENAME = "EventKeys2017.json";
+
+    // Saves a list of all the events for a certain year,
+    // User then chooses what event that they are at
+    public static void getEventListAndSave(final int year, final Context context) {
+        // Runs on separate thread because it is downloading and saving to file
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Get the object from the server
+                JSONArray eventKeys;
+                try {
+                    // TODO: Update the year to 2018
+                    // Return if the string returns null, avoids a null pointer exception
+                    String eventKeyStrings = BlueAllianceUtils.getEventKeysFromYear(year);
+                    if(eventKeyStrings == null)
+                        return;
+
+                    eventKeys = new JSONArray(eventKeyStrings);
+                } catch (JSONException e) {
+                    Log.d("JSON exception", e.toString());
+                    return;
+                }
+
+                // Create a new array to only save the important values, which is the key and name values
+                JSONArray arr = new JSONArray();
+
+                try {
+                    for (int i = 0; i < eventKeys.length(); i++) {
+                        JSONObject obj = new JSONObject();
+
+                        // Add the key and name
+                        obj.put("key", eventKeys.getJSONObject(i).getString("key"));
+                        obj.put("name", eventKeys.getJSONObject(i).getString("name"));
+
+                        // Only in Canada
+                        if(eventKeys.getJSONObject(i).getString("country").equals("Canada"))
+                            arr.put(obj);
+                    }
+                } catch (JSONException e) {
+                    Log.d("JSON error, ", e.toString());
+                    return;
+                }
+
+                // TODO: Sort the array by event, right now not needed because only showing events in Canada
+
+                // Save the file to the internal storage
+                try {
+                    writeFile(context, arr.toString(), EVENT_KEYS_FILENAME);
+                } catch(IOException e) {
+                    Log.d("Error writing file", e.toString());
+                }
+
+                Log.d("Event Keys file - ", arr.toString());
+            }
+        }).start();
+    }
+
+    public static JSONArray getArrayOfEvents(Context context) throws JSONException {
+        return new JSONArray(readFile(EVENT_KEYS_FILENAME, context));
+    }
+
+    // Returns the string content of a file
+    public static String readFile(String filename, Context context) {
+        String fileContents;
+
+        if(fileExists(context, filename)) {
+            File file;
+
+            try {
+                // Find the file
+                file = new File(context.getFilesDir(), filename);
+
+                // Create and read the file
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                fileContents = br.readLine();
+                br.close();
+
+                return fileContents;
+            } catch(IOException e) {
+                Log.d("Error reading file", e.toString());
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    // Writes a string to a file, throws an IOException if something goes wrong
+    public static void writeFile(Context context, String s, String filename) throws IOException {
+        // Create the file and directories
+        File file = new File(context.getFilesDir(), filename);
+        file.createNewFile();
+
+        // Create the file writer and write to file
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+        bw.append(s);
+
+        // Close the file
+        bw.flush();
+        bw.close();
+    }
+
 }

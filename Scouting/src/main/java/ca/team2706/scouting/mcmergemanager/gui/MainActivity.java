@@ -93,7 +93,14 @@ public class MainActivity extends AppCompatActivity
 
         FileUtils.checkFileReadWritePermissions(this);
 
+        getEventKeys();
+    }
 
+    // Check to see if the event keys has been downloaded yet, if not yet downloaded for this year then download
+    private void getEventKeys() {
+        if (!FileUtils.fileExists(this, FileUtils.EVENT_KEYS_FILENAME)) {
+            FileUtils.getEventListAndSave(2017, this);
+        }
     }
 
     @Override
@@ -130,6 +137,10 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("Get Match: " + WebServerUtils.getMatchFromServer("Canadian Rockies Regional", 1));
             }
         }).start();
+
+        // syncs unposted matches and downloads matchdata for current competition
+        if (false)
+            FileUtils.syncFiles(this);
     }
 
     /**
