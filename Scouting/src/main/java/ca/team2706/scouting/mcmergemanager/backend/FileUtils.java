@@ -668,6 +668,8 @@ public class FileUtils {
 
         }
 
+        scanDirectoryTree(sLocalCommentFilePath);
+
     }
 
     /**

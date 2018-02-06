@@ -8,21 +8,19 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.App;
-import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
-import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
+import android.view.View.OnKeyListener;
 
 
 public class PrimaryTab extends Fragment {
@@ -89,8 +87,42 @@ public class PrimaryTab extends Fragment {
             }
         });
 
+        showCommentBar();
+
         return v;
     }
+
+    public void showCommentBar(){
+        final EditText teamNumber = (EditText) v.findViewById(R.id.teamNumber);
+
+        final EditText comment = (EditText) v.findViewById(R.id.comment);
+
+        teamNumber.setOnKeyListener(new OnKeyListener()
+        {
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+
+                teamNum = CommentListener.getTeamNum(keyCode, keyevent, teamNumber, comment);
+                if (teamNum == -1) {
+                    return false;
+                }
+                return true;
+            }
+        });
+
+        comment.setOnKeyListener(new OnKeyListener()
+        {
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, v, getContext());
+                return true;
+            }
+        });
+
+
+    }
+
+
+    public static int teamNum = -1;
+
 
 
 

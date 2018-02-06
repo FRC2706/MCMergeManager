@@ -16,7 +16,7 @@ import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.PostGameOb
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.PostGameClass;
 
 import static ca.team2706.scouting.mcmergemanager.R.*;
-import static ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeleopScouting.teleopScoutingObject;
+
 
 /**
  * Created by Merge on 2017-02-12.

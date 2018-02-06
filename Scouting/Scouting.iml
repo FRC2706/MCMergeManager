@@ -125,7 +125,6 @@
     <orderEntry type="library" name="com.android.support:design-23.1.1" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-drive-8.4.0" level="project" />
     <orderEntry type="library" name="__local_aars__:/home/daniel/Programming/Android/Projects/McMergeManager/Scouting/libs/Jama-1.0.3.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="com.android.volley:volley-1.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-annotations:23.1.1@jar" level="project" />
     <orderEntry type="library" name="__local_aars__:/home/daniel/Programming/Android/Projects/McMergeManager/Scouting/libs/json-simple-1.1.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="__local_aars__:/home/daniel/Programming/Android/Projects/McMergeManager/Scouting/libs/commons-net-3.5.jar:unspecified@jar" level="project" />

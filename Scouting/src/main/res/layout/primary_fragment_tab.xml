@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/primary_tab"
     android:layout_height="fill_parent">
 
     <LinearLayout
@@ -69,7 +70,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
+                android:layout_height="51dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -92,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:onClick="syncPhotos"
                     android:text="Sync Photos" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -122,13 +124,24 @@
                 android:onClick="onRepairTimeRecordClicked"
                 android:text="Record Repair Time" />
 
-            <Button
-                android:id="@+id/button7"
-                android:layout_width="match_parent"
+            <include android:id="@+id/comments"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onWriteCommentButtonClick"
-                android:text="Write Comment"
-                android:visibility="visible" />
+                layout="@layout/comment_bar"/>
+
+            <!--<Button-->
+                <!--android:id="@+id/button7"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onWriteCommentButtonClick"-->
+                <!--android:text="Write Comment"-->
+                <!--android:visibility="visible" />-->
+
+
+
+
+
+
 
         </LinearLayout>
 
@@ -136,7 +149,7 @@
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fragment_container1"
             android:layout_width="match_parent"
-            android:layout_height="144dp">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/button"
@@ -144,6 +157,9 @@
                 android:layout_height="wrap_content"
                 android:onClick="onClick"
                 android:text="Sync Match Data" />
+
+
+
 
         </FrameLayout>
     </LinearLayout>
