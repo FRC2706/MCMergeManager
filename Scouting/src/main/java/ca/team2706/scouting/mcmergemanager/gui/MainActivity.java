@@ -138,9 +138,6 @@ public class MainActivity extends AppCompatActivity
             }
         }).start();
 
-        // syncs unposted matches and downloads matchdata for current competition
-        if (false)
-            FileUtils.syncFiles(this);
     }
 
     /**

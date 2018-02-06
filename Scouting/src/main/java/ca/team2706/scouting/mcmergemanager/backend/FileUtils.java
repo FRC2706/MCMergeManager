@@ -846,11 +846,11 @@ public class FileUtils {
                 return fileContents;
             } catch(IOException e) {
                 Log.d("Error reading file", e.toString());
-                return null;
+                return "";
             }
         }
 
-        return null;
+        return "";
     }
 
     // Writes a string to a file, throws an IOException if something goes wrong

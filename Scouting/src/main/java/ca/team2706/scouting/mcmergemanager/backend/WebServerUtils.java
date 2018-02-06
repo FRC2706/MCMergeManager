@@ -57,7 +57,7 @@ public class WebServerUtils {
             Log.d("Okhttp error", e.toString());
         }
 
-        return null;
+        return "";
     }
 
     // Get a list of teams on the webserver
@@ -65,6 +65,8 @@ public class WebServerUtils {
         try {
             return new JSONArray(getDataFromServer("teams/list"));
         } catch (JSONException e) {
+            return null;
+        } catch (NullPointerException e) {
             return null;
         }
     }
@@ -75,6 +77,8 @@ public class WebServerUtils {
             return new JSONObject(getDataFromServer("teams/show?team=" + team_number));
         } catch (JSONException e) {
             return null;
+        } catch (NullPointerException e) {
+            return null;
         }
     }
 
@@ -83,6 +87,8 @@ public class WebServerUtils {
         try {
             return new JSONArray(getDataFromServer("competitions/list"));
         } catch (JSONException e) {
+            return null;
+        } catch (NullPointerException e) {
             return null;
         }
     }
@@ -93,6 +99,8 @@ public class WebServerUtils {
             return new JSONObject(getDataFromServer("competitions/show?competition=" + competiton_id));
         } catch (JSONException e) {
             return null;
+        } catch(NullPointerException e) {
+            return null;
         }
     }
 
@@ -101,6 +109,8 @@ public class WebServerUtils {
         try {
             return new JSONObject(getDataFromServer("matches/show?competition=" + competition_id + "&match=" + match_number));
         } catch (JSONException e) {
+            return null;
+        } catch (NullPointerException e) {
             return null;
         }
     }

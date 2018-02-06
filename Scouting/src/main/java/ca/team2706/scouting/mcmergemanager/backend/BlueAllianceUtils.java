@@ -252,7 +252,7 @@ public class BlueAllianceUtils {
                 .build();
 
         try {
-            Response response = client.newCall(request).execute();
+            Response response = WebServerUtils.client.newCall(request).execute();
 
             // Add the json file string to be sent back to settings page
             sb.append(response.body().string());
