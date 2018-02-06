@@ -81,6 +81,7 @@
         android:layout_below="@+id/auto_malfunction_checkbox"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="11dp"
+        android:onClick="toTeleop"
         android:text="Go to teleop"
         android:textSize="20sp" />
 
