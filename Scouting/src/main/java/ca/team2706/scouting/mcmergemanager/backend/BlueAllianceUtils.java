@@ -262,4 +262,28 @@ public class BlueAllianceUtils {
 
         return sb.toString();
     }
+
+    public static JSONArray getTeamListForEvent() {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        String TBA_Event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
+
+        Request request = new Request.Builder()
+                .url(BASE_URL + "event/" + "2017onto1" + "/teams/keys")
+                .header("X-TBA-Auth-Key", AUTH_KEY)
+                .build();
+
+        try {
+            Response response = WebServerUtils.client.newCall(request).execute();
+
+            String s = response.body().string();
+            System.out.println(s);
+            return new JSONArray(s);
+        } catch(IOException e) {
+            e.printStackTrace();
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

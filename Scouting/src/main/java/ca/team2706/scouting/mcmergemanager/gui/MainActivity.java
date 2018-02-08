@@ -47,6 +47,7 @@ import java.util.TimerTask;
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.App;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
+import ca.team2706.scouting.mcmergemanager.backend.CreateCsvFile;
 import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
@@ -103,6 +104,15 @@ public class MainActivity extends AppCompatActivity
 
         getEventKeys();
 
+
+        System.out.println("Writing a csv file of the data");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                CreateCsvFile.saveCsvFile("Csv.csv");
+            }
+        }).start();
     }
 
 
