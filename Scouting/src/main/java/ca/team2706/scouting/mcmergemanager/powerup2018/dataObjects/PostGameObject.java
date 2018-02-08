@@ -7,6 +7,9 @@ import java.io.Serializable;
  */
 
 public class PostGameObject implements Serializable {
+
+    public static final int objectiveId = 4;
+
     public String notes = "";
 
     public enum ClimbType {

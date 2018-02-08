@@ -7,6 +7,9 @@ import java.io.Serializable;
  */
 //The Pre Game Object
 public class PreGameObject implements Serializable {
+
+
+
     public int teamNumber;
     public int matchNumber;
 
