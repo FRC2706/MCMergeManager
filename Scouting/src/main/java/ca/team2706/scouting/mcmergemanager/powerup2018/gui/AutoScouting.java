@@ -13,18 +13,20 @@ import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeleopScouting;
 
 public class AutoScouting extends AppCompatActivity {
 
-    private AutoScoutingObject autoScoutingObject2018 = new AutoScoutingObject();
+    private AutoScoutingObject autoScoutingObject2018;
     public int pointsScored;
 
     SeekBar simpleSeekBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.powerup2018_activity_auto_scouting);
         // initiate  views
 
-        }
+        autoScoutingObject2018 = new AutoScoutingObject();
 
+    }
 
 
     public void toTeleop(View view) {
@@ -33,24 +35,21 @@ public class AutoScouting extends AppCompatActivity {
         final CheckBox checkBox = (CheckBox) findViewById(R.id.baselineCheckbox);
         if (checkBox.isChecked()) {
             autoScoutingObject2018.setCrossedAutoLine(true);
-        }
-        else {
+        } else {
             autoScoutingObject2018.setCrossedAutoLine(false);
         }
 
         final CheckBox noAutocheckbox = (CheckBox) findViewById(R.id.noAutoCheckbox);
         if (noAutocheckbox.isChecked()) {
             autoScoutingObject2018.setNoAuto(true);
-        }
-        else {
+        } else {
             autoScoutingObject2018.setNoAuto(false);
         }
 
         final CheckBox malfunctioncheckbox = (CheckBox) findViewById(R.id.autoMalfunctionCheckbox);
         if (malfunctioncheckbox.isChecked()) {
             autoScoutingObject2018.setAutoMalfunction(true);
-        }
-        else {
+        } else {
             autoScoutingObject2018.setAutoMalfunction(false);
         }
 

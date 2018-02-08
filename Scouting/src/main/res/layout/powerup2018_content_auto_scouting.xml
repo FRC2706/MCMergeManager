@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,9 +15,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="50dp"
         android:text="Autonomous"
+        android:textColor="#663399"
         android:textSize="30sp" />
 
     <CheckBox
@@ -34,16 +40,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:text="Pickup"
+        android:textColor="#663399"
         android:textSize="20sp" />
 
     <CheckBox
         android:id="@+id/autoStartedCubeCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/auto_goToTeleop_button"
+        android:layout_alignStart="@+id/autoGroundCheckbox"
         android:layout_below="@+id/autoGroundCheckbox"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:text="Started with cube"
         android:textSize="20sp" />
 
@@ -51,9 +57,8 @@
         android:id="@+id/autoGroundCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/autoDeliveredText"
+        android:layout_alignStart="@+id/baselineCheckbox"
         android:layout_below="@+id/autoPickupText"
-        android:layout_marginTop="8dp"
         android:text="Ground"
         android:textSize="20sp" />
 
@@ -65,14 +70,16 @@
         android:layout_marginTop="10dp"
         android:layout_toStartOf="@+id/autoFailedCheckbox"
         android:text="Delivered"
+        android:textColor="#663399"
         android:textSize="20sp" />
 
     <CheckBox
         android:id="@+id/autoScaleCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/autoDeliveredText"
-        android:layout_toStartOf="@+id/autoDeliveredText"
+        android:layout_alignStart="@+id/autoStartedCubeCheckbox"
+        android:layout_alignTop="@+id/autoDeliveredText"
+        android:layout_marginTop="28dp"
         android:text="Scale"
         android:textSize="20sp" />
 
@@ -82,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/autoScaleCheckbox"
         android:layout_alignBottom="@+id/autoScaleCheckbox"
-        android:layout_toEndOf="@+id/baselineCheckbox"
+        android:layout_toEndOf="@+id/autoDeliveredText"
         android:text="Switch"
         android:textSize="20sp" />
 
@@ -100,19 +107,28 @@
         android:id="@+id/autoFailedCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/autoExchangeCheckbox"
-        android:layout_marginTop="9dp"
+        android:layout_alignBaseline="@+id/autoExchangeCheckbox"
+        android:layout_alignBottom="@+id/autoExchangeCheckbox"
         android:layout_toEndOf="@+id/autoPickupText"
         android:text="Failed"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/autoOtherText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/autoFailedCheckbox"
+        android:layout_toEndOf="@+id/noAutoCheckbox"
+        android:text="Other"
+        android:textColor="#663399"
         android:textSize="20sp" />
 
     <CheckBox
         android:id="@+id/noAutoCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/baselineCheckbox"
-        android:layout_below="@+id/autoFailedCheckbox"
-        android:layout_marginStart="7dp"
+        android:layout_alignStart="@+id/autoExchangeCheckbox"
+        android:layout_alignTop="@+id/autoOtherText"
         android:layout_marginTop="17dp"
         android:text="No Auto"
         android:textSize="20sp" />
@@ -128,14 +144,16 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/auto_goToTeleop_button"
+        android:id="@+id/autoGoToTeleopButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/autoMalfunctionCheckbox"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="11dp"
+        android:onClick="toTeleop"
         android:text="Go to teleop"
         android:textSize="20sp" />
 
 
 </RelativeLayout>
+</ScrollView>
