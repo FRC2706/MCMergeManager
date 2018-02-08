@@ -70,7 +70,7 @@ public class TeamInfoFragment extends Fragment
                     if (activity != null) {
                         // Get the nickname of the team
                         if (BlueAllianceUtils.checkInternetPermissions(activity)) {
-                            nicknameString = BlueAllianceUtils.getBlueAllicanceData("nickname", "team/frc" + m_teamNumber);
+                            nicknameString = BlueAllianceUtils.getBlueAllianceData("nickname", "team/frc" + m_teamNumber);
                         }
 
                         // Update the ui text
