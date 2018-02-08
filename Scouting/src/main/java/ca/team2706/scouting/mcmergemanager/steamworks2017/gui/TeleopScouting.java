@@ -35,7 +35,7 @@ public class TeleopScouting extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.steamworks2017_activity_teleop_scouting);
+        setContentView(R.layout.powerup2018_content_teleop);
 
     }
 }
