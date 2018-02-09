@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class PostGameObject implements Serializable {
 
-    public static final int objectiveId = 4;
+    public static final String ID = "post_game";
 
     public String notes = "";
 
