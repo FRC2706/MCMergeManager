@@ -67,6 +67,7 @@
         android:layout_above="@+id/comments_editText"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="41dp"
+        android:onClick="startedClimbing"
         android:text="Started climbing"
         android:textSize="16sp" />
 
@@ -79,4 +80,5 @@
         android:layout_marginBottom="20dp"
         android:text="2:15"
         android:textSize="28sp" />
+
 </RelativeLayout>
