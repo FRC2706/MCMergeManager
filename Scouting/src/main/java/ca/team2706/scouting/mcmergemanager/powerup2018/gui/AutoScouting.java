@@ -2,13 +2,20 @@ package ca.team2706.scouting.mcmergemanager.powerup2018.gui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoCubePickupEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoCubePlacementEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoLineCrossEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoMalfunctionEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeleopScouting;
 
 public class AutoScouting extends AppCompatActivity {
@@ -18,6 +25,12 @@ public class AutoScouting extends AppCompatActivity {
 
     SeekBar simpleSeekBar;
 
+    private Handler m_handler;
+    private Runnable m_handlerTask;
+    private volatile boolean stopTimer;
+    private int remainTime = 15;
+    public Event event = new Event();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +39,37 @@ public class AutoScouting extends AppCompatActivity {
 
         autoScoutingObject2018 = new AutoScoutingObject();
 
+
+        m_handler = new Handler();
+        final TextView tvGameTime = (TextView) findViewById(R.id.autoTimer);
+
+        m_handlerTask = new Runnable() {
+            @Override
+            public void run() {
+
+                if (remainTime == 0) {
+                    tvGameTime.setText("Auto Over! Please Go To Teleop.");
+                } else {
+                    remainTime--;
+                    int minuets = remainTime / 60;
+                    int remainSec = remainTime - minuets * 60;
+                    String remainSecString;
+                    if (remainSec < 10)
+                        remainSecString = "0" + remainSec;
+                    else
+                        remainSecString = remainSec + "";
+// woo
+                    tvGameTime.setText(minuets + ":" + remainSecString);
+
+                    // set an alarm to run this again in 1 second
+                    if (!stopTimer)
+                        m_handler.postDelayed(m_handlerTask, 1000);  // 1 second delay
+                }
+            }
+        };
+        m_handlerTask.run();
+
+
     }
 
 
@@ -33,67 +77,149 @@ public class AutoScouting extends AppCompatActivity {
 
 
         final CheckBox checkBox = (CheckBox) findViewById(R.id.baselineCheckbox);
-        if (checkBox.isChecked()) {
-            autoScoutingObject2018.setCrossedAutoLine(true);
-        } else {
-            autoScoutingObject2018.setCrossedAutoLine(false);
-        }
+        checkBox.setChecked(false);
+        final Event event;
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkBox.isChecked()) {
 
-        final CheckBox noAutocheckbox = (CheckBox) findViewById(R.id.noAutoCheckbox);
-        if (noAutocheckbox.isChecked()) {
-            autoScoutingObject2018.setNoAuto(true);
-        } else {
-            autoScoutingObject2018.setNoAuto(false);
-        }
+                    AutoLineCrossEvent autoLineCrossEvent = new AutoLineCrossEvent(15 - remainTime, true);
+                    autoScoutingObject2018.add(autoLineCrossEvent);
+                    checkBox.setChecked(true);
+
+                } else {
+                    checkBox.setChecked(false);
+                }
+            }
+        });
+//        if (checkBox.isChecked()) {
+//            autoScoutingObject2018.setOnClickListener(true);
+//        } else {
+//            autoScoutingObject2018.setCrossedAutoLine(false);
+//        }
+
+//        final CheckBox noAutocheckbox = (CheckBox) findViewById(R.id.noAutoCheckbox);
+//        if (noAutocheckbox.isChecked()) {
+//            autoScoutingObject2018.setNoAuto(true);
+//        } else {
+//            autoScoutingObject2018.setNoAuto(false);
+//        }
 
         final CheckBox malfunctioncheckbox = (CheckBox) findViewById(R.id.autoMalfunctionCheckbox);
-        if (malfunctioncheckbox.isChecked()) {
-            autoScoutingObject2018.setAutoMalfunction(true);
-        } else {
-            autoScoutingObject2018.setAutoMalfunction(false);
-        }
+        malfunctioncheckbox.setChecked(false);
+        final Event mevent;
+        malfunctioncheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        final CheckBox startedCheckbox = (CheckBox) findViewById(R.id.autoStartedCubeCheckbox);
+                if (malfunctioncheckbox.isChecked()) {
+                    AutoMalfunctionEvent autoMalfunctionEvent = new AutoMalfunctionEvent(15 - remainTime, true);
+                    autoScoutingObject2018.add(autoMalfunctionEvent);
+                    malfunctioncheckbox.setChecked(true);
+                } else
+
+                {
+                    malfunctioncheckbox.setChecked(false);
+                }
+            }
+        });
+
         final CheckBox groundCheckbox = (CheckBox) findViewById(R.id.autoGroundCheckbox);
+        groundCheckbox.setChecked(false);
+        final Event cevent;
+        groundCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (groundCheckbox.isChecked()) {
 
-        if (startedCheckbox.isChecked() && !groundCheckbox.isChecked()) {
-            autoScoutingObject2018.setPickupType(AutoScoutingObject.pickupType.STARTED_CUBE);
+                    AutoCubePickupEvent autoCubePickupEvent = new AutoCubePickupEvent(15 - remainTime, AutoCubePickupEvent.pickupType.GROUND);
+                    autoScoutingObject2018.add(autoCubePickupEvent);
+                    groundCheckbox.setChecked(true);
 
-        } else if (groundCheckbox.isChecked() && !startedCheckbox.isChecked()) {
-            autoScoutingObject2018.setPickupType(AutoScoutingObject.pickupType.GROUND);
+                } else {
+                    groundCheckbox.setChecked(false);
+                }
 
-        } else if (!startedCheckbox.isChecked() && !groundCheckbox.isChecked()) {
-            autoScoutingObject2018.setPickupType(AutoScoutingObject.pickupType.NO_PICKUP);
-        } else {
-            autoScoutingObject2018.setPickupType(AutoScoutingObject.pickupType.NO_PICKUP);
-            //place holder not sure what to do with multiple checkboxes clicked
-        }
+                final CheckBox switchCheckbox = (CheckBox) findViewById(R.id.autoSwitchCheckbox);
+                switchCheckbox.setChecked(false);
+                final Event swevent;
+                switchCheckbox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (switchCheckbox.isChecked()) {
 
-        final CheckBox switchCheckbox = (CheckBox) findViewById(R.id.autoSwitchCheckbox);
-        final CheckBox scaleCheckbox = (CheckBox) findViewById(R.id.autoScaleCheckbox);
-        final CheckBox exchangeCheckbox = (CheckBox) findViewById(R.id.autoExchangeCheckbox);
-        final CheckBox failedCheckbox = (CheckBox) findViewById(R.id.autoFailedCheckbox);
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.placementType.ALLIANCE_SWITCH);
+                            autoScoutingObject2018.add(autoCubePlacementEvent);
+                            switchCheckbox.setChecked(true);
+                        } else {
+                            switchCheckbox.setChecked(false);
+                        }
 
-        if (switchCheckbox.isChecked() && !scaleCheckbox.isChecked() && !exchangeCheckbox.isChecked() && !failedCheckbox.isChecked()) {
-            autoScoutingObject2018.setDeliveryType(AutoScoutingObject.deliveryType.SWITCH);
-        } else if (!switchCheckbox.isChecked() && scaleCheckbox.isChecked() && !exchangeCheckbox.isChecked() && !failedCheckbox.isChecked()) {
-            autoScoutingObject2018.setDeliveryType(AutoScoutingObject.deliveryType.SCALE);
-        } else if (!switchCheckbox.isChecked() && !scaleCheckbox.isChecked() && exchangeCheckbox.isChecked() && !failedCheckbox.isChecked()) {
-            autoScoutingObject2018.setDeliveryType(AutoScoutingObject.deliveryType.EXCHANGE);
-        } else if (!switchCheckbox.isChecked() && !scaleCheckbox.isChecked() && !exchangeCheckbox.isChecked() && failedCheckbox.isChecked()) {
-            autoScoutingObject2018.setDeliveryType(AutoScoutingObject.deliveryType.FAILURE);
-        } else if (!switchCheckbox.isChecked() && !scaleCheckbox.isChecked() && !exchangeCheckbox.isChecked() && !failedCheckbox.isChecked()) {
-            autoScoutingObject2018.setDeliveryType(AutoScoutingObject.deliveryType.NO_DELIVERY);
-        } else {
-            autoScoutingObject2018.setDeliveryType(AutoScoutingObject.deliveryType.NO_DELIVERY);
-        }
+                    }
+                });
+
+                final CheckBox scaleCheckbox = (CheckBox) findViewById(R.id.autoScaleCheckbox);
+                scaleCheckbox.setChecked(false);
+                final Event scevent;
+                scaleCheckbox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (scaleCheckbox.isChecked()) {
+
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.placementType.SCALE);
+                            autoScoutingObject2018.add(autoCubePlacementEvent);
+                            scaleCheckbox.setChecked(true);
+                        } else {
+                            scaleCheckbox.setChecked(false);
+                        }
+
+                    }
+                });
+
+                final CheckBox exchangeCheckbox = (CheckBox) findViewById(R.id.autoExchangeCheckbox);
+                exchangeCheckbox.setChecked(false);
+                final Event eevent;
+                exchangeCheckbox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (exchangeCheckbox.isChecked()) {
+
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.placementType.EXCHANGE);
+                            autoScoutingObject2018.add(autoCubePlacementEvent);
+                            exchangeCheckbox.setChecked(true);
+                        } else {
+                            exchangeCheckbox.setChecked(false);
+                        }
+                    }
+                });
+
+                final CheckBox droppedCheckbox = (CheckBox) findViewById(R.id.autoDroppedCheckbox);
+                droppedCheckbox.setChecked(false);
+                final Event devent;
+                droppedCheckbox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (droppedCheckbox.isChecked()) {
+
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.placementType.DROPPED);
+                            autoScoutingObject2018.add(autoCubePlacementEvent);
+                            droppedCheckbox.setChecked(true);
+                        } else {
+                            droppedCheckbox.setChecked(false);
+                        }
+                    }
+                });
 
 
-        Intent intent = new Intent(this, TeleopScouting.class);
-        intent.putExtra("PreGameData", getIntent().getSerializableExtra("PreGameData"));
-        intent.putExtra("AutoScoutingData", autoScoutingObject2018);
-        startActivity(intent);
+
+//                Intent intent = new Intent(this, TeleopScouting.class);
+//                intent.putExtra("PreGameData", getIntent().getSerializableExtra("PreGameData"));
+//                intent.putExtra("AutoScoutingData", autoScoutingObject2018);
+//                startActivity(intent);
+            }
+
+
+        });
     }
-
-
 }

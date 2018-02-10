@@ -25,10 +25,9 @@
         android:id="@+id/baselineCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/autoPickupText"
-        android:layout_below="@+id/autoTitle"
-        android:layout_marginEnd="7dp"
-        android:layout_marginTop="7dp"
+        android:layout_alignStart="@+id/autoTitle"
+        android:layout_below="@+id/autoTimer"
+        android:layout_marginTop="23dp"
         android:text="Cross baseline?"
         android:textSize="20sp" />
 
@@ -68,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/autoStartedCubeCheckbox"
         android:layout_marginTop="10dp"
-        android:layout_toStartOf="@+id/autoFailedCheckbox"
+        android:layout_toStartOf="@+id/autoDroppedCheckbox"
         android:text="Delivered"
         android:textColor="#663399"
         android:textSize="20sp" />
@@ -104,42 +103,32 @@
         android:textSize="20sp" />
 
     <CheckBox
-        android:id="@+id/autoFailedCheckbox"
+        android:id="@+id/autoDroppedCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/autoExchangeCheckbox"
         android:layout_alignBottom="@+id/autoExchangeCheckbox"
         android:layout_toEndOf="@+id/autoPickupText"
-        android:text="Failed"
+        android:text="Dropped"
         android:textSize="20sp" />
 
     <TextView
         android:id="@+id/autoOtherText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/autoFailedCheckbox"
-        android:layout_toEndOf="@+id/noAutoCheckbox"
+        android:layout_alignStart="@+id/autoPickupText"
+        android:layout_below="@+id/autoDroppedCheckbox"
         android:text="Other"
         android:textColor="#663399"
-        android:textSize="20sp" />
-
-    <CheckBox
-        android:id="@+id/noAutoCheckbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/autoExchangeCheckbox"
-        android:layout_alignTop="@+id/autoOtherText"
-        android:layout_marginTop="17dp"
-        android:text="No Auto"
         android:textSize="20sp" />
 
     <CheckBox
         android:id="@+id/autoMalfunctionCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/noAutoCheckbox"
-        android:layout_below="@+id/noAutoCheckbox"
-        android:layout_marginTop="18dp"
+        android:layout_alignStart="@+id/autoExchangeCheckbox"
+        android:layout_below="@+id/autoOtherText"
+        android:layout_marginTop="11dp"
         android:text="Auto Malfunction"
         android:textSize="20sp" />
 
@@ -148,10 +137,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/autoMalfunctionCheckbox"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/autoGroundCheckbox"
         android:onClick="toTeleop"
         android:text="Go to teleop"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/autoTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/autoDroppedCheckbox"
+        android:layout_below="@+id/autoTitle"
+        android:text="TextView"
+        android:textAlignment="viewEnd"
         android:textSize="20sp" />
 
 
