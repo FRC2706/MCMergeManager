@@ -89,18 +89,7 @@ public class AutoScouting extends AppCompatActivity {
                 }
             }
         });
-//        if (checkBox.isChecked()) {
-//            autoScoutingObject2018.setOnClickListener(true);
-//        } else {
-//            autoScoutingObject2018.setCrossedAutoLine(false);
-//        }
-
-//        final CheckBox noAutocheckbox = (CheckBox) findViewById(R.id.noAutoCheckbox);
-//        if (noAutocheckbox.isChecked()) {
-//            autoScoutingObject2018.setNoAuto(true);
-//        } else {
-//            autoScoutingObject2018.setNoAuto(false);
-//        }
+        
 
         final CheckBox malfunctioncheckbox = (CheckBox) findViewById(R.id.autoMalfunctionCheckbox);
         malfunctioncheckbox.setChecked(false);
