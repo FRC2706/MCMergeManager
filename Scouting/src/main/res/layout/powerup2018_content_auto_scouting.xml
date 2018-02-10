@@ -28,7 +28,7 @@
         android:layout_alignStart="@+id/autoTitle"
         android:layout_below="@+id/autoTimer"
         android:layout_marginTop="23dp"
-        android:text="Cross baseline?"
+        android:text="Cross Baseline?"
         android:textSize="20sp" />
 
     <TextView
@@ -70,7 +70,9 @@
         android:layout_toStartOf="@+id/autoDroppedCheckbox"
         android:text="Delivered"
         android:textColor="#663399"
-        android:textSize="20sp" />
+        android:textSize="20sp"/>
+
+
 
     <CheckBox
         android:id="@+id/autoScaleCheckbox"
@@ -152,6 +154,8 @@
         android:text="TextView"
         android:textAlignment="viewEnd"
         android:textSize="20sp" />
+
+
 
 
 </RelativeLayout>

@@ -16,6 +16,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjec
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoMalfunctionEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
+
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeleopScouting;
 
 public class AutoScouting extends AppCompatActivity {
@@ -25,11 +26,13 @@ public class AutoScouting extends AppCompatActivity {
 
     SeekBar simpleSeekBar;
 
+
     private Handler m_handler;
     private Runnable m_handlerTask;
     private volatile boolean stopTimer;
     private int remainTime = 15;
     public Event event = new Event();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +71,6 @@ public class AutoScouting extends AppCompatActivity {
             }
         };
         m_handlerTask.run();
-
-
-    }
-
-
-    public void toTeleop(View view) {
-
 
         final CheckBox checkBox = (CheckBox) findViewById(R.id.baselineCheckbox);
         checkBox.setChecked(false);
@@ -212,14 +208,30 @@ public class AutoScouting extends AppCompatActivity {
                 });
 
 
-
-//                Intent intent = new Intent(this, TeleopScouting.class);
-//                intent.putExtra("PreGameData", getIntent().getSerializableExtra("PreGameData"));
-//                intent.putExtra("AutoScoutingData", autoScoutingObject2018);
-//                startActivity(intent);
             }
 
 
         });
+
+
+
+    }
+
+
+    public void toTeleop(View view) {
+
+
+
+
+
+
+
+        Intent intent = new Intent(this, TeleopScouting.class);
+        intent.putExtra("PreGameData", getIntent().getSerializableExtra("PreGameData"));
+        intent.putExtra("AutoScoutingData", autoScoutingObject2018);
+        startActivity(intent);
     }
 }
+
+
+
