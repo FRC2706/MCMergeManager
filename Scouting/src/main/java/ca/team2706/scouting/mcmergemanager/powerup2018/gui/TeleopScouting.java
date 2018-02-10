@@ -1,4 +1,4 @@
-package ca.team2706.scouting.mcmergemanager.steamworks2017.gui;
+package ca.team2706.scouting.mcmergemanager.powerup2018.gui;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.powerup2018.DroppedCubeFragment;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.FuelPickupEvent;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.FuelShotEvent;
@@ -44,6 +45,17 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
     }
 
+
+    private Handler m_handler;
+    private Runnable m_handlerTask;
+    private volatile boolean stopTimer;
+    private int remainTime = 135;
+    public int ballsHeld;
+    public boolean gearHeld = false;
+    public boolean gearDropped = false;
+    public String ballsHeldString;
+    public Event event = new Event();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +63,41 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
         final Spinner cubeDeliverySpinner = (Spinner) findViewById(R.id.cube_delivery_spinner);
 
-        //TeleopScoutingObject teleopScouting = new TeleopScouting();
+        TeleopScoutingObject teleopScouting = new TeleopScoutingObject();
+
+        final Event event;
+
+        final TextView tvGameTime = (TextView) findViewById(R.id.match_timer_textView);
+
+
+
+        m_handler = new Handler();
+
+        m_handlerTask = new Runnable() {
+            @Override
+            public void run() {
+
+                if (remainTime == 0) {
+                    tvGameTime.setText("Game Over! Please Select Climb Type.");
+                } else {
+                    remainTime--;
+                    int minuets = remainTime / 60;
+                    int remainSec = remainTime - minuets * 60;
+                    String remainSecString;
+                    if (remainSec < 10)
+                        remainSecString = "0" + remainSec;
+                    else
+                        remainSecString = remainSec + "";
+// woo
+                    tvGameTime.setText(minuets + ":" + remainSecString);
+
+                    // set an alarm to run this again in 1 second
+                    if (!stopTimer)
+                        m_handler.postDelayed(m_handlerTask, 1000);  // 1 second delay
+                }
+            }
+        };
+        m_handlerTask.run();
 
 
 
@@ -64,6 +110,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
                         switch (position){
 
                             case 1:
+                                // event = new CubePlacementEvent();
 
 
                             case 3:
@@ -76,6 +123,8 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
         );
         View view = cubeDeliverySpinner.getChildAt(3);
+
+
 
     }
 
@@ -90,6 +139,9 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
 
     }
+
+
+
 
 }
 
