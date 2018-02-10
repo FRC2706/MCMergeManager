@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoCubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoCubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoLineCrossEvent;
@@ -19,6 +22,8 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeleopScouting;
 
+import static ca.team2706.scouting.mcmergemanager.backend.App.getContext;
+
 public class AutoScouting extends AppCompatActivity {
 
     private AutoScoutingObject autoScoutingObject2018;
@@ -27,12 +32,14 @@ public class AutoScouting extends AppCompatActivity {
     SeekBar simpleSeekBar;
 
 
+    private View v;
+
     private Handler m_handler;
     private Runnable m_handlerTask;
     private volatile boolean stopTimer;
     private int remainTime = 15;
     public Event event = new Event();
-
+    public static int teamNum = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +78,32 @@ public class AutoScouting extends AppCompatActivity {
             }
         };
         m_handlerTask.run();
+
+        final EditText teamNumber = (EditText) findViewById(R.id.teamNumber);
+        final EditText comment = (EditText) findViewById(R.id.comment);
+
+        teamNumber.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+
+                teamNum = CommentListener.getTeamNum(keyCode, keyevent, teamNumber, comment);
+                if (teamNum == -1) {
+                    return false;
+                }
+                return true;
+            }
+        });
+
+
+
+        comment.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber,v, getContext());
+                return true;
+            }
+        });
+
 
         final CheckBox checkBox = (CheckBox) findViewById(R.id.baselineCheckbox);
         checkBox.setChecked(false);
