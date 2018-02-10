@@ -55,6 +55,10 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.FTPRequester;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
+import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
 
 @TargetApi(21)
@@ -101,6 +105,11 @@ public class MainActivity extends AppCompatActivity
 
         getEventKeys();
 
+        ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject autoScoutingObject = new ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject();
+        TeleopScoutingObject teleopScoutingObject = new TeleopScoutingObject();
+
+        Event event;
+        
     }
 
 
@@ -238,24 +247,6 @@ public class MainActivity extends AppCompatActivity
 
 
     public CommentTextEditor commentTextEditor;
-
-    public void onWriteCommentButtonClick(View v) {
-
-//        // Get the comment
-//        commentTextEditor = new CommentTextEditor("Write your comment.", "Comment", this);
-//        commentTextEditor.displayAlertDialog();
-//
-//        // Get the team number (After for lazy layout reasons)
-//        enterATeamNumberPopup = new GetTeamNumberDialog("Team Number", "Team Number", 1, this);
-//        enterATeamNumberPopup.displayAlertDialog();
-//        CommentList commentList = new CommentList(enterATeamNumberPopup.getTeamNumber());
-//
-//        commentList.addComment(commentTextEditor.getComment());
-//
-//        FileUtils.saveTeamComments(commentList);
-    }
-
-
 
     public void onRepairTimeRecordClicked(View view) {
         Intent intent = new Intent(this, RepairTimeCollection.class);

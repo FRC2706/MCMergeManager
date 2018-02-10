@@ -103,7 +103,7 @@ public class PostGameClass extends AppCompatActivity {
 
                 notesText = notes.getText().toString();
                 if (!notesText.equals(noEntry)) {
-                    postGameObject.notes = notes.getText().toString();
+                   // postGameObject.notes = notes.getText().toString();
                     comment.setComment(notesText);
                 }
 
