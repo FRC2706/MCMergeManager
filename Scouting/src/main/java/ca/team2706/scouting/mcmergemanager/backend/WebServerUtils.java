@@ -43,6 +43,34 @@ public class WebServerUtils {
         return false;
     }
 
+    // Post a match event to the server
+    public static boolean postMatchEvent(String matchKey, String teamNumber, String goal, String success,
+                                         String startTime, String endTime, String extra) {
+        Request request = new Request.Builder()
+                .url(SERVER_URL + "events/create?match=" + matchKey +
+                        "&team=" + teamNumber +
+                        "&goal=" + goal +
+                        "&success=" + success +
+                        "&start=" + startTime +
+                        "&end=" + endTime +
+                        "&extra=" + extra)
+                .build();
+
+        System.out.println(request.url().toString());
+        try {
+            Response response = client.newCall(request).execute();
+
+            // If server returns success then the comment posted
+            String responseString = response.body().string();
+            if(responseString.equals("success"))
+                return true;
+        } catch(IOException e) {
+            Log.d("Okhttp3 error", e.toString());
+        }
+
+        return false;
+    }
+
     // Returns the contents of a webserver at a given url
     public static String getDataFromServer(String url) {
         Request request = new Request.Builder()
@@ -99,7 +127,7 @@ public class WebServerUtils {
             return new JSONObject(getDataFromServer("competitions/show?competition=" + competiton_id));
         } catch (JSONException e) {
             return null;
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             return null;
         }
     }
