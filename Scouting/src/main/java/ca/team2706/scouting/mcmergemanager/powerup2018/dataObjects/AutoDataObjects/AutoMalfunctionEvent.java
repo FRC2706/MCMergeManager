@@ -9,7 +9,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 public class AutoMalfunctionEvent extends Event {
     public static final String ID = "auto_malfunction_event";
 
-    private Boolean autoMalfunction = false;
+    public Boolean autoMalfunction = false;
 
     public AutoMalfunctionEvent() {
         // Empty Constructor

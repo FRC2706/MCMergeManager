@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 /**
@@ -68,5 +69,27 @@ public class MatchData implements Serializable{
         }
 
 
+    }
+
+    // Member Variables
+    public ArrayList<Match> matches;
+
+    public MatchData() {
+        matches = new ArrayList<Match>();
+    }
+
+    public void addMatch(Match match) {
+        matches.add(match);
+    }
+
+    public MatchData filterByTeam(int teamNo) {
+
+        MatchData matchData = new MatchData();
+
+        for(Match match : matches) {
+            if (match.preGameObject.teamNumber == teamNo)
+                matchData.addMatch(match);
+        }
+        return matchData;
     }
 }

@@ -12,7 +12,7 @@ public class CubePlacementEvent extends Event{
         ALLIANCE_SWITCH, OPPOSING_SWITCH, SCALE, EXCHANGE, DROPPED
     }
 
-    placementType placementType;
+    public placementType placementType;
 
     public CubePlacementEvent(){
         // Empty Constructor

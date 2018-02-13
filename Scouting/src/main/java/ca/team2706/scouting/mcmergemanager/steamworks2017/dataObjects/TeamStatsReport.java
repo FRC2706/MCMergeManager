@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
-import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Cycle;
 
 public class TeamStatsReport implements Serializable {
 

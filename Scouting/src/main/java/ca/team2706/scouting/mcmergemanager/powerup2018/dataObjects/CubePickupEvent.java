@@ -12,7 +12,7 @@ public class CubePickupEvent extends Event {
         PORTAL, GROUND, EXCHANGE
     }
 
-    private pickupType pickupType;
+    public pickupType pickupType;
 
     public CubePickupEvent() {
         // Empty Constructor

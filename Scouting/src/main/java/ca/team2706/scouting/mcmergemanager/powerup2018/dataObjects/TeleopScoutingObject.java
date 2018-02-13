@@ -17,7 +17,7 @@ public class TeleopScoutingObject implements Serializable {
 
     /**
      * Puts all events during teleop mode into a list, sorted by timestamp.
-     * Useful for doing cycle analysis in StatsEngine.
+     * Useful for doing cycle analysis in StatsEngine2018.
      */
     public ArrayList<Event> getEvents() {
         Collections.sort(events);

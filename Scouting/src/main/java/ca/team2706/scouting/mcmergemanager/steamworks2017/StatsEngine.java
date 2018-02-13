@@ -13,7 +13,7 @@ import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.AutoScoutingObject;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Cycle;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Cycle;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.DefenseEvent;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.FuelPickupEvent;
@@ -63,7 +63,7 @@ public class StatsEngine implements Serializable{
 
 
     /**
-     * Fill in a TeamStatsReport about the given team.
+     * Fill in a TeamStatsReport2018 about the given team.
      */
     public TeamStatsReport getTeamStatsReport(int teamNo) {
         if (matchData == null)

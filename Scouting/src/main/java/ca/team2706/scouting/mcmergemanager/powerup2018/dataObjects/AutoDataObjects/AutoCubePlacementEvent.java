@@ -14,7 +14,7 @@ public class AutoCubePlacementEvent extends Event {
         ALLIANCE_SWITCH, SCALE, EXCHANGE, DROPPED
     }
 
-    placementType placementType;
+    public placementType placementType;
 
     public AutoCubePlacementEvent(){
         // Empty Constructor

@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Cycle;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Cycle;
 
 /**
  * Created by mike on 23/01/17.
