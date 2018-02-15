@@ -1,5 +1,7 @@
 package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
@@ -40,10 +42,34 @@ public class TeamStatsReport2018 {
     public double autoAvgMalfunctions;
 
     // Teleop vars
-    public int telPickupPortal, telPickupGround, telPickupExchange;
-    public int telPlaceAllianceSwitch, telPlaceScale, telPlaceExchange, telPlaceDropped, telPlaceOpposingSwitch;
+    public int totalPickupPortal, totalPickupGround, totalPickupExchange;
+    public int totalPlaceSwitch, totalPlaceScale, totalPlaceExchange, totalPlaceDropped;
 
+    public double pickupPortalAvgMatch, pickupGroundAvgMatch, pickupExchangeAvgMatch;
+    public double placeSwitchAvgMatch, placeScaleAvgMatch, placeExchangeAvgMatch, droppedAvgMatch;
+
+    public double pickupGroundAvgCycleTime, pickupPortalAvgCycleTime, pickupExchangeAvgCycleTime;
+    public double placeSwitchAvgCycleTime, placeScaleAvgCycleTime, placeExchangeAvgCycleTime, droppedAvgCycleTime;
+
+    public CubePickupEvent.PICKUP_TYPE favouritePickup;
+    public CubePlacementEvent.PLACEMENT_TYPE favouritePlacement;
+
+    // Post game stuff
+    public double avgDeadness, highestDeadness, numMatchesNoDeadness;
 
     public MatchSchedule teamMatcheSchedule;
     public MatchData teamMatchData;
+    public ArrayList<CyclesInAMatch> cycleMatches = new ArrayList<>();
+
+    /**
+     * For feeding the CycleDisplay window..
+     */
+    public static class CyclesInAMatch implements Serializable {
+        public int matchNo;
+        public ArrayList<Cycle> cycles = new ArrayList<>();
+
+        public CyclesInAMatch(int matchNo) {
+            this.matchNo = matchNo;
+        }
+    }
 }

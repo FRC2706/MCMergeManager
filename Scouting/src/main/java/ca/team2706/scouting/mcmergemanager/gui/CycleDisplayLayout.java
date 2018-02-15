@@ -61,23 +61,23 @@ public class CycleDisplayLayout extends LinearLayout {
 
 
     public void addCycle(Cycle cycle) {
-        switch(cycle.cycleType) {
-            case GEAR:
-                addCycle(GEAR_CYCLE, cycle.startTime, cycle.endTime, cycle.success);
-                break;
-            case LOW_GOAL:
-                addCycle(LOW_FUEL_CYCLE, cycle.startTime, cycle.endTime, cycle.success);
-                break;
-            case HIGH_GOAL:
-                addCycle(HIGH_FUEL_CYCLE, cycle.startTime, cycle.endTime, cycle.success);
-                break;
-            case CLIMB:
-                addCycle(CLIMB_CYCLE, cycle.startTime, cycle.endTime, cycle.success);
-                break;
-            case DEFENSE:
-                addCycle(DEFENSE_CYCLE, cycle.startTime, cycle.endTime, cycle.success);
-                break;
-        }
+//        switch(cycle.cycleType) {
+//            case GEAR:
+//                addCycle(GEAR_CYCLE, cycle.startTime, cycle.endTime, cycle.success);
+//                break;
+//            case LOW_GOAL:
+//                addCycle(LOW_FUEL_CYCLE, cycle.startTime, cycle.endTime, cycle.success);
+//                break;
+//            case HIGH_GOAL:
+//                addCycle(HIGH_FUEL_CYCLE, cycle.startTime, cycle.endTime, cycle.success);
+//                break;
+//            case CLIMB:
+//                addCycle(CLIMB_CYCLE, cycle.startTime, cycle.endTime, cycle.success);
+//                break;
+//            case DEFENSE:
+//                addCycle(DEFENSE_CYCLE, cycle.startTime, cycle.endTime, cycle.success);
+//                break;
+//        }
 
     }
 

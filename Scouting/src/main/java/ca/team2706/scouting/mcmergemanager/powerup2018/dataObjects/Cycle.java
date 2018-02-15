@@ -5,7 +5,7 @@ import java.io.Serializable;
 // For feeding the CycleDisplay window
 public class Cycle implements Serializable{
     public enum CycleType {
-        GEAR, HIGH_GOAL, LOW_GOAL, CLIMB, DEFENSE;
+        PICKUP_GROUND, PICKUP_PORTAL, PICKUP_EXCHANGE, CLIMB, PLACE_SWITCH, PLACE_SCALE, PLACE_EXCHANGE, PLACE_DROPPED;
     }
 
     public CycleType cycleType;
@@ -41,5 +41,8 @@ public class Cycle implements Serializable{
         return c;
     }
 
+    public double getCycleTime() {
+        return startTime - endTime;
+    }
 
 }

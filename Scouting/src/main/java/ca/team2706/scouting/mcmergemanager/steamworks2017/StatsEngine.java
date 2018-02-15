@@ -515,7 +515,7 @@ public class StatsEngine implements Serializable{
             Cycle currFuelCycle = new Cycle();
 
             boolean inGearCycle=false;
-            Cycle currGearCycle = new Cycle(Cycle.CycleType.GEAR);
+//            Cycle currGearCycle = new Cycle(Cycle.CycleType.GEAR);
 
 
             // Events in the list are already sorted in chronological order, so just loop over them!
@@ -553,32 +553,32 @@ public class StatsEngine implements Serializable{
                             teamStatsReport.numFuelHopperCycles++;
                         }
 
-                        if (inFuelHighCycle) {
-                            teamStatsReport.teleop_fuelHigh_aveCycleTime += cycleTime;
-
-                            if (cycleTime > teamStatsReport.teleop_fuelHigh_maxCycleTime)
-                                teamStatsReport.teleop_fuelHigh_maxCycleTime = cycleTime;
-
-                            if (cycleTime < teamStatsReport.teleop_fuelHigh_minCycleTime)
-                                teamStatsReport.teleop_fuelHigh_minCycleTime = cycleTime;
-
-                            Cycle c = currFuelCycle.clone(Cycle.CycleType.HIGH_GOAL);
-                            cyclesInThisMatch.cycles.add(c);
-                            teamStatsReport.numFuelHighCycles++;
-                        }
-
-                        if (inFuelLowCycle) {
-                            teamStatsReport.teleop_fuelLow_aveCycleTime += cycleTime;
-
-                            if (cycleTime > teamStatsReport.teleop_fuelLow_maxCycleTime)
-                                teamStatsReport.teleop_fuelLow_maxCycleTime = cycleTime;
-
-                            if (cycleTime < teamStatsReport.teleop_fuelLow_minCycleTime)
-                                teamStatsReport.teleop_fuelLow_minCycleTime = cycleTime;
-
-                            cyclesInThisMatch.cycles.add(currFuelCycle.clone(Cycle.CycleType.LOW_GOAL));
-                            teamStatsReport.numFuelLowCycles++;
-                        }
+//                        if (inFuelHighCycle) {
+//                            teamStatsReport.teleop_fuelHigh_aveCycleTime += cycleTime;
+//
+//                            if (cycleTime > teamStatsReport.teleop_fuelHigh_maxCycleTime)
+//                                teamStatsReport.teleop_fuelHigh_maxCycleTime = cycleTime;
+//
+//                            if (cycleTime < teamStatsReport.teleop_fuelHigh_minCycleTime)
+//                                teamStatsReport.teleop_fuelHigh_minCycleTime = cycleTime;
+//
+//                            Cycle c = currFuelCycle.clone(Cycle.CycleType.HIGH_GOAL);
+//                            cyclesInThisMatch.cycles.add(c);
+//                            teamStatsReport.numFuelHighCycles++;
+//                        }
+//
+//                        if (inFuelLowCycle) {
+//                            teamStatsReport.teleop_fuelLow_aveCycleTime += cycleTime;
+//
+//                            if (cycleTime > teamStatsReport.teleop_fuelLow_maxCycleTime)
+//                                teamStatsReport.teleop_fuelLow_maxCycleTime = cycleTime;
+//
+//                            if (cycleTime < teamStatsReport.teleop_fuelLow_minCycleTime)
+//                                teamStatsReport.teleop_fuelLow_minCycleTime = cycleTime;
+//
+//                            cyclesInThisMatch.cycles.add(currFuelCycle.clone(Cycle.CycleType.LOW_GOAL));
+//                            teamStatsReport.numFuelLowCycles++;
+//                        }
 
                         // reset all the state vars
                         inFuelCycle = false;
@@ -656,7 +656,7 @@ public class StatsEngine implements Serializable{
 
                     // if we're already in a gear cycle, don't update the cycle start time
                     if (!inGearCycle) {
-                        currGearCycle.startTime = gearPickupEvent.timestamp;
+//                        currGearCycle.startTime = gearPickupEvent.timestamp;
                     }
 
                     inGearCycle = true;
@@ -686,33 +686,33 @@ public class StatsEngine implements Serializable{
                         teamStatsReport.teleop_gearsDropped_avgPerMatch++;
                     }
                     else if (gearDelivevryEvent.deliveryStatus == GearDelivevryEvent.GearDeliveryStatus.DELIVERED) {
-                        inGearCycle = false;
-                        currGearCycle.endTime = gearDelivevryEvent.timestamp;
-                        double cycleTime = currGearCycle.endTime - currGearCycle.startTime;
+//                        inGearCycle = false;
+////                        currGearCycle.endTime = gearDelivevryEvent.timestamp;
+////                        double cycleTime = currGearCycle.endTime - currGearCycle.startTime;
+//
+//                        teamStatsReport.teleop_gearsDelivered_avgPerMatch++;
+//                        teamStatsReport.teleop_gears_avgCycleTime += cycleTime;
+//                        teamStatsReport.numGearCycles++;
+//
+//                        if (cycleTime > teamStatsReport.teleop_gears_maxCycleTime)
+//                            teamStatsReport.teleop_gears_maxCycleTime = cycleTime;
+//
+//                        if (cycleTime < teamStatsReport.teleop_gears_minCycleTime)
+//                            teamStatsReport.teleop_gears_minCycleTime = cycleTime;
+//
+//                        switch (gearDelivevryEvent.lift) {
+//                            case FEEDER_SIDE:
+//                                teamStatsReport.teleop_gearsScored_feederSide++;
+//                                break;
+//                            case CENTRE:
+//                                teamStatsReport.teleop_gearsScored_centre++;
+//                                break;
+//                            case BOILER_SIDE:
+//                                teamStatsReport.teleop_gearsScored_boilerSide++;
+//                                break;
+//                        }
 
-                        teamStatsReport.teleop_gearsDelivered_avgPerMatch++;
-                        teamStatsReport.teleop_gears_avgCycleTime += cycleTime;
-                        teamStatsReport.numGearCycles++;
-
-                        if (cycleTime > teamStatsReport.teleop_gears_maxCycleTime)
-                            teamStatsReport.teleop_gears_maxCycleTime = cycleTime;
-
-                        if (cycleTime < teamStatsReport.teleop_gears_minCycleTime)
-                            teamStatsReport.teleop_gears_minCycleTime = cycleTime;
-
-                        switch (gearDelivevryEvent.lift) {
-                            case FEEDER_SIDE:
-                                teamStatsReport.teleop_gearsScored_feederSide++;
-                                break;
-                            case CENTRE:
-                                teamStatsReport.teleop_gearsScored_centre++;
-                                break;
-                            case BOILER_SIDE:
-                                teamStatsReport.teleop_gearsScored_boilerSide++;
-                                break;
-                        }
-
-                        cyclesInThisMatch.cycles.add(currGearCycle.clone());
+//                        cyclesInThisMatch.cycles.add(currGearCycle.clone());
                     }
                 }
 
@@ -765,15 +765,15 @@ public class StatsEngine implements Serializable{
             // wrap up any incomplete cycles
             if (inFuelCycle) {
 
-                if (inFuelHighCycle) {
-                    teamStatsReport.numFuelHighCycles++;
-                    cyclesInThisMatch.cycles.add(currFuelCycle.clone(Cycle.CycleType.HIGH_GOAL));
-                }
-
-                if (inFuelLowCycle) {
-                    teamStatsReport.numFuelLowCycles++;
-                    cyclesInThisMatch.cycles.add(currFuelCycle.clone(Cycle.CycleType.LOW_GOAL));
-                }
+//                if (inFuelHighCycle) {
+//                    teamStatsReport.numFuelHighCycles++;
+//                    cyclesInThisMatch.cycles.add(currFuelCycle.clone(Cycle.CycleType.HIGH_GOAL));
+//                }
+//
+//                if (inFuelLowCycle) {
+//                    teamStatsReport.numFuelLowCycles++;
+//                    cyclesInThisMatch.cycles.add(currFuelCycle.clone(Cycle.CycleType.LOW_GOAL));
+//                }
 
                 if(inFuelGroundCycle) {
                     teamStatsReport.numFuelGroundCycles++;
@@ -789,11 +789,11 @@ public class StatsEngine implements Serializable{
             }
 
 
-            if (inGearCycle) {
-                currGearCycle.endTime = 135;
-                currGearCycle.success = false;
-                cyclesInThisMatch.cycles.add(currGearCycle);
-            }
+//            if (inGearCycle) {
+//                currGearCycle.endTime = 135;
+//                currGearCycle.success = false;
+//                cyclesInThisMatch.cycles.add(currGearCycle);
+//            }
 
             if (match.postGameObject.time_dead > 0) {
                 teamStatsReport.avgDeadness += match.postGameObject.time_dead;

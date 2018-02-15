@@ -10,17 +10,17 @@ public class AutoCubePlacementEvent extends Event {
     public static final String ID = "auto_cube_placement";
 
 
-    public enum placementType {
+    public enum PLACEMENT_TYPE {
         ALLIANCE_SWITCH, SCALE, EXCHANGE, DROPPED
     }
 
-    public placementType placementType;
+    public PLACEMENT_TYPE placementType;
 
     public AutoCubePlacementEvent(){
         // Empty Constructor
     }
 
-    public AutoCubePlacementEvent(double timestamp, placementType placementType){
+    public AutoCubePlacementEvent(double timestamp, PLACEMENT_TYPE placementType){
         super(timestamp);
         this.placementType = placementType;
 

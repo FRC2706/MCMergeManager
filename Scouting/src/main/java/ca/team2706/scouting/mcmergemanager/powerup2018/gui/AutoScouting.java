@@ -118,7 +118,7 @@ public class AutoScouting extends AppCompatActivity {
             public void onClick(View v) {
                 if (groundCheckbox.isChecked()) {
 
-                    AutoCubePickupEvent autoCubePickupEvent = new AutoCubePickupEvent(15 - remainTime, AutoCubePickupEvent.pickupType.GROUND);
+                    AutoCubePickupEvent autoCubePickupEvent = new AutoCubePickupEvent(15 - remainTime, AutoCubePickupEvent.PICKUP_TYPE.GROUND);
                     autoScoutingObject2018.add(autoCubePickupEvent);
                     groundCheckbox.setChecked(true);
 
@@ -134,7 +134,7 @@ public class AutoScouting extends AppCompatActivity {
                     public void onClick(View v) {
                         if (switchCheckbox.isChecked()) {
 
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.placementType.ALLIANCE_SWITCH);
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PLACEMENT_TYPE.ALLIANCE_SWITCH);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             switchCheckbox.setChecked(true);
                         } else {
@@ -152,7 +152,7 @@ public class AutoScouting extends AppCompatActivity {
                     public void onClick(View v) {
                         if (scaleCheckbox.isChecked()) {
 
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.placementType.SCALE);
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PLACEMENT_TYPE.SCALE);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             scaleCheckbox.setChecked(true);
                         } else {
@@ -170,7 +170,7 @@ public class AutoScouting extends AppCompatActivity {
                     public void onClick(View v) {
                         if (exchangeCheckbox.isChecked()) {
 
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.placementType.EXCHANGE);
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PLACEMENT_TYPE.EXCHANGE);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             exchangeCheckbox.setChecked(true);
                         } else {
@@ -187,7 +187,7 @@ public class AutoScouting extends AppCompatActivity {
                     public void onClick(View v) {
                         if (droppedCheckbox.isChecked()) {
 
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.placementType.DROPPED);
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PLACEMENT_TYPE.DROPPED);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             droppedCheckbox.setChecked(true);
                         } else {

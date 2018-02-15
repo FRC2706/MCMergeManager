@@ -15,10 +15,15 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjec
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Cycle;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport2018;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeamStatsReport;
+
+import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PLACEMENT_TYPE.ALLIANCE_SWITCH;
+import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PLACEMENT_TYPE.DROPPED;
+import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PLACEMENT_TYPE.EXCHANGE;
+import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PLACEMENT_TYPE.SCALE;
 
 public class StatsEngine2018 {
 
@@ -35,7 +40,8 @@ public class StatsEngine2018 {
         this(matchData, matchSchedule, null);
     }
 
-    /** Contructor
+    /**
+     * Contructor
      *
      * @param repairTimeObjects May be null
      **/
@@ -47,7 +53,7 @@ public class StatsEngine2018 {
 
     public TeamStatsReport2018 getTeamStatsReport(int teamNumber) {
         // If there is no match data then there is no data to compile
-        if(matchData == null)
+        if (matchData == null)
             throw new IllegalStateException("no match data");
 
         TeamStatsReport2018 teamStatsReport = new TeamStatsReport2018();
@@ -66,12 +72,12 @@ public class StatsEngine2018 {
         teamStatsReport.teamNumber = teamNumber;
 
         teamStatsReport.numMatchesPlayed = 0;
-        for(MatchSchedule.Match match : teamStatsReport.teamMatcheSchedule.getMatches() ) {
+        for (MatchSchedule.Match match : teamStatsReport.teamMatcheSchedule.getMatches()) {
             if (match.getBlueScore() > 0 && match.getRedScore() > 0)
                 teamStatsReport.numMatchesPlayed++;
         }
 
-        if(records == null)
+        if (records == null)
             computeRecords();
 
         if (records.get(teamNumber) != null) {
@@ -91,13 +97,14 @@ public class StatsEngine2018 {
     }
 
     // Fill in the stats that are only to do with auto mode
+    //TODO: Avg delivery time in auto
     private void fillInAutoStats(TeamStatsReport2018 teamStatsReport) {
-        for(MatchData.Match match: teamStatsReport.teamMatchData.matches) {
+        for (MatchData.Match match : teamStatsReport.teamMatchData.matches) {
             AutoScoutingObject autoScouting = match.autoScoutingObject;
 
             // Loop through all the auto events and add the stats to the team-stats
-            for(Event event : autoScouting.getEvents()) {
-                if(event instanceof AutoCubePickupEvent) {
+            for (Event event : autoScouting.getEvents()) {
+                if (event instanceof AutoCubePickupEvent) {
                     switch (((AutoCubePickupEvent) event).pickupType) {
                         case EXCHANGE:
                             teamStatsReport.autoPickupExchange++;
@@ -110,8 +117,8 @@ public class StatsEngine2018 {
                             break;
                     }
                 }
-                if(event instanceof AutoCubePlacementEvent) {
-                    switch(((AutoCubePlacementEvent) event).placementType) {
+                if (event instanceof AutoCubePlacementEvent) {
+                    switch (((AutoCubePlacementEvent) event).placementType) {
                         case SCALE:
                             teamStatsReport.autoPlaceScale++;
                             break;
@@ -126,12 +133,12 @@ public class StatsEngine2018 {
                             break;
                     }
                 }
-                if(event instanceof AutoLineCrossEvent) {
-                    if(((AutoLineCrossEvent) event).crossedAutoLine)
+                if (event instanceof AutoLineCrossEvent) {
+                    if (((AutoLineCrossEvent) event).crossedAutoLine)
                         teamStatsReport.autoCrossedLine++;
                 }
-                if(event instanceof AutoMalfunctionEvent) {
-                    if(((AutoMalfunctionEvent) event).autoMalfunction)
+                if (event instanceof AutoMalfunctionEvent) {
+                    if (((AutoMalfunctionEvent) event).autoMalfunction)
                         teamStatsReport.autoMalfunction++;
                 }
             }
@@ -140,68 +147,171 @@ public class StatsEngine2018 {
         // Compute the averages and totals, when calculating averages make sure no divide by zero
         teamStatsReport.autoTotalPlacedCubes = teamStatsReport.autoPlaceAllianceSwitch
                 + teamStatsReport.autoPlaceScale + teamStatsReport.autoPlaceExchange;
-        if(teamStatsReport.numMatchesPlayed != 0)
+        if (teamStatsReport.numMatchesPlayed != 0)
             teamStatsReport.autoAvgMalfunctions = teamStatsReport.autoMalfunction / teamStatsReport.numMatchesPlayed;
     }
 
     private void fillInTeleopStats(TeamStatsReport2018 teamStatsReport) {
         // Loop through all the matches, calculate cycles using a big ol state maching
-        for(MatchData.Match match : teamStatsReport.teamMatchData.matches) {
+        for (MatchData.Match match : teamStatsReport.teamMatchData.matches) {
             // Process all the events during this match in a big state machine.
             ArrayList<Event> events = match.teleopScoutingObject.getEvents();
 
-            TeamStatsReport.CyclesInAMatch cyclesInThisMatch = new TeamStatsReport.CyclesInAMatch(match.preGameObject.matchNumber);
+            TeamStatsReport2018.CyclesInAMatch cyclesInThisMatch = new TeamStatsReport2018.CyclesInAMatch(match.preGameObject.matchNumber);
 
             // State machine state vars
-            boolean inPickupCycle = false, inPlaceCycle = false;
+            boolean inCubePickupCycle = false, inCubePlaceCycle = false;
+            Cycle cubeCycle = new Cycle();
 
             // Loop through all events in the match
-            for(Event event : events) {
+            for (Event event : events) {
 
-                if(event instanceof CubePickupEvent) {
+                if (event instanceof CubePickupEvent) {
                     CubePickupEvent c = (CubePickupEvent) event;
-                    switch(c.pickupType) {
-                        case PORTAL:
-                            teamStatsReport.telPickupPortal++;
+
+                    // Get the timestamp
+                    cubeCycle.startTime = c.timestamp;
+
+                    // Add the stats and
+                    switch (c.pickupType) {
+                        case EXCHANGE:
+                            teamStatsReport.pickupExchangeAvgCycleTime += cubeCycle.getCycleTime();
+                            teamStatsReport.totalPickupExchange++;
+                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PICKUP_EXCHANGE));
                             break;
                         case GROUND:
-                            teamStatsReport.telPickupGround++;
+                            teamStatsReport.pickupGroundAvgCycleTime += cubeCycle.getCycleTime();
+                            teamStatsReport.totalPickupGround++;
+                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PICKUP_GROUND));
                             break;
-                        case EXCHANGE:
-                            teamStatsReport.telPickupExchange++;
+                        case PORTAL:
+                            teamStatsReport.pickupPortalAvgCycleTime += cubeCycle.getCycleTime();
+                            teamStatsReport.totalPickupPortal++;
+                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PICKUP_PORTAL));
                             break;
                     }
                 }
 
-                if(event instanceof CubePlacementEvent) {
+                if (event instanceof CubePlacementEvent) {
                     CubePlacementEvent c = (CubePlacementEvent) event;
-                    switch(c.placementType) {
+
+                    // Time stamp stuff
+                    cubeCycle.endTime = c.timestamp;
+
+                    // If dropped fail the cycle
+                    if (c.placementType == DROPPED)
+                        cubeCycle.success = false;
+                    else
+                        cubeCycle.success = true;
+
+                    // Add stats and cycle
+                    switch (c.placementType) {
                         case EXCHANGE:
-                            teamStatsReport.telPlaceExchange++;
+                            teamStatsReport.placeExchangeAvgCycleTime += cubeCycle.getCycleTime();
+                            teamStatsReport.totalPlaceExchange++;
+                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PLACE_EXCHANGE));
                             break;
-                        case ALLIANCE_SWITCH:
-                            teamStatsReport.telPlaceAllianceSwitch+;
+                        case ALLIANCE_SWITCH:   // TODO: Could change, but the opposing switch and ours are basically the same thing
+                        case OPPOSING_SWITCH:
+                            teamStatsReport.placeSwitchAvgCycleTime += cubeCycle.getCycleTime();
+                            teamStatsReport.totalPlaceSwitch++;
+                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PLACE_SWITCH));
                             break;
                         case DROPPED:
-                            teamStatsReport.telPlaceDropped++;
+                            teamStatsReport.droppedAvgCycleTime += cubeCycle.getCycleTime();
+                            teamStatsReport.totalPlaceDropped++;
+                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PLACE_DROPPED));
                             break;
                         case SCALE:
-                            teamStatsReport.telPlaceScale++;
-                            break;
-                        case OPPOSING_SWITCH:
-                            teamStatsReport.telPlaceOpposingSwitch++;
+                            teamStatsReport.placeScaleAvgCycleTime += cubeCycle.getCycleTime();
+                            teamStatsReport.totalPlaceScale++;
+                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PLACE_SCALE));
                             break;
                     }
                 }
+
+                // Get the time dead of the team
+                if (match.postGameObject.time_dead > 0) {
+                    teamStatsReport.avgDeadness += match.postGameObject.time_dead;
+
+                    if (match.postGameObject.time_dead > teamStatsReport.highestDeadness)
+                        teamStatsReport.highestDeadness = match.postGameObject.time_dead;
+                } else {
+                    teamStatsReport.numMatchesNoDeadness++;
+                }
+
+                // Add the cycles to the report
+                teamStatsReport.cycleMatches.add(cyclesInThisMatch);
+
+                // TODO: i don't think i need to finish cycles
             }
+
+
+            // Climbing stuff
+            //TODO:
+
+
         }
+
+
+        // Calculate the averages for the team, make sure not dividing by zero
+        int numMatchesPlayed = matchData.matches.size();
+        if (teamStatsReport.numMatchesPlayed != 0) {
+
+            // Avg times
+            teamStatsReport.pickupGroundAvgCycleTime /= teamStatsReport.totalPickupGround;
+            teamStatsReport.pickupPortalAvgCycleTime /= teamStatsReport.totalPickupPortal;
+            teamStatsReport.pickupExchangeAvgCycleTime /= teamStatsReport.totalPickupExchange;
+
+            teamStatsReport.placeSwitchAvgCycleTime /= teamStatsReport.totalPlaceSwitch;
+            teamStatsReport.placeScaleAvgCycleTime /= teamStatsReport.totalPlaceScale;
+            teamStatsReport.placeExchangeAvgCycleTime /= teamStatsReport.totalPlaceExchange;
+            teamStatsReport.droppedAvgCycleTime /= teamStatsReport.totalPlaceDropped;
+
+            // Avg per match
+            teamStatsReport.pickupGroundAvgMatch /= numMatchesPlayed;
+            teamStatsReport.pickupPortalAvgMatch /= numMatchesPlayed;
+            teamStatsReport.pickupExchangeAvgMatch /= numMatchesPlayed;
+
+            teamStatsReport.placeSwitchAvgMatch /= numMatchesPlayed;
+            teamStatsReport.placeScaleAvgMatch /= numMatchesPlayed;
+            teamStatsReport.placeExchangeAvgMatch /= numMatchesPlayed;
+            teamStatsReport.droppedAvgMatch /= numMatchesPlayed;
+
+            // Deadness
+            teamStatsReport.avgDeadness /= numMatchesPlayed;
+        }
+
+        // Find the favourites of teams
+        if(teamStatsReport.pickupPortalAvgMatch > teamStatsReport.pickupExchangeAvgMatch &&
+                teamStatsReport.pickupPortalAvgMatch > teamStatsReport.pickupGroundAvgMatch) {
+            teamStatsReport.favouritePickup = CubePickupEvent.PICKUP_TYPE.PORTAL;
+        } else if(teamStatsReport.pickupGroundAvgMatch > teamStatsReport.pickupExchangeAvgMatch) {
+            teamStatsReport.favouritePickup = CubePickupEvent.PICKUP_TYPE.GROUND;
+        } else {
+            teamStatsReport.favouritePickup = CubePickupEvent.PICKUP_TYPE.EXCHANGE;
+        }
+
+        if(teamStatsReport.placeExchangeAvgMatch > teamStatsReport.placeScaleAvgMatch &&
+                teamStatsReport.placeExchangeAvgMatch > teamStatsReport.placeSwitchAvgMatch &&
+                teamStatsReport.placeExchangeAvgMatch > teamStatsReport.droppedAvgMatch) {
+            teamStatsReport.favouritePlacement = EXCHANGE;
+        } else if(teamStatsReport.placeScaleAvgMatch > teamStatsReport.placeSwitchAvgMatch &&
+                teamStatsReport.placeScaleAvgMatch > teamStatsReport.droppedAvgMatch) {
+            teamStatsReport.favouritePlacement = SCALE;
+        } else if(teamStatsReport.placeSwitchAvgMatch > teamStatsReport.droppedAvgMatch) {
+            teamStatsReport.favouritePlacement = ALLIANCE_SWITCH;   // Either alliance or opposing switch
+        } else {
+            teamStatsReport.favouritePlacement = DROPPED;
+        }
+
     }
 
     // Determines the wlt of team
     private void computeRecords() {
         records = new HashMap<>();
 
-        for(MatchSchedule.Match match : matchSchedule.getMatches()) {
+        for (MatchSchedule.Match match : matchSchedule.getMatches()) {
             if (match.getBlueScore() == -1 || match.getRedScore() == -1)
                 continue;   // this match has not been played yet
 
@@ -244,9 +354,17 @@ public class StatsEngine2018 {
         int losses;
         int ties;
 
-        void addWin()  { wins++; }
-        void addLoss() { losses++; }
-        void addTie()  { ties++; }
+        void addWin() {
+            wins++;
+        }
+
+        void addLoss() {
+            losses++;
+        }
+
+        void addTie() {
+            ties++;
+        }
     }
 
     /**
