@@ -92,6 +92,7 @@ public class PrimaryTab extends Fragment {
         return v;
     }
 
+
     public void showCommentBar(){
         final EditText teamNumber = (EditText) v.findViewById(R.id.teamNumber);
 

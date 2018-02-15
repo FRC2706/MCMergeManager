@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <Spinner
-
-        android:id="@+id/climbType_Spinner"
-        android:layout_width="215dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/climb_type_title_textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="11dp"
-        android:entries="@array/climb_type" />
-
+  
     <TextView
-        android:id="@+id/deadTime_textView"
+        android:id="@+id/climb_type_title_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="Climb Type"
+        android:textColor="#663399"
+
         android:layout_alignStart="@+id/climbTime_textView"
         android:layout_below="@+id/climb_time_seekBar"
         android:layout_marginTop="25dp"
@@ -25,70 +22,93 @@
         android:textColor="#000"
         android:textSize="20sp" />
 
-    <SeekBar
-        android:id="@+id/deadTime_seekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/deadTime_tracker_textView"
-        android:layout_marginTop="11dp" />
-
-    <TextView
-        android:id="@+id/defense_textView"
+    <CheckBox
+        android:id="@+id/climbTypeNoClimb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/deadTime_seekBar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
-        android:text="Time defending"
-        android:textColor="#000"
-        android:textSize="20sp" />
 
-    <SeekBar
-        android:id="@+id/defense_seekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/defense_tracker_textView"
-        android:layout_marginTop="21dp" />
-
-    <Button
-        android:id="@+id/done_button"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/defense_seekBar"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/climb_type_title_textView"
         android:layout_marginTop="11dp"
-        android:text="Done" />
+        android:layout_toStartOf="@+id/defense_textView"
+        android:text="No climb"
+        android:textSize="18sp" />
+
+    <CheckBox
+        android:id="@+id/climbTypeFail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/climbTypeWasAssisted"
+        android:layout_below="@+id/climbTypeNoClimb"
+        android:text="Fail"
+        android:textSize="18sp" />
+
+    <CheckBox
+        android:id="@+id/climbTypeBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/climbTypeAssisted"
+        android:layout_alignTop="@+id/climbTypeNoClimb"
+        android:layout_marginTop="12dp"
+        android:text="Bar: successful"
+        android:textSize="18sp" />
+
+    <CheckBox
+        android:id="@+id/climbTypeAssisted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/climbTypeBar"
+        android:layout_marginEnd="16dp"
+        android:text="Assisted Someone"
+        android:textSize="18sp" />
+
+    <CheckBox
+        android:id="@+id/climbTypeWasAssisted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/climbTypeNoClimb"
+        android:layout_below="@+id/climbTypeFail"
+        android:text="Was Assisted"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/climbTime_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/climbType_Spinner"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
+        android:layout_above="@+id/climb_time_seekBar"
+        android:layout_alignStart="@+id/climb_type_title_textView"
+        android:layout_marginBottom="24dp"
         android:text="Climb time"
-        android:textColor="#000"
+        android:textColor="#663399"
         android:textSize="20sp" />
-
-    <SeekBar
-        android:id="@+id/climb_time_seekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/climbTime_tracker_textView"
-        android:layout_marginTop="12dp" />
 
     <TextView
         android:id="@+id/climbTime_tracker_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/climbTime_textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="13dp"
+        android:layout_above="@+id/climb_time_seekBar"
+        android:layout_alignEnd="@+id/defense_tracker_textView"
         android:text="0 seconds climbing"
         android:textSize="16sp" />
+
+    <SeekBar
+        android:id="@+id/climb_time_seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/deadTime_textView"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="14dp" />
+
+    <TextView
+        android:id="@+id/deadTime_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/deadTime_tracker_textView"
+        android:layout_alignStart="@+id/climbTime_textView"
+        android:text="Time dead"
+        android:textColor="#663399"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/deadTime_tracker_textView"
@@ -98,6 +118,25 @@
         android:layout_centerVertical="true"
         android:text="0 seconds dead"
         android:textSize="16sp" />
+
+    <SeekBar
+        android:id="@+id/deadTime_seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/defense_textView"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="23dp" />
+
+    <TextView
+        android:id="@+id/defense_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/defense_tracker_textView"
+        android:layout_alignEnd="@+id/defense_tracker_textView"
+        android:text="Time defending"
+        android:textColor="#663399"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/defense_tracker_textView"
@@ -109,15 +148,23 @@
         android:text="0 seconds defending"
         android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/climb_type_title_textView"
-        android:layout_width="wrap_content"
+    <SeekBar
+        android:id="@+id/defense_seekBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:text="Climb type"
-        android:textSize="18sp" />
+        android:layout_above="@+id/done_button"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="13dp" />
+
+    <Button
+        android:id="@+id/done_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/climbTime_textView"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="90dp"
+        android:text="Done" />
 
     <RelativeLayout
         android:id="@+id/comments"
