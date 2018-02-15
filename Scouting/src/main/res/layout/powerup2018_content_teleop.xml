@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/pickup_prompt_textView"
         android:layout_width="wrap_content"
@@ -12,6 +13,7 @@
         android:layout_marginTop="60dp"
         android:text="Teleop"
         android:textSize="24sp" />
+
 
     <Spinner
         android:id="@+id/cube_pickup_spinner"
@@ -70,9 +72,15 @@
         android:text="2:15"
         android:textSize="28sp" />
 
-    <include android:id="@+id/comments"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/comments"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        layout="@layout/comment_bar"/>
+        android:layout_alignParentBottom="true" >
+
+        <include layout="@layout/comment_bar" />
+    </RelativeLayout>
+
 
 </RelativeLayout>
+

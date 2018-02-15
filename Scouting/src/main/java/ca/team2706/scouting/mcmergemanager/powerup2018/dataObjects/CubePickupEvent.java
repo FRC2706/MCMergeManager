@@ -9,7 +9,7 @@ public class CubePickupEvent extends Event {
     public static final String ID = "pickup_cube";
 
     public enum pickupType{
-        PORTAL, GROUND, EXCHANGE
+        PORTAL, GROUND, EXCHANGE, PYRAMID
     }
 
     private pickupType pickupType;

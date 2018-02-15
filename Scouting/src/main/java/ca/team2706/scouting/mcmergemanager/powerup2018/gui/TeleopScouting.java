@@ -8,16 +8,21 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.team2706.scouting.mcmergemanager.R;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.powerup2018.DroppedCubeFragment;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.FuelPickupEvent;
@@ -25,7 +30,7 @@ import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.FuelShotEv
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.GearDelivevryEvent;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.GearPickupEvent;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.PostGameObject;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeleopScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.BallPickupFragment;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.BallShootingFragment;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.ClimbingFragment;
@@ -33,7 +38,15 @@ import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.FragmentLis
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.GearDeliveryFragment;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.GearPickupFragment;
 
+import static ca.team2706.scouting.mcmergemanager.backend.App.getContext;
+
+import android.view.View.OnKeyListener;
+
 public class TeleopScouting extends AppCompatActivity implements FragmentListener{
+
+    public static int teamNum = -1;
+
+    private View v;
 
     @Override
     public void editNameDialogComplete(DialogFragment dialogFragment, Bundle data){
@@ -54,21 +67,19 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
     public boolean gearHeld = false;
     public boolean gearDropped = false;
     public String ballsHeldString;
-    public Event event = new Event();
+
+    ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject teleopScoutingObject;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.steamworks2017_activity_teleop_scouting);
 
-        final Spinner cubeDeliverySpinner = (Spinner) findViewById(R.id.cube_delivery_spinner);
+        teleopScoutingObject = new TeleopScoutingObject();
 
-        TeleopScoutingObject teleopScouting = new TeleopScoutingObject();
-
-        final Event event;
 
         final TextView tvGameTime = (TextView) findViewById(R.id.match_timer_textView);
-
 
 
         m_handler = new Handler();
@@ -101,20 +112,47 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
 
 
+        Event event;
+
+        //Recording data for delivery
+        final Spinner cubeDeliverySpinner = (Spinner) findViewById(R.id.cube_delivery_spinner);
+
         cubeDeliverySpinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                         String text = (String) cubeDeliverySpinner.getItemAtPosition(position);
 
+                        CubePlacementEvent cubePlacementEvent;
+
                         switch (position){
 
                             case 1:
-                                // event = new CubePlacementEvent();
+                                cubePlacementEvent = new CubePlacementEvent(135 - remainTime, CubePlacementEvent.placementType.ALLIANCE_SWITCH);
+                                teleopScoutingObject.add(cubePlacementEvent);
+                                cubeDeliverySpinner.setSelection(0);
+                                break;
 
+                            case 2:
+                                cubePlacementEvent = new CubePlacementEvent(135 - remainTime, CubePlacementEvent.placementType.SCALE);
+                                teleopScoutingObject.add(cubePlacementEvent);
+                                cubeDeliverySpinner.setSelection(0);
+                                break;
 
                             case 3:
+                                cubePlacementEvent = new CubePlacementEvent(135 - remainTime, CubePlacementEvent.placementType.EXCHANGE);
+                                teleopScoutingObject.add(cubePlacementEvent);
+                                cubeDeliverySpinner.setSelection(0);
+                                break;
+
+                            case 4:
+                                cubePlacementEvent = new CubePlacementEvent(135 - remainTime, CubePlacementEvent.placementType.DROPPED);
+                                teleopScoutingObject.add(cubePlacementEvent);
+
+                                //show the cube dropped popup
                                 showCubeDropped();
+
+                                cubeDeliverySpinner.setSelection(0);
                                 break;
                         }
                     }
@@ -122,8 +160,79 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
                 }
 
         );
+
+
+        //Recording data for pickup
+        final Spinner cubePickupSpinner = (Spinner) findViewById(R.id.cube_pickup_spinner);
+
+        cubePickupSpinner.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                        String text = (String) cubePickupSpinner.getItemAtPosition(position);
+
+                        CubePickupEvent cubePickupEvent;
+
+                        switch (position){
+
+                            case 0:
+                                cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.pickupType.PYRAMID);
+                                teleopScoutingObject.add(cubePickupEvent);
+                                cubeDeliverySpinner.setSelection(0);
+                                break;
+
+                            case 1:
+                                cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.pickupType.PORTAL);
+                                teleopScoutingObject.add(cubePickupEvent);
+                                cubeDeliverySpinner.setSelection(0);
+                                break;
+
+                            case 2:
+                                cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.pickupType.EXCHANGE);
+                                teleopScoutingObject.add(cubePickupEvent);
+                                cubeDeliverySpinner.setSelection(0);
+                                break;
+
+                            case 3:
+                                cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.pickupType.GROUND);
+                                teleopScoutingObject.add(cubePickupEvent);
+                                cubeDeliverySpinner.setSelection(0);
+                                break;
+                        }
+                    }
+                    public  void onNothingSelected(AdapterView<?> parent){}
+                }
+
+        );
+
         View view = cubeDeliverySpinner.getChildAt(3);
 
+
+
+        final EditText teamNumber = (EditText) findViewById(R.id.teamNumber);
+
+        final EditText comment = (EditText) findViewById(R.id.comment);
+
+
+
+        teamNumber.setOnKeyListener(new OnKeyListener(){
+
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+
+                teamNum = CommentListener.getTeamNum(keyCode, keyevent, teamNumber, comment);
+                if (teamNum == -1) {
+                    return false;
+                }
+                return true;
+            }
+        });
+
+        comment.setOnKeyListener(new OnKeyListener(){
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, v, getContext());
+                return true;
+            }
+        });
 
 
     }
@@ -137,6 +246,8 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
     public void startedClimbing(View view){
 
+        Intent intent = new Intent(this, Postgame.class);
+        startActivity(intent);
 
     }
 
