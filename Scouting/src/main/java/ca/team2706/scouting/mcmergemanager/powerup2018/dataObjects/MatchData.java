@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLineCrossEvent;
@@ -60,7 +61,7 @@ public class MatchData implements Serializable{
 
                 Event event;
 
-                for(int i = 0; i < jsonArray.length();i++) {
+                for(int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = new JSONObject(jsonArray.get(i).toString());
 
                     try {
@@ -95,42 +96,25 @@ public class MatchData implements Serializable{
                                 // TODO
                         }
                     } catch (IllegalArgumentException e) {
-                        // TODO comment this
-                        continue;
+                        // If an illegal argument is found in the JSON file, the for loop will continue to the next item in the array
+                        i++;
                     }
 
                 }
         }
 
         public void toJson() throws JSONException {
+            // TODO add auto
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
 
             jsonObject.put("team", preGameObject.teamNumber);
             jsonObject.put("match_number", preGameObject.matchNumber);
 
-            for(Event event : teleopScoutingObject.getEvents()){
+            for(Event event : autoScoutingObject.getEvents()){
                 JSONObject obj = new JSONObject();
                 obj.put(START_TIME, event.timestamp);
-                if(event instanceof CubePickupEvent) {
-                    CubePickupEvent e = (CubePickupEvent) event;
-                    obj.put(GOAL, e.ID);
-                    obj.put(START_TIME, e.timestamp);
-                    obj.put(EXTRA, e.pickupType.toString());
-                }
-                if(event instanceof CubePlacementEvent) {
-                    CubePlacementEvent e = (CubePlacementEvent) event;
-                    obj.put(GOAL, e.ID);
-                    obj.put(START_TIME, e.timestamp);
-                    obj.put(EXTRA, e.placementType.toString());
-                    }
-                if(event instanceof CubeDroppedEvent) {
-                    CubeDroppedEvent e = (CubeDroppedEvent) event;
-                    obj.put(GOAL, e.ID);
-                    obj.put(START_TIME, e.timestamp);
-                    obj.put(EXTRA, e.dropType.toString());
-                    break;
-                }
+
                 if(event instanceof  AutoCubePlacementEvent) {
                     AutoCubePlacementEvent e = (AutoCubePlacementEvent) event;
                     obj.put(GOAL, e.ID);
@@ -155,6 +139,32 @@ public class MatchData implements Serializable{
                     obj.put(GOAL, e.ID);
                     obj.put(START_TIME, e.timestamp);
                     obj.put(EXTRA, e.autoMalfunction.toString());
+                }
+                jsonArray.put(obj);
+
+            }
+
+            for(Event event : teleopScoutingObject.getEvents()){
+                JSONObject obj = new JSONObject();
+                obj.put(START_TIME, event.timestamp);
+                if(event instanceof CubePickupEvent) {
+                    CubePickupEvent e = (CubePickupEvent) event;
+                    obj.put(GOAL, e.ID);
+                    obj.put(START_TIME, e.timestamp);
+                    obj.put(EXTRA, e.pickupType.toString());
+                }
+                if(event instanceof CubePlacementEvent) {
+                    CubePlacementEvent e = (CubePlacementEvent) event;
+                    obj.put(GOAL, e.ID);
+                    obj.put(START_TIME, e.timestamp);
+                    obj.put(EXTRA, e.placementType.toString());
+                    }
+                if(event instanceof CubeDroppedEvent) {
+                    CubeDroppedEvent e = (CubeDroppedEvent) event;
+                    obj.put(GOAL, e.ID);
+                    obj.put(START_TIME, e.timestamp);
+                    obj.put(EXTRA, e.dropType.toString());
+                    break;
                 }if (event instanceof PostGameObject) {
                     // For this event, we set extra to time_dead and end_time to time_defending
                     PostGameObject e = (PostGameObject) event;
@@ -170,9 +180,11 @@ public class MatchData implements Serializable{
                     obj.put(START_TIME, 140);
                     obj.put("end_time", e.climb_time);
                 }
+                jsonArray.put(obj);
             }
-            jsonObject.put( "events", jsonArray);
 
+            jsonObject.put( "events", jsonArray);
+            FileUtils.saveJsonData(jsonObject);
         }
 
     }
