@@ -109,9 +109,6 @@ public class MainActivity extends AppCompatActivity
 
         getEventKeys();
 
-        
-
-        
     }
 
 

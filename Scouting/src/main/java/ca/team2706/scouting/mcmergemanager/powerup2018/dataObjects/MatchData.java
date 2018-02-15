@@ -1,5 +1,7 @@
 package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,8 +33,8 @@ public class MatchData implements Serializable{
 
     public static final String CUBE_PLACE_ID = "place_cube";
     public static final String CUBE_PICKUP_ID = "pickup_cube";
-
     public static final String POST_GAME_ID = "post_game";
+    public static final String CLIMB_ID = "climb";
 
     public static final String START_TIME = "start_time";
     public static final String EXTRA = "extra";
@@ -42,13 +44,11 @@ public class MatchData implements Serializable{
 
         public TeleopScoutingObject teleopScoutingObject;
         public AutoScoutingObject autoScoutingObject;
-        public PostGameObject postGameObject;
         public PreGameObject preGameObject;
 
-        public Match(PreGameObject preGameObject, PostGameObject postGameObject, TeleopScoutingObject teleopScoutingObject, AutoScoutingObject autoScoutingObject) {
+        public Match(PreGameObject preGameObject, TeleopScoutingObject teleopScoutingObject, AutoScoutingObject autoScoutingObject) {
             this.preGameObject = preGameObject;
             this.autoScoutingObject = autoScoutingObject;
-            this.postGameObject = postGameObject;
             this.teleopScoutingObject = teleopScoutingObject;
         }
 
@@ -91,12 +91,14 @@ public class MatchData implements Serializable{
                                 teleopScoutingObject.add(event);
                                 break;
                             case POST_GAME_ID:
+
                                 break;
                             default:
                                 // TODO
                         }
                     } catch (IllegalArgumentException e) {
                         // If an illegal argument is found in the JSON file, the for loop will continue to the next item in the array
+                        Log.d("Invalid Argument", "INVALID");
                         i++;
                     }
 
@@ -172,7 +174,7 @@ public class MatchData implements Serializable{
                     obj.put(START_TIME, 140);
                     obj.put(EXTRA, Double.toString(e.time_dead));
                     obj.put("end_time", e.time_defending);
-                } if (event instanceof PostGameObject) {
+                } if (event instanceof ClimbEvent) {
                     // For this event, end_time is climb_time
                     ClimbEvent e = (ClimbEvent) event;
                     obj.put(GOAL, e.ID);
