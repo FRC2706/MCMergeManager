@@ -98,6 +98,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.team2706.scouting.mcmergemanager.gui.MainActivity" />
         </activity>
+        <activity
+            android:name=".powerup2018.gui.PitScoutingFragment"
+            android:label="pitScoutingPage"
+            android:parentActivityName=".gui.MainActivity"
+            android:theme="@style/AppTheme">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="ca.team2706.scouting.mcmergemanager.gui.MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>
