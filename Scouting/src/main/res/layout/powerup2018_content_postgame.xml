@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+  
     <TextView
         android:id="@+id/climb_type_title_textView"
         android:layout_width="wrap_content"
@@ -13,12 +14,19 @@
         android:layout_marginTop="25dp"
         android:text="Climb Type"
         android:textColor="#663399"
+
+        android:layout_alignStart="@+id/climbTime_textView"
+        android:layout_below="@+id/climb_time_seekBar"
+        android:layout_marginTop="25dp"
+        android:text="Time dead"
+        android:textColor="#000"
         android:textSize="20sp" />
 
     <CheckBox
         android:id="@+id/climbTypeNoClimb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_below="@+id/climb_type_title_textView"
         android:layout_marginTop="11dp"
         android:layout_toStartOf="@+id/defense_textView"
@@ -106,8 +114,8 @@
         android:id="@+id/deadTime_tracker_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/deadTime_seekBar"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:text="0 seconds dead"
         android:textSize="16sp" />
 
@@ -134,8 +142,9 @@
         android:id="@+id/defense_tracker_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/defense_seekBar"
-        android:layout_centerHorizontal="true"
+        android:layout_alignStart="@+id/defense_textView"
+        android:layout_below="@+id/defense_textView"
+        android:layout_marginTop="11dp"
         android:text="0 seconds defending"
         android:textSize="16sp" />
 
@@ -156,5 +165,14 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="90dp"
         android:text="Done" />
+
+    <RelativeLayout
+        android:id="@+id/comments"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <include layout="@layout/comment_bar" />
+    </RelativeLayout>
 
 </RelativeLayout>
