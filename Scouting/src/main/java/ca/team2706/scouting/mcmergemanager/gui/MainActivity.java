@@ -55,7 +55,6 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.FTPRequester;
-import ca.team2706.scouting.mcmergemanager.powerup2018.gui.PitScoutingFragment;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
 
 @TargetApi(21)
@@ -263,13 +262,6 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(getResources().getString(R.string.EXTRA_MATCH_SCHEDULE), sMatchSchedule.toString());
         startActivity(intent);
     }
-
-    public void pitScoutingPage(View view){
-        Intent intent = new Intent(this, PitScoutingFragment.class);
-        startActivity(intent);
-    }
-
-
 
     private void setNavDrawer() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

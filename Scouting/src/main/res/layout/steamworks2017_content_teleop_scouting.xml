@@ -151,7 +151,7 @@
             android:src="@mipmap/ic_fuel"
             android:id="@+id/imageView3"
             android:layout_below="@+id/gearDeliveryButton"
-            android:layout_toEndOf="@+id/gearsTextView" />
+            android:layout_toEndOf="@+id/startedClimbingButton" />
 
     </RelativeLayout>
 </ScrollView>
