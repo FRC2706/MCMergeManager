@@ -246,7 +246,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
     public void startedClimbing(View view){
 
-        Intent intent = new Intent(this, PostGame.class);
+        Intent intent = new Intent(this, Postgame.class);
         startActivity(intent);
 
     }
