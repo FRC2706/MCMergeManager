@@ -17,7 +17,6 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoMalf
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeleopScouting;
 
 public class AutoScouting extends AppCompatActivity {
 
@@ -208,13 +207,6 @@ public class AutoScouting extends AppCompatActivity {
 
 
     public void toTeleop(View view) {
-
-
-
-
-
-
-
         Intent intent = new Intent(this, TeleopScouting.class);
         intent.putExtra("PreGameData", getIntent().getSerializableExtra("PreGameData"));
         intent.putExtra("AutoScoutingData", autoScoutingObject2018);

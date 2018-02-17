@@ -155,6 +155,7 @@
         android:layout_alignEnd="@+id/climbTime_textView"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="90dp"
+        android:onClick="returnHome"
         android:text="Done" />
 
 </RelativeLayout>

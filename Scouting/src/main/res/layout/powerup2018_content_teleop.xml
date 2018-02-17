@@ -3,16 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/comments_editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Comments..." />
 
     <TextView
         android:id="@+id/pickup_prompt_textView"
@@ -23,6 +13,7 @@
         android:layout_marginTop="60dp"
         android:text="Teleop"
         android:textSize="24sp" />
+
 
     <Spinner
         android:id="@+id/cube_pickup_spinner"
@@ -64,9 +55,10 @@
         android:id="@+id/go_to_postgame_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/comments_editText"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="41dp"
+        android:layout_marginBottom="83dp"
+        android:onClick="startedClimbing"
         android:text="Started climbing"
         android:textSize="16sp" />
 
@@ -79,4 +71,16 @@
         android:layout_marginBottom="20dp"
         android:text="2:15"
         android:textSize="28sp" />
+
+    <RelativeLayout
+        android:id="@+id/comments"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <include layout="@layout/comment_bar" />
+    </RelativeLayout>
+
+
 </RelativeLayout>
+

@@ -34,24 +34,12 @@ public class PostGame extends AppCompatActivity {
 
     public String notesText;
     public String noEntry = "Notes...";
-    SeekBar deadTimeSeekBar;
-    SeekBar defenseSeekBar;
-    SeekBar climbTimeSeekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.steamworks2017_activity_post_game);
 
-
-        // Using this  onClickListener so the text disappears when clicked.
-        final EditText notes = (EditText) findViewById(R.id.postGameNotes);
-        notes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                notes.setText("");
-            }
-        });
 
         final CheckBox noClimbCheckbox = (CheckBox) findViewById(R.id.climbTypeNoClimb);
         final CheckBox climbFailCheckbox = (CheckBox) findViewById(R.id.climbTypeFail);
@@ -84,7 +72,8 @@ public class PostGame extends AppCompatActivity {
 
     }
 
-        public void returnHome(){
+
+        public void returnHome(View view){
             Intent thisIntent = getIntent();
 
             PreGameObject pre = (PreGameObject) thisIntent.getSerializableExtra("PreGameData");
@@ -92,7 +81,7 @@ public class PostGame extends AppCompatActivity {
             TeleopScoutingObject t  = (TeleopScoutingObject) thisIntent.getSerializableExtra("TeleopScoutingData");
 
             Intent intent = new Intent(this,PreGameActivity.class);
-            
+
 
             startActivity(intent);
 

@@ -63,7 +63,6 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeleopScouting;
 
 @TargetApi(21)
 public class MainActivity extends AppCompatActivity
