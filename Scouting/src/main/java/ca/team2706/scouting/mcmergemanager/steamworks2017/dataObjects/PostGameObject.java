@@ -6,8 +6,8 @@ import java.io.Serializable;
  * Created by dwall on 16/01/17.
  */
 
-public class PostGameObject implements Serializable {
-    public String notes = "";
+public class PostGameObject extends Event implements Serializable {
+    public static String ID = "post_game";
 
     public enum ClimbType {
         NO_CLIMB, FAIL, SUCCESS;
@@ -24,7 +24,6 @@ public class PostGameObject implements Serializable {
 
     public PostGameObject(String notes, ClimbType climbType, double climb_time, double time_dead, double time_defending) {
         this.climbType = climbType;
-        this.notes = notes;
         this.climb_time = climb_time;
         this.time_dead = time_dead;
         this.time_defending = time_defending;

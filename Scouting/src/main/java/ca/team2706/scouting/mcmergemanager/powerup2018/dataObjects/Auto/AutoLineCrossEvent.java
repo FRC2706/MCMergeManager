@@ -1,4 +1,4 @@
-package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects;
+package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto;
 
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 
@@ -9,7 +9,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 public class AutoLineCrossEvent extends Event {
     public static final String ID = "auto_line_cross";
 
-    private Boolean crossedAutoLine = false;
+    public Boolean crossedAutoLine = false;
 
     public AutoLineCrossEvent() {
         // Empty Constructor

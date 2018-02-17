@@ -61,7 +61,7 @@ public class GearPickupFragment extends DialogFragment {
 //                new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
-//                        gearPickupEvent.pickupType = GearPickupEvent.GearPickupType.GROUND;
+//                        gearPickupEvent.PickupType = GearPickupEvent.GearPickupType.GROUND;
 //
 //                        gearPickupData.putSerializable(GEAR_PICKUP_EVENT_STRING, gearPickupEvent);
 //                        listener.editNameDialogComplete(me, gearPickupData);
@@ -75,7 +75,7 @@ public class GearPickupFragment extends DialogFragment {
 //                new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
-//                        gearPickupEvent.pickupType = GearPickupEvent.GearPickupType.WALL;
+//                        gearPickupEvent.PickupType = GearPickupEvent.GearPickupType.WALL;
 //
 //                        gearPickupData.putSerializable(GEAR_PICKUP_EVENT_STRING, gearPickupEvent);
 //                        listener.editNameDialogComplete(me, gearPickupData);
@@ -90,7 +90,7 @@ public class GearPickupFragment extends DialogFragment {
 //                new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
-//                        gearPickupEvent.pickupType = GearPickupEvent.GearPickupType.GROUND;
+//                        gearPickupEvent.PickupType = GearPickupEvent.GearPickupType.GROUND;
 //
 //                        gearPickupData.putSerializable(GEAR_PICKUP_EVENT_STRING, gearPickupEvent);
 //                        listener.editNameDialogComplete(me, gearPickupData);
