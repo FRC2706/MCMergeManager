@@ -6,37 +6,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.powerup2018.DroppedCubeFragment;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Event;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.FuelPickupEvent;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.FuelShotEvent;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.GearDelivevryEvent;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.GearPickupEvent;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.PostGameObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.BallPickupFragment;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.BallShootingFragment;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.ClimbingFragment;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.FragmentListener;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.GearDeliveryFragment;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.GearPickupFragment;
 
 import static ca.team2706.scouting.mcmergemanager.backend.App.getContext;
 

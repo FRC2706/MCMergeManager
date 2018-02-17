@@ -32,9 +32,6 @@ public class PostGame extends AppCompatActivity {
 
     public String notesText;
     public String noEntry = "Notes...";
-    SeekBar deadTimeSeekBar;
-    SeekBar defenseSeekBar;
-    SeekBar climbTimeSeekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
