@@ -18,6 +18,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacement
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Cycle;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PostGameObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport2018;
 
 import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PLACEMENT_TYPE.ALLIANCE_SWITCH;
@@ -230,27 +231,55 @@ public class StatsEngine2018 {
                     }
                 }
 
-                // Get the time dead of the team
-                if (match.postGameObject.time_dead > 0) {
-                    teamStatsReport.avgDeadness += match.postGameObject.time_dead;
-
-                    if (match.postGameObject.time_dead > teamStatsReport.highestDeadness)
-                        teamStatsReport.highestDeadness = match.postGameObject.time_dead;
-                } else {
-                    teamStatsReport.numMatchesNoDeadness++;
-                }
-
-                // Add the cycles to the report
-                teamStatsReport.cycleMatches.add(cyclesInThisMatch);
-
                 // TODO: i don't think i need to finish cycles
             }
 
 
             // Climbing stuff
-            //TODO:
+            PostGameObject p = match.postGameObject;
 
+            switch(p.climbType) {
+                case FAIL:
+                    teamStatsReport.failClimb++;
+                    break;
+                case NO_CLIMB:
+                    teamStatsReport.noClimb++;
+                    break;
+                case SUCCESS_ASSISTED:
+                    teamStatsReport.assistedClimb++;
+                    break;
+                case SUCCESS_INDEPENDENT:
+                    teamStatsReport.independentClimb++;
+                    break;
+                case SUCCESS_ASSISTED_OTHERS:
+                    teamStatsReport.assistedOthersClimb++;
+                    break;
+            }
 
+            teamStatsReport.avgClimbTime += p.climb_time;
+            if(p.climb_time > teamStatsReport.maxClimbTime) {
+                teamStatsReport.maxClimbTime = p.climb_time;
+            } else if(p.climb_time < teamStatsReport.minClimbTime) {
+                teamStatsReport.minClimbTime = p.climb_time;
+            }
+
+            teamStatsReport.avgTimeDefending += p.time_defending;
+            if(p.time_defending > teamStatsReport.maxTimeDefending) {
+                teamStatsReport.maxTimeDefending = p.time_defending;
+            }
+
+            // Get the time dead of the team
+            if (match.postGameObject.time_dead > 0) {
+                teamStatsReport.avgDeadness += match.postGameObject.time_dead;
+
+                if (match.postGameObject.time_dead > teamStatsReport.highestDeadness)
+                    teamStatsReport.highestDeadness = match.postGameObject.time_dead;
+            } else {
+                teamStatsReport.numMatchesNoDeadness++;
+            }
+
+            // Add the cycles to the report
+            teamStatsReport.cycleMatches.add(cyclesInThisMatch);
         }
 
 
@@ -280,6 +309,12 @@ public class StatsEngine2018 {
 
             // Deadness
             teamStatsReport.avgDeadness /= numMatchesPlayed;
+
+            // Climbing
+            teamStatsReport.avgClimbTime /= numMatchesPlayed;
+
+            // Defending
+            teamStatsReport.avgTimeDefending /= numMatchesPlayed;
         }
 
         // Find the favourites of teams

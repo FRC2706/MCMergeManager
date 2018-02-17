@@ -56,10 +56,15 @@ public class TeamStatsReport2018 {
 
     // Post game stuff
     public double avgDeadness, highestDeadness, numMatchesNoDeadness;
+    public double avgClimbTime, minClimbTime = Double.MAX_VALUE, maxClimbTime = 0;
+    public int noClimb, failClimb, independentClimb, assistedClimb, assistedOthersClimb;
+    public double avgTimeDefending, maxTimeDefending;
 
     public MatchSchedule teamMatcheSchedule;
     public MatchData teamMatchData;
     public ArrayList<CyclesInAMatch> cycleMatches = new ArrayList<>();
+
+
 
     /**
      * For feeding the CycleDisplay window..
