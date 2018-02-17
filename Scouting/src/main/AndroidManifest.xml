@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".powerup2018.gui.Postgame"
+            android:name=".powerup2018.gui.PostGame"
             android:label="@string/app_name" />
         <activity
             android:name=".powerup2018.gui.TeleopScouting"
