@@ -1,6 +1,7 @@
 package ca.team2706.scouting.mcmergemanager.gui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -51,7 +52,7 @@ public class PrimaryTab extends Fragment {
 
                 int matchNo = 0;
                 try {
-                    matchNo = Integer.parseInt( v.getText().toString() );
+                    matchNo = Integer.parseInt(v.getText().toString());
                 } catch (NumberFormatException e) {
                     // they didn't type in a valid number. Too bad for them, we're not going any further!
                     return false;
@@ -67,7 +68,7 @@ public class PrimaryTab extends Fragment {
                     // bundle up the gearDeliveryData it needs
                     Bundle args = new Bundle();
                     MatchSchedule.Match match;
-                    match = MainActivity.sMatchSchedule.getMatchNo(matchNo-1);
+                    match = MainActivity.sMatchSchedule.getMatchNo(matchNo - 1);
                     args.putString(PreMatchReportFragment.ARG_MATCH, match.toString());  // if match == null, this will throw an exception and be caught
                     if (MainActivity.sMatchSchedule == null) return false;
 

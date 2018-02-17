@@ -124,11 +124,12 @@
                 android:layout_height="wrap_content"
                 android:onClick="onRepairTimeRecordClicked"
                 android:text="Record Repair Time" />
+
             <Button
                 android:id="@+id/button_threatlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="onRepairTimeRecordClicked"
+                android:onClick="generateThreatList"
                 android:text="Generate Picklist" />
             <include
                 android:id="@+id/comments"

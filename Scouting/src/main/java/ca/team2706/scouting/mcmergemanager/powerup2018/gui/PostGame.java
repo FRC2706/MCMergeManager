@@ -13,6 +13,7 @@ import android.widget.TextView;
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.gui.PreGameActivity;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.ClimbEvent;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Comment;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.DefenseEvent;
@@ -28,6 +29,7 @@ import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeleopScou
 public class PostGame extends AppCompatActivity {
 
     private PostGameObject postGameObject = new PostGameObject();
+    private ClimbEvent climbEvent = new ClimbEvent();
     private DefenseEvent defenseEvent = new DefenseEvent();
 
     public String notesText;
@@ -39,18 +41,39 @@ public class PostGame extends AppCompatActivity {
         setContentView(R.layout.steamworks2017_activity_post_game);
 
 
-        Button fab = (Button) findViewById(R.id.done_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                returnHome();
-            }
-        });
+        final CheckBox noClimbCheckbox = (CheckBox) findViewById(R.id.climbTypeNoClimb);
+        final CheckBox climbFailCheckbox = (CheckBox) findViewById(R.id.climbTypeFail);
+        final CheckBox climbBarCheckbox = (CheckBox) findViewById(R.id.climbTypeBar);
+        final CheckBox climbAssistCheckbox = (CheckBox) findViewById(R.id.climbTypeAssisted);
+        final CheckBox climbWasAssistedCheckbox = (CheckBox) findViewById(R.id.climbTypeWasAssisted);
+
+        if (noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+            // postGameObject.climbType(PostGameObject.ClimbType.NO_CLIMB);
+            climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
+
+        } else if (!noClimbCheckbox.isChecked() && climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+            climbEvent.climbType = ClimbEvent.ClimbType.FAIL;
+
+        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_INDEPENDENT;
+
+        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED_OTHERS;
+
+        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && climbWasAssistedCheckbox.isChecked()) {
+            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
+
+        } else {
+            climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
+        }
+
+
+       // postGameObject = (PostGameObject) getIntent().getSerializableExtra("PostGameData");  // climb was set in climbingFragment
+
     }
 
 
-
-        public void returnHome(){
+        public void returnHome(View view){
             Intent thisIntent = getIntent();
 
             PreGameObject pre = (PreGameObject) thisIntent.getSerializableExtra("PreGameData");
@@ -58,6 +81,7 @@ public class PostGame extends AppCompatActivity {
             TeleopScoutingObject t  = (TeleopScoutingObject) thisIntent.getSerializableExtra("TeleopScoutingData");
 
             Intent intent = new Intent(this,PreGameActivity.class);
+
 
             startActivity(intent);
 

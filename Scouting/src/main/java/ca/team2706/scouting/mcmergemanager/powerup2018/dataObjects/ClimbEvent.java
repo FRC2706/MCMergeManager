@@ -21,5 +21,10 @@ public class ClimbEvent extends Event{
         this.climbType = climbType;
     }
 
+    public ClimbEvent() {
+        this.climb_time = climb_time;
+        this.climbType = climbType;
+    }
+
 
 }
