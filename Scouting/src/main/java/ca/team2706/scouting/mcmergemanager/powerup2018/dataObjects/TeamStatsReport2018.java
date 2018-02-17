@@ -21,6 +21,7 @@ public class TeamStatsReport2018 {
     public int    ties;
     public double OPR;  // Offensive Power Rating, a standard stat in FRC
     public double DPR;  // Defensive Power Rating, a standard stat in FRC
+    public double CCWM;
 
     public double scheduleToughnessByWLT;    // Whether, on average, their opponents were stronger than their allies, or the other way around.
     // ie.: Are they seeded artificially high or artificially low by schedule luck?

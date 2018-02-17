@@ -1,11 +1,17 @@
 package ca.team2706.scouting.mcmergemanager.powerup2018;
 
 
+import android.content.Context;
+import android.util.Log;
+
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoCubePickupEvent;
@@ -29,6 +35,7 @@ import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePl
 public class StatsEngine2018 {
 
     public static final String OPR_FILENAME = "OPRs.json";
+
 
     private MatchData matchData;
     private MatchSchedule matchSchedule;
@@ -89,10 +96,17 @@ public class StatsEngine2018 {
             teamStatsReport.ties = records.get(teamNumber).ties;
         }
 
-        // TODO: get the opr and dpr from tba
+        // The oprs from tba
+        try {
+            teamStatsReport.OPR = FileUtils.getOprsFromFile().getJSONObject("oprs").getInt("frc" + teamNumber);
+            teamStatsReport.DPR = FileUtils.getOprsFromFile().getJSONObject("dprs").getInt("frc" + teamNumber);
+            teamStatsReport.CCWM = FileUtils.getOprsFromFile().getJSONObject("ccwms").getInt("frc" + teamNumber);
+        } catch(JSONException e) {
+            Log.d("json err", e.toString());
+        }
 
         teamStatsReport.scheduleToughnessByWLT = computeScheduleToughnessByWLT(teamNumber);
-        // TODO: computer schedule toughness by opr's
+        teamStatsReport.scheduleToughnessByOPR = computeScheduleToughnessByOPR();
 
         // TODO: repair team objects
 
@@ -453,5 +467,56 @@ public class StatsEngine2018 {
             return 1.0;
 
         return (((double) opponentsWins * 2) / (alliesWins * 3));
+    }
+
+    /**
+     * Schedule toughness is a measure of your opponents' wins over your allies' wins.
+     * A toughness of 1.0 is a neutral schedule.
+     */
+    private double computeScheduleToughnessByOPR(int teamNo) {
+        if (OPRs == null)
+            return 1.0;
+
+        double alliesOPRs = 0;
+        double opponentsOPRs = 0;
+
+        try {
+            for (MatchSchedule.Match match : matchSchedule.filterByTeam(teamNo).getMatches()) {
+                // am I blue or red?
+                if (match.getBlue1() == teamNo || match.getBlue2() == teamNo || match.getBlue3() == teamNo) {
+                    if (match.getBlue1() != teamNo)
+                        alliesOPRs += OPRs.get(match.getBlue1());
+
+                    if (match.getBlue2() != teamNo)
+                        alliesOPRs += OPRs.get(match.getBlue2());
+
+                    if (match.getBlue3() != teamNo)
+                        alliesOPRs += OPRs.get(match.getBlue3());
+
+                    opponentsOPRs += OPRs.get(match.getRed1());
+                    opponentsOPRs += OPRs.get(match.getRed2());
+                    opponentsOPRs += OPRs.get(match.getRed3());
+                } else {
+                    if (match.getRed1() != teamNo)
+                        alliesOPRs += OPRs.get(match.getRed1());
+
+                    if (match.getRed2() != teamNo)
+                        alliesOPRs += OPRs.get(match.getRed2());
+
+                    if (match.getRed3() != teamNo)
+                        alliesOPRs += OPRs.get(match.getRed3());
+
+                    opponentsOPRs += OPRs.get(match.getBlue1());
+                    opponentsOPRs += OPRs.get(match.getBlue2());
+                    opponentsOPRs += OPRs.get(match.getBlue3());
+                }
+            }
+        } catch (NullPointerException e) {
+            //nothing
+        }
+        if (alliesOPRs == 0 || opponentsOPRs == 0)
+            return 1.0;
+
+        return (opponentsOPRs * 2) / (alliesOPRs * 3);
     }
 }

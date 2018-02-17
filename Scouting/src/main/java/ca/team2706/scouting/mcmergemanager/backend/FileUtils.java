@@ -51,6 +51,8 @@ import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
  */
 public class FileUtils {
 
+    private static Context context; // TODO: probably not the best way to do this
+
     public static String sLocalToplevelFilePath;
     public static String sLocalEventFilePath;
     public static String sLocalTeamPhotosFilePath;
@@ -873,9 +875,13 @@ public class FileUtils {
         bw.close();
     }
 
+    // Returns a json oject containg the opr, dpr and ccwm of a certain event for all teams
+    public static JSONObject getOprsFromFile() {
+        return getOprsFromFile(context);
+    }
     public static JSONObject getOprsFromFile(Context context) {
         try {
-            return new JSONObject(readFile(StatsEngine2018.OPR_FILENAME, context)).getJSONObject("oprs");
+            return new JSONObject(readFile(StatsEngine2018.OPR_FILENAME, context));
         } catch(JSONException e) {
             Log.d("JSON err ", e.toString());
         }
@@ -893,5 +899,7 @@ public class FileUtils {
             }
         }).start();
     }
+
+    public static void setContext(Context c) { context = c; }
 
 }

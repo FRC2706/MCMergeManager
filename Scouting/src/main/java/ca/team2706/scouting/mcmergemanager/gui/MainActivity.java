@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity
         updateDataSyncLabel();
 
         FileUtils.checkFileReadWritePermissions(this);
+        FileUtils.setContext(this);
 
         getEventKeys();
 
