@@ -9,6 +9,7 @@ public class CubePickupEvent extends Event {
     public static final String ID = "pickup_cube";
 
     public enum PickupType {
+    powerup2018_integration
         PORTAL, GROUND, EXCHANGE, PYRAMID
     }
 

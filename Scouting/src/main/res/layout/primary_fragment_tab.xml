@@ -64,6 +64,7 @@
                 android:enabled="true"
                 android:onClick="scout"
                 android:text="Scout Match"
+                android:textColor="#FFFFFF"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
