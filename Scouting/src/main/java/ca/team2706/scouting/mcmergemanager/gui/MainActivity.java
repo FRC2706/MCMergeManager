@@ -111,7 +111,14 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    
+    public void generateThreatList(View view){
+        Intent intent = new Intent(this, ThreatListGenerator.class);
+        startActivity(intent);
+    }
+
+
+
+
 
 
 
