@@ -139,10 +139,10 @@ public class TeamInfoTab extends Fragment {
         m_teamInfoFragment = new TeamInfoFragment();
         Bundle args = new Bundle();
         args.putInt("teamNumber", teamNumber);
-        StatsEngine statsEngine = new StatsEngine(MainActivity.sMatchData, MainActivity.sMatchSchedule, MainActivity.sRepairTimeObjects);
+        // StatsEngine statsEngine = new StatsEngine(MainActivity.sMatchData, MainActivity.sMatchSchedule, MainActivity.sRepairTimeObjects);
 
-        TeamStatsReport teamStatsReport = statsEngine.getTeamStatsReport(teamNumber);  // just so I can look at it in bebug
-        args.putSerializable(getString(R.string.EXTRA_TEAM_STATS_REPORT), teamStatsReport);
+       // TeamStatsReport teamStatsReport = statsEngine.getTeamStatsReport(teamNumber);  // just so I can look at it in bebug
+       // args.putSerializable(getString(R.string.EXTRA_TEAM_STATS_REPORT), teamStatsReport);
         m_teamInfoFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout

@@ -37,6 +37,7 @@ import android.view.View.OnKeyListener;
 import android.view.View;
 import android.view.KeyEvent;
 import org.apache.commons.net.ftp.FTPFile;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,14 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.FTPRequester;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeleopScouting;
 
 @TargetApi(21)
 public class MainActivity extends AppCompatActivity
@@ -103,9 +111,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
-
-
+    
 
 
 
@@ -133,7 +139,7 @@ public class MainActivity extends AppCompatActivity
 
         // In case the schedule is empty, make sure we pass along the list of teams registered at event
         // that we fetched at the beginning.
-        sMatchData = FileUtils.loadMatchDataFile();
+       // sMatchData = FileUtils.loadMatchDataFile();
         if (sMatchData == null) sMatchData = new MatchData();
 
         sRepairTimeObjects = FileUtils.getRepairTimeObjects();
@@ -238,24 +244,6 @@ public class MainActivity extends AppCompatActivity
 
 
     public CommentTextEditor commentTextEditor;
-
-    public void onWriteCommentButtonClick(View v) {
-
-//        // Get the comment
-//        commentTextEditor = new CommentTextEditor("Write your comment.", "Comment", this);
-//        commentTextEditor.displayAlertDialog();
-//
-//        // Get the team number (After for lazy layout reasons)
-//        enterATeamNumberPopup = new GetTeamNumberDialog("Team Number", "Team Number", 1, this);
-//        enterATeamNumberPopup.displayAlertDialog();
-//        CommentList commentList = new CommentList(enterATeamNumberPopup.getTeamNumber());
-//
-//        commentList.addComment(commentTextEditor.getComment());
-//
-//        FileUtils.saveTeamComments(commentList);
-    }
-
-
 
     public void onRepairTimeRecordClicked(View view) {
         Intent intent = new Intent(this, RepairTimeCollection.class);

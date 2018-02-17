@@ -205,7 +205,7 @@ public class MatchData implements Serializable {
                         }
                 }
 
-                postGameObject.notes = jsonObject.getString("general_notes");
+               // postGameObject.notes = jsonObject.getString("general_notes");
                 postGameObject.time_dead = jsonObject.getDouble("time_dead");
 
             } catch(JSONException e) {
@@ -363,7 +363,6 @@ public class MatchData implements Serializable {
                 arr.put(obj);
                 jsonObject.put("events", arr);
 
-                jsonObject.put("general_notes", postGameObject.notes);
                 jsonObject.put("time_dead", postGameObject.time_dead);
 
             } catch (JSONException e) {

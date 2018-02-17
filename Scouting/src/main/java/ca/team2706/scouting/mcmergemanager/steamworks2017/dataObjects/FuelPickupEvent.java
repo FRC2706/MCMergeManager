@@ -22,7 +22,7 @@ public class FuelPickupEvent extends Event {
 
     public FuelPickupEvent(double timestamp, FuelPickupType pickupType, int amount) {
         super(timestamp);
-//        pickupType = FuelPickupType.GROUND;
+//        PickupType = FuelPickupType.GROUND;
         this.pickupType = pickupType;
         this.amount = amount;
     }

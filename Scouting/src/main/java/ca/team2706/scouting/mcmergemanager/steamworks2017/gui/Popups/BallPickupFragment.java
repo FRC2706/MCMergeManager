@@ -99,7 +99,7 @@ public class BallPickupFragment extends DialogFragment {
 //                    @Override
 //                    public void onClick(View v) {
 //                        ballPickups.amount = ballsPickedUp;
-//                        ballPickups.pickupType = FuelPickupEvent.FuelPickupType.GROUND;
+//                        ballPickups.PickupType = FuelPickupEvent.FuelPickupType.GROUND;
 //
 //                        fuelPickupData.putSerializable(FUEL_PICKUP_EVENT_STRING, ballPickups);
 //                        listener.editNameDialogComplete(me, fuelPickupData);
@@ -118,7 +118,7 @@ public class BallPickupFragment extends DialogFragment {
 //                    @Override
 //                    public void onClick(View v) {
 //                        ballPickups.amount = ballsPickedUp;
-//                        ballPickups.pickupType = FuelPickupEvent.FuelPickupType.GROUND;
+//                        ballPickups.PickupType = FuelPickupEvent.FuelPickupType.GROUND;
 //                        fuelPickupData.putSerializable(FUEL_PICKUP_EVENT_STRING, ballPickups);
 //                        listener.editNameDialogComplete(me, fuelPickupData);
 //
@@ -134,7 +134,7 @@ public class BallPickupFragment extends DialogFragment {
 //                    @Override
 //                    public void onClick(View v) {
 //                        ballPickups.amount = ballsPickedUp;
-//                        ballPickups.pickupType = FuelPickupEvent.FuelPickupType.HOPPER;
+//                        ballPickups.PickupType = FuelPickupEvent.FuelPickupType.HOPPER;
 //                        fuelPickupData.putSerializable(FUEL_PICKUP_EVENT_STRING, ballPickups);
 //                        listener.editNameDialogComplete(me, fuelPickupData);
 //
@@ -151,7 +151,7 @@ public class BallPickupFragment extends DialogFragment {
 //                    @Override
 //                    public void onClick(View v) {
 //                        ballPickups.amount = ballsPickedUp;
-//                        ballPickups.pickupType = FuelPickupEvent.FuelPickupType.WALL;
+//                        ballPickups.PickupType = FuelPickupEvent.FuelPickupType.WALL;
 //                        fuelPickupData.putSerializable(FUEL_PICKUP_EVENT_STRING, ballPickups);
 //                        listener.editNameDialogComplete(me, fuelPickupData);
 //
