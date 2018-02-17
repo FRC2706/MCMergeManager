@@ -28,6 +28,8 @@ import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePl
 
 public class StatsEngine2018 {
 
+    public static final String OPR_FILENAME = "OPRs.json";
+
     private MatchData matchData;
     private MatchSchedule matchSchedule;
     private List<TeamDataObject> repairTimeObjects;

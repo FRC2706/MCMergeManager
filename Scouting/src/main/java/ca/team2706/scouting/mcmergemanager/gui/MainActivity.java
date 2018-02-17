@@ -39,6 +39,7 @@ import android.view.KeyEvent;
 import org.apache.commons.net.ftp.FTPFile;
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -58,6 +59,8 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.FTPRequester;
+import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine2018;
+import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
 
 @TargetApi(21)
@@ -104,14 +107,14 @@ public class MainActivity extends AppCompatActivity
 
         getEventKeys();
 
-        System.out.println("Writing a csv file of the data");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                CreateCsvFile.saveCsvFile("Csv.csv");
-            }
-        }).start();
+//        System.out.println("Writing a csv file of the data");
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                CreateCsvFile.saveCsvFile("Csv.csv");
+//            }
+//        }).start();
     }
 
     // Check to see if the event keys has been downloaded yet, if not yet downloaded for this year then download
@@ -157,7 +160,6 @@ public class MainActivity extends AppCompatActivity
                         "true", "true", "0", "1", "false"));
             }
         }).start();
-
     }
 
     /**
@@ -453,5 +455,8 @@ public class MainActivity extends AppCompatActivity
         // TODO: sync the match files on the phone
     }
 
+    public void onClickGetOprs(View view) {
+        FileUtils.saveOprsToFile(this);
+    }
 
 }

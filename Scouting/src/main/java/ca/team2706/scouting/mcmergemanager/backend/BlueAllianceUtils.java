@@ -286,4 +286,27 @@ public class BlueAllianceUtils {
 
         return null;
     }
+
+    // Returns a json object containing the opr, dpr and ccwm of teams at event
+    public static JSONObject getEventOprs() {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        String TBA_Event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
+
+        Request request = new Request.Builder()
+                .url(BASE_URL + "event/" + "2017onto1" + "/oprs")
+                .header("X-TBA-Auth-Key", AUTH_KEY)
+                .build();
+
+        try {
+            Response response = WebServerUtils.client.newCall(request).execute();
+
+            return new JSONObject(response.body().string());
+        } catch(IOException e) {
+            Log.d("Okhttp3 err", e.toString());
+        } catch(JSONException e) {
+            Log.d("JSON error", e.toString());
+        }
+
+        return new JSONObject();
+    }
 }

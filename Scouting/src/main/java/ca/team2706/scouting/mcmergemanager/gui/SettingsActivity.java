@@ -210,7 +210,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         try {
             for (int i = 0; i < arr.length(); i++) {
-                keys[i] = arr.getJSONObject(i).getString("name");
+                keys[i] = arr.getJSONObject(i).getString("key");
             }
         } catch(JSONException e) {
             Log.d("Error parsing json", e.toString());
@@ -240,8 +240,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 eventsLP.setEntries(new CharSequence[]{"Get wifi"});
                 eventsLP.setEntryValues(new CharSequence[]{"Get wifi"});
             } else {
-                eventsLP.setEntries(getKeys(eventKeys));
-                eventsLP.setEntryValues(getEvents(eventKeys));
+                eventsLP.setEntries(getEvents(eventKeys));
+                eventsLP.setEntryValues(getKeys(eventKeys));
             }
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences

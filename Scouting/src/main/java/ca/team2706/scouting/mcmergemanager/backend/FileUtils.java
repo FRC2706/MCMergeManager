@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -38,6 +39,8 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.NoteObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
+import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine2018;
+import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
 
 /**
@@ -815,7 +818,7 @@ public class FileUtils {
 
                 // Save the file to the internal storage
                 try {
-                    writeFile(context, arr.toString(), EVENT_KEYS_FILENAME);
+                    writeFile(arr.toString(), EVENT_KEYS_FILENAME, context);
                 } catch(IOException e) {
                     Log.d("Error writing file", e.toString());
                 }
@@ -848,7 +851,6 @@ public class FileUtils {
                 return fileContents;
             } catch(IOException e) {
                 Log.d("Error reading file", e.toString());
-                return "";
             }
         }
 
@@ -856,10 +858,11 @@ public class FileUtils {
     }
 
     // Writes a string to a file, throws an IOException if something goes wrong
-    public static void writeFile(Context context, String s, String filename) throws IOException {
+    public static void writeFile(String s, String filename, Context context) throws IOException {
         // Create the file and directories
         File file = new File(context.getFilesDir(), filename);
         file.createNewFile();
+        (new File(file.getParent())).mkdirs();
 
         // Create the file writer and write to file
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
@@ -868,6 +871,27 @@ public class FileUtils {
         // Close the file
         bw.flush();
         bw.close();
+    }
+
+    public static JSONObject getOprsFromFile(Context context) {
+        try {
+            return new JSONObject(readFile(StatsEngine2018.OPR_FILENAME, context)).getJSONObject("oprs");
+        } catch(JSONException e) {
+            Log.d("JSON err ", e.toString());
+        }
+        return new JSONObject();
+    }
+    public static void saveOprsToFile(final Context context) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    writeFile(BlueAllianceUtils.getEventOprs().toString(), StatsEngine2018.OPR_FILENAME, context);
+                } catch(IOException e) {
+                    Log.d("err saving oprs", e.toString());
+                }
+            }
+        }).start();
     }
 
 }
