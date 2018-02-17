@@ -98,6 +98,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.team2706.scouting.mcmergemanager.gui.MainActivity" />
         </activity>
+        <activity
+            android:name=".gui.ThreatListGenerator"
+            android:parentActivityName=".gui.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.team2706.scouting.mcmergemanager.gui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
