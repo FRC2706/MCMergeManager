@@ -218,23 +218,21 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
             }
         });
 
-        Intent intent = getIntent();
 
+        PreGameObject preGameObject = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
+        final Integer teamNum = preGameObject.teamNumber;
 
         comment.setOnKeyListener(new OnKeyListener(){
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
                 CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, v, getContext());
+                teamNumber.setText(teamNum.toString());
                 return true;
             }
         });
 
 
-
-        PreGameObject preGameObject = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
-
-        Integer teamNum = preGameObject.teamNumber;
-
         teamNumber.setText(teamNum.toString());
+
       //  int i = preGameObject.teamNumber;
 
     }
