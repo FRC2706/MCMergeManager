@@ -43,14 +43,17 @@ public class AutoScouting extends AppCompatActivity {
 
 
         m_handler = new Handler();
+
         final TextView tvGameTime = (TextView) findViewById(R.id.autoTimer);
+
+        m_handler = new Handler();
 
         m_handlerTask = new Runnable() {
             @Override
             public void run() {
 
                 if (remainTime == 0) {
-                    tvGameTime.setText("Auto Over! Please Go To Teleop.");
+                    tvGameTime.setText("Game Over! Please Select Climb Type.");
                 } else {
                     remainTime--;
                     int minuets = remainTime / 60;
