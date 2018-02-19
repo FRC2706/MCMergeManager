@@ -16,6 +16,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLine
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoMalfunctionEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
 
 
 public class AutoScouting extends AppCompatActivity {
@@ -41,6 +42,7 @@ public class AutoScouting extends AppCompatActivity {
 
         autoScoutingObject2018 = new AutoScoutingObject();
 
+       // TODO Add the code for comment_bar
 
         m_handler = new Handler();
 

@@ -15,13 +15,13 @@ import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.gui.PreGameActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.ClimbEvent;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.AutoScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Comment;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.DefenseEvent;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PostGameObject;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.PreGameObject;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeleopScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
 
 
 public class PostGame extends AppCompatActivity {
@@ -149,11 +149,11 @@ public class PostGame extends AppCompatActivity {
         public void returnHome(View view){
             Intent thisIntent = getIntent();
 
-            PreGameObject pre = (PreGameObject) thisIntent.getSerializableExtra("PreGameData");
+            PreGameObject pre = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
             AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
             TeleopScoutingObject t  = (TeleopScoutingObject) thisIntent.getSerializableExtra("TeleopScoutingData");
 
-            Intent intent = new Intent(this,PreGameActivity.class);
+            Intent intent = new Intent(this, PreGameActivity.class);
 
 
             startActivity(intent);
