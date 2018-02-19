@@ -9,6 +9,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
@@ -67,8 +70,7 @@ public class PostGame extends AppCompatActivity {
             climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
         }
 
-
-       // postGameObject = (PostGameObject) getIntent().getSerializableExtra("PostGameData");  // climb was set in climbingFragment
+        
 
     }
 
@@ -79,6 +81,14 @@ public class PostGame extends AppCompatActivity {
             PreGameObject pre = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
             AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
             TeleopScoutingObject t  = (TeleopScoutingObject) thisIntent.getSerializableExtra("TeleopScoutingData");
+
+            MatchData.Match match =  new MatchData.Match(pre, a ,t);
+
+            try {
+                match.toJson();
+            } catch (JSONException e) {
+                Toast.makeText(this, "JSON Failed to save", Toast.LENGTH_SHORT).show();
+            }
 
             Intent intent = new Intent(this, PreGameActivity.class);
 

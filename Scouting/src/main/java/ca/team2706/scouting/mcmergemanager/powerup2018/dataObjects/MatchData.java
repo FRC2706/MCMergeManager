@@ -46,7 +46,7 @@ public class MatchData implements Serializable{
         public AutoScoutingObject autoScoutingObject;
         public PreGameObject preGameObject;
 
-        public Match(PreGameObject preGameObject, TeleopScoutingObject teleopScoutingObject, AutoScoutingObject autoScoutingObject) {
+        public Match(PreGameObject preGameObject, AutoScoutingObject autoScoutingObject, TeleopScoutingObject teleopScoutingObject) {
             this.preGameObject = preGameObject;
             this.autoScoutingObject = autoScoutingObject;
             this.teleopScoutingObject = teleopScoutingObject;
@@ -166,7 +166,6 @@ public class MatchData implements Serializable{
                     obj.put(GOAL, e.ID);
                     obj.put(START_TIME, e.timestamp);
                     obj.put(EXTRA, e.dropType.toString());
-                    break;
                 }if (event instanceof PostGameObject) {
                     // For this event, we set extra to time_dead and end_time to time_defending
                     PostGameObject e = (PostGameObject) event;
