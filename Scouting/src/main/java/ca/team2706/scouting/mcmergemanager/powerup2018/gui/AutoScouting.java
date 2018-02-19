@@ -55,7 +55,7 @@ public class AutoScouting extends AppCompatActivity {
             public void run() {
 
                 if (remainTime == 0) {
-                    tvGameTime.setText("Game Over! Please Select Climb Type.");
+                    tvGameTime.setText("Auto Over! Please Go To Teleop.");
                 } else {
                     remainTime--;
                     int minuets = remainTime / 60;
@@ -153,7 +153,7 @@ public class AutoScouting extends AppCompatActivity {
                 final Event scevent;
                 scaleCheckbox.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v
                         if (scaleCheckbox.isChecked()) {
 
                             AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.SCALE);
