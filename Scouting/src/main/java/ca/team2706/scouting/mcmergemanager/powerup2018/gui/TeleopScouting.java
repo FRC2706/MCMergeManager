@@ -19,6 +19,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.DroppedCubeFragment;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubeDroppedEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.FragmentListener;
@@ -26,6 +27,8 @@ import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.FragmentLis
 import static ca.team2706.scouting.mcmergemanager.backend.App.getContext;
 
 import android.view.View.OnKeyListener;
+
+import java.io.Serializable;
 
 public class TeleopScouting extends AppCompatActivity implements FragmentListener{
 
@@ -215,6 +218,9 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
             }
         });
 
+        Intent intent = getIntent();
+
+
         comment.setOnKeyListener(new OnKeyListener(){
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
                 CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, v, getContext());
@@ -223,7 +229,16 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
         });
 
 
+
+        PreGameObject preGameObject = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
+
+        Integer teamNum = preGameObject.teamNumber;
+
+        teamNumber.setText(teamNum.toString());
+      //  int i = preGameObject.teamNumber;
+
     }
+
 
     private void showCubeDropped(){
         FragmentManager fm = getFragmentManager();
@@ -233,8 +248,10 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
     }
 
     public void startedClimbing(View view){
-
         Intent intent = new Intent(this, PostGame.class);
+        intent.putExtra("PreGameData", getIntent().getSerializableExtra("PreGameData"));
+        intent.putExtra("AutoScoutingData", getIntent().getSerializableExtra("AutoScoutingData"));
+        intent.putExtra("TeleopScoutingData", teleopScoutingObject);
         startActivity(intent);
 
     }

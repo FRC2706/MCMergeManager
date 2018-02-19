@@ -33,11 +33,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View.OnKeyListener;
-import android.view.View;
-import android.view.KeyEvent;
-import org.apache.commons.net.ftp.FTPFile;
-import org.json.JSONException;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +62,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 
 @TargetApi(21)
 public class MainActivity extends AppCompatActivity
-        implements DataRequester, PreMatchReportFragment.OnFragmentInteractionListener,
-        FTPRequester {
+        implements DataRequester, PreMatchReportFragment.OnFragmentInteractionListener {
 
     public Context context;
 
@@ -396,9 +391,6 @@ public class MainActivity extends AppCompatActivity
         //Here in case we need it later
     }
 
-    public void dirCallback(FTPFile[] listing) {
-        //Here in case we need it later
-    }
 
     public void updateSyncBar(String Caption, int Progress, Activity activity, boolean isRunning) {
         final String caption = Caption;
@@ -427,22 +419,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void syncPhotos(View v) {
-        try {
 
-            String ftpHostname = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPHostname), null);
-            String ftpUsername = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPUsername), null);
-            String ftpPassword = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPPassword), null);
-            if (ftpUsername == null || ftpHostname == null || ftpPassword == null) return;
-            sFtpClient = new FTPClient(ftpHostname, ftpUsername, ftpPassword, FileUtils.sLocalTeamPhotosFilePath, FileUtils.sRemoteTeamPhotosFilePath);
-            sFtpClient.connect();
-            sFtpClient.syncAllFiles(this, this);
-        } catch (Exception e) {
-            // empty
-            Log.e("MCMergeManager: ", "", e);
-        }
-
-    }
 
     public void onClick(View v) {
         FileUtils.checkLocalFileStructure(this);
