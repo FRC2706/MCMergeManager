@@ -11,6 +11,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.SeekBar.*;
 
+import org.json.JSONException;
+
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.gui.PreGameActivity;
@@ -154,6 +156,12 @@ public class PostGame extends AppCompatActivity {
             TeleopScoutingObject t  = (TeleopScoutingObject) thisIntent.getSerializableExtra("TeleopScoutingData");
 
             Intent intent = new Intent(this, PreGameActivity.class);
+
+            MatchData.Match match = new MatchData.Match(pre, t, a);
+
+            try {
+                match.toJson();
+            } catch (JSONException e) {}
 
 
             startActivity(intent);

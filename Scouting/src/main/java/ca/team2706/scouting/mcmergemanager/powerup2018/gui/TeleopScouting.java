@@ -20,7 +20,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubeDroppedEv
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.Event;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.FragmentListener;
 
@@ -36,6 +36,12 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
     
     @Override
     public void editNameDialogComplete(DialogFragment dialogFragment, Bundle data){
+
+        if(dialogFragment instanceof DroppedCubeFragment) {
+            CubeDroppedEvent cubeDroppedEvent = (CubeDroppedEvent) data.getSerializable("dropped_cube");
+            cubeDroppedEvent.timestamp = event.timestamp;
+            teleopScoutingObject.add(cubeDroppedEvent);
+        }
 
     }
 
@@ -133,11 +139,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
                                 cubeDeliverySpinner.setSelection(0);
                                 break;
 
-                            // TODO This will need to be updated to reflect the different drop types
                             case 4:
-                                cubeDroppedEvent = new CubeDroppedEvent(135 - remainTime, CubeDroppedEvent.DropType.EASY_PICKUP);
-                                teleopScoutingObject.add(cubeDroppedEvent);
-
                                 //show the cube dropped popup
                                 showCubeDropped();
 
@@ -203,7 +205,6 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
         final EditText comment = (EditText) findViewById(R.id.comment);
 
 
-
         teamNumber.setOnKeyListener(new OnKeyListener(){
 
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
@@ -222,7 +223,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
         comment.setOnKeyListener(new OnKeyListener(){
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
-                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, v, getContext());
+                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, view, getContext());
                 teamNumber.setText(teamNum.toString());
                 return true;
             }
@@ -236,12 +237,17 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
     }
 
 
+    Event event = new Event();
+
     private void showCubeDropped(){
         FragmentManager fm = getFragmentManager();
         DroppedCubeFragment droppedCubeFragment = DroppedCubeFragment.newInstance("subscribe", this);
         droppedCubeFragment.show(fm, "fragment_dropped_cube");
+        event.timestamp = 135 - remainTime;
 
     }
+
+
 
     public void startedClimbing(View view){
         Intent intent = new Intent(this, PostGame.class);

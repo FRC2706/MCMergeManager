@@ -166,7 +166,6 @@ public class MatchData implements Serializable{
                     obj.put(GOAL, e.ID);
                     obj.put(START_TIME, e.timestamp);
                     obj.put(EXTRA, e.dropType.toString());
-                    break;
                 }if (event instanceof PostGameObject) {
                     // For this event, we set extra to time_dead and end_time to time_defending
                     PostGameObject e = (PostGameObject) event;
@@ -187,6 +186,7 @@ public class MatchData implements Serializable{
 
             jsonObject.put( "events", jsonArray);
             FileUtils.saveJsonData(jsonObject);
+
         }
 
     }
