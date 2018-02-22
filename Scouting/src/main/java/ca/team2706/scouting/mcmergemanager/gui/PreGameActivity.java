@@ -11,7 +11,6 @@ import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.gui.AutoScouting;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeleopScouting;
 
 public class PreGameActivity extends AppCompatActivity {
     @Override
@@ -52,8 +51,8 @@ public class PreGameActivity extends AppCompatActivity {
 
 
         Intent intent = new Intent(this, AutoScouting.class);
-       // intent.putExtra("PreGameData", new PreGameObject(teamNumInt, matchNumInt));
-       startActivity(intent);
+        intent.putExtra("PreGameData", new PreGameObject(teamNumInt, matchNumInt));
+        startActivity(intent);
     }
 
 }

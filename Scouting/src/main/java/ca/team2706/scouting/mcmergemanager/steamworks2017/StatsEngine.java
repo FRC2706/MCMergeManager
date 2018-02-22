@@ -759,8 +759,8 @@ public class StatsEngine implements Serializable{
 
             // Post match gearDeliveryData
 
-            if (! match.postGameObject.notes.equals("") )
-                teamStatsReport.notes += "\t\t- " + match.postGameObject.notes + "\n";
+//            if (! match.postGameObject.notes.equals("") )
+//                teamStatsReport.notes += "\t\t- " + match.postGameObject.notes + "\n";
 
             // wrap up any incomplete cycles
             if (inFuelCycle) {

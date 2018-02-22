@@ -14,17 +14,13 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
-import android.text.Selection;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,13 +29,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View.OnKeyListener;
-import android.view.View;
-import android.view.KeyEvent;
-import org.apache.commons.net.ftp.FTPFile;
-import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -48,13 +38,10 @@ import java.util.TimerTask;
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.App;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
-import ca.team2706.scouting.mcmergemanager.backend.CreateCsvFile;
 import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
 import ca.team2706.scouting.mcmergemanager.backend.WebServerUtils;
-import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
-import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
@@ -62,11 +49,16 @@ import ca.team2706.scouting.mcmergemanager.backend.interfaces.FTPRequester;
 import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine2018;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 
 @TargetApi(21)
 public class MainActivity extends AppCompatActivity
-        implements DataRequester, PreMatchReportFragment.OnFragmentInteractionListener,
-        FTPRequester {
+        implements DataRequester, PreMatchReportFragment.OnFragmentInteractionListener {
 
     public Context context;
 
@@ -118,6 +110,12 @@ public class MainActivity extends AppCompatActivity
 //        }).start();
     }
 
+
+    public void generateThreatList(View view){
+        Intent intent = new Intent(this, ThreatListGenerator.class);
+        startActivity(intent);
+    }
+
     // Check to see if the event keys has been downloaded yet, if not yet downloaded for this year then download
     private void getEventKeys() {
         if (!FileUtils.fileExists(this, FileUtils.EVENT_KEYS_FILENAME)) {
@@ -142,7 +140,7 @@ public class MainActivity extends AppCompatActivity
 
         // In case the schedule is empty, make sure we pass along the list of teams registered at event
         // that we fetched at the beginning.
-        sMatchData = FileUtils.loadMatchDataFile();
+       // sMatchData = FileUtils.loadMatchDataFile();
         if (sMatchData == null) sMatchData = new MatchData();
 
         sRepairTimeObjects = FileUtils.getRepairTimeObjects();
@@ -404,9 +402,6 @@ public class MainActivity extends AppCompatActivity
         //Here in case we need it later
     }
 
-    public void dirCallback(FTPFile[] listing) {
-        //Here in case we need it later
-    }
 
     public void updateSyncBar(String Caption, int Progress, Activity activity, boolean isRunning) {
         final String caption = Caption;
@@ -435,22 +430,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void syncPhotos(View v) {
-        try {
 
-            String ftpHostname = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPHostname), null);
-            String ftpUsername = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPUsername), null);
-            String ftpPassword = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPPassword), null);
-            if (ftpUsername == null || ftpHostname == null || ftpPassword == null) return;
-            sFtpClient = new FTPClient(ftpHostname, ftpUsername, ftpPassword, FileUtils.sLocalTeamPhotosFilePath, FileUtils.sRemoteTeamPhotosFilePath);
-            sFtpClient.connect();
-            sFtpClient.syncAllFiles(this, this);
-        } catch (Exception e) {
-            // empty
-            Log.e("MCMergeManager: ", "", e);
-        }
-
-    }
 
     public void onClick(View v) {
         // TODO: sync the match files on the phone

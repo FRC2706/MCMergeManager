@@ -1,4 +1,4 @@
-package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects;
+package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto;
 
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 

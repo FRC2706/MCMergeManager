@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.SeekBar;
 
 import ca.team2706.scouting.mcmergemanager.R;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.TeleopScouting;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.AutoScoutingObject;
 
 public class AutoScouting extends AppCompatActivity {

@@ -14,11 +14,12 @@ import java.util.Map;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoCubePickupEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoCubePlacementEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoLineCrossEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoMalfunctionEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePlacementEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLineCrossEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoMalfunctionEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.ClimbEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Cycle;
@@ -26,11 +27,12 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PostGameObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport2018;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.PostGame;
 
-import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PLACEMENT_TYPE.ALLIANCE_SWITCH;
-import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PLACEMENT_TYPE.DROPPED;
-import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PLACEMENT_TYPE.EXCHANGE;
-import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PLACEMENT_TYPE.SCALE;
+import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.ALLIANCE_SWITCH;
+import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.DROPPED;
+import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.EXCHANGE;
+import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.SCALE;
 
 public class StatsEngine2018 {
 
@@ -106,7 +108,7 @@ public class StatsEngine2018 {
         }
 
         teamStatsReport.scheduleToughnessByWLT = computeScheduleToughnessByWLT(teamNumber);
-        teamStatsReport.scheduleToughnessByOPR = computeScheduleToughnessByOPR();
+        teamStatsReport.scheduleToughnessByOPR = computeScheduleToughnessByOPR(teamNumber);
 
         // TODO: repair team objects
 
@@ -207,9 +209,7 @@ public class StatsEngine2018 {
                             cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PICKUP_PORTAL));
                             break;
                     }
-                }
-
-                if (event instanceof CubePlacementEvent) {
+                } else if (event instanceof CubePlacementEvent) {
                     CubePlacementEvent c = (CubePlacementEvent) event;
 
                     // Time stamp stuff
@@ -245,53 +245,56 @@ public class StatsEngine2018 {
                             cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PLACE_SCALE));
                             break;
                     }
+                } else if(event instanceof ClimbEvent) {
+                    ClimbEvent c = (ClimbEvent) event;
+
+                    // Type of climb
+                    switch(c.climbType) {
+                        case FAIL:
+                            teamStatsReport.failClimb++;
+                            break;
+                        case NO_CLIMB:
+                            teamStatsReport.noClimb++;
+                            break;
+                        case SUCCESS_ASSISTED:
+                            teamStatsReport.assistedClimb++;
+                            break;
+                        case SUCCESS_INDEPENDENT:
+                            teamStatsReport.independentClimb++;
+                            break;
+                        case SUCCESS_ASSISTED_OTHERS:
+                            teamStatsReport.assistedOthersClimb++;
+                            break;
+                    }
+
+                    // Time for climbing
+                    teamStatsReport.avgClimbTime += c.climb_time;
+                    if(c.climb_time > teamStatsReport.maxClimbTime) {
+                        teamStatsReport.maxClimbTime = c.climb_time;
+                    } else if(c.climb_time < teamStatsReport.minClimbTime) {
+                        teamStatsReport.minClimbTime = c.climb_time;
+                    }
+                } else if(event instanceof PostGameObject) {
+                    PostGameObject p = (PostGameObject) event;
+
+                    // Defending
+                    teamStatsReport.avgTimeDefending += p.time_defending;
+                    if(p.time_defending > teamStatsReport.maxTimeDefending) {
+                        teamStatsReport.maxTimeDefending = p.time_defending;
+                    }
+
+                    // Time dead
+                    if (p.time_dead > 0) {
+                        teamStatsReport.avgDeadness += p.time_dead;
+
+                        if (p.time_dead > teamStatsReport.highestDeadness)
+                            teamStatsReport.highestDeadness = p.time_dead;
+                    } else {
+                        teamStatsReport.numMatchesNoDeadness++;
+                    }
                 }
 
                 // TODO: i don't think i need to finish cycles
-            }
-
-
-            // Climbing stuff
-            PostGameObject p = match.postGameObject;
-
-            switch(p.climbType) {
-                case FAIL:
-                    teamStatsReport.failClimb++;
-                    break;
-                case NO_CLIMB:
-                    teamStatsReport.noClimb++;
-                    break;
-                case SUCCESS_ASSISTED:
-                    teamStatsReport.assistedClimb++;
-                    break;
-                case SUCCESS_INDEPENDENT:
-                    teamStatsReport.independentClimb++;
-                    break;
-                case SUCCESS_ASSISTED_OTHERS:
-                    teamStatsReport.assistedOthersClimb++;
-                    break;
-            }
-
-            teamStatsReport.avgClimbTime += p.climb_time;
-            if(p.climb_time > teamStatsReport.maxClimbTime) {
-                teamStatsReport.maxClimbTime = p.climb_time;
-            } else if(p.climb_time < teamStatsReport.minClimbTime) {
-                teamStatsReport.minClimbTime = p.climb_time;
-            }
-
-            teamStatsReport.avgTimeDefending += p.time_defending;
-            if(p.time_defending > teamStatsReport.maxTimeDefending) {
-                teamStatsReport.maxTimeDefending = p.time_defending;
-            }
-
-            // Get the time dead of the team
-            if (match.postGameObject.time_dead > 0) {
-                teamStatsReport.avgDeadness += match.postGameObject.time_dead;
-
-                if (match.postGameObject.time_dead > teamStatsReport.highestDeadness)
-                    teamStatsReport.highestDeadness = match.postGameObject.time_dead;
-            } else {
-                teamStatsReport.numMatchesNoDeadness++;
             }
 
             // Add the cycles to the report
@@ -336,11 +339,11 @@ public class StatsEngine2018 {
         // Find the favourites of teams
         if(teamStatsReport.pickupPortalAvgMatch > teamStatsReport.pickupExchangeAvgMatch &&
                 teamStatsReport.pickupPortalAvgMatch > teamStatsReport.pickupGroundAvgMatch) {
-            teamStatsReport.favouritePickup = CubePickupEvent.PICKUP_TYPE.PORTAL;
+            teamStatsReport.favouritePickup = CubePickupEvent.PickupType.PORTAL;
         } else if(teamStatsReport.pickupGroundAvgMatch > teamStatsReport.pickupExchangeAvgMatch) {
-            teamStatsReport.favouritePickup = CubePickupEvent.PICKUP_TYPE.GROUND;
+            teamStatsReport.favouritePickup = CubePickupEvent.PickupType.GROUND;
         } else {
-            teamStatsReport.favouritePickup = CubePickupEvent.PICKUP_TYPE.EXCHANGE;
+            teamStatsReport.favouritePickup = CubePickupEvent.PickupType.EXCHANGE;
         }
 
         if(teamStatsReport.placeExchangeAvgMatch > teamStatsReport.placeScaleAvgMatch &&
@@ -353,7 +356,7 @@ public class StatsEngine2018 {
         } else if(teamStatsReport.placeSwitchAvgMatch > teamStatsReport.droppedAvgMatch) {
             teamStatsReport.favouritePlacement = ALLIANCE_SWITCH;   // Either alliance or opposing switch
         } else {
-            teamStatsReport.favouritePlacement = DROPPED;
+            teamStatsReport.favouritePlacement = CubePlacementEvent.PlacementType.DROPPED;
         }
 
     }

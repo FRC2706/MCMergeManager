@@ -1,4 +1,4 @@
-package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects;
+package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto;
 
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 
@@ -9,22 +9,19 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 public class AutoCubePlacementEvent extends Event {
     public static final String ID = "auto_cube_placement";
 
-
-    public enum PLACEMENT_TYPE {
+    public enum PlacementType {
         ALLIANCE_SWITCH, SCALE, EXCHANGE, DROPPED
     }
 
-    public PLACEMENT_TYPE placementType;
+    public PlacementType placementType;
 
     public AutoCubePlacementEvent(){
         // Empty Constructor
     }
 
-    public AutoCubePlacementEvent(double timestamp, PLACEMENT_TYPE placementType){
+    public AutoCubePlacementEvent(double timestamp, PlacementType placementType){
         super(timestamp);
         this.placementType = placementType;
-
     }
-
 
 }

@@ -8,20 +8,19 @@ public class CubePickupEvent extends Event {
 
     public static final String ID = "pickup_cube";
 
-    public enum PICKUP_TYPE {
-        PORTAL, GROUND, EXCHANGE
+    public enum PickupType {
+        PORTAL, GROUND, EXCHANGE, PYRAMID
     }
 
-    public PICKUP_TYPE pickupType;
+    public PickupType pickupType;
 
     public CubePickupEvent() {
         // Empty Constructor
     }
 
-    public CubePickupEvent(double timestamp, PICKUP_TYPE pickupType){
+    public CubePickupEvent(double timestamp, PickupType PickupType){
         super(timestamp);
-        this.pickupType = pickupType;
-
+        this.pickupType = PickupType;
     }
 
 }

@@ -10,14 +10,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoCubePickupEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoCubePlacementEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoLineCrossEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoMalfunctionEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects.AutoScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePlacementEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLineCrossEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoMalfunctionEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
 
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeleopScouting;
 
 public class AutoScouting extends AppCompatActivity {
 
@@ -42,9 +42,13 @@ public class AutoScouting extends AppCompatActivity {
 
         autoScoutingObject2018 = new AutoScoutingObject();
 
+       // TODO Add the code for comment_bar
 
         m_handler = new Handler();
+
         final TextView tvGameTime = (TextView) findViewById(R.id.autoTimer);
+
+        m_handler = new Handler();
 
         m_handlerTask = new Runnable() {
             @Override
@@ -117,8 +121,7 @@ public class AutoScouting extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (groundCheckbox.isChecked()) {
-
-                    AutoCubePickupEvent autoCubePickupEvent = new AutoCubePickupEvent(15 - remainTime, AutoCubePickupEvent.PICKUP_TYPE.GROUND);
+                    AutoCubePickupEvent autoCubePickupEvent = new AutoCubePickupEvent(15 - remainTime, AutoCubePickupEvent.PickupType.GROUND);
                     autoScoutingObject2018.add(autoCubePickupEvent);
                     groundCheckbox.setChecked(true);
 
@@ -133,8 +136,7 @@ public class AutoScouting extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (switchCheckbox.isChecked()) {
-
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PLACEMENT_TYPE.ALLIANCE_SWITCH);
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.ALLIANCE_SWITCH);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             switchCheckbox.setChecked(true);
                         } else {
@@ -149,10 +151,9 @@ public class AutoScouting extends AppCompatActivity {
                 final Event scevent;
                 scaleCheckbox.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v){
                         if (scaleCheckbox.isChecked()) {
-
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PLACEMENT_TYPE.SCALE);
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.SCALE);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             scaleCheckbox.setChecked(true);
                         } else {
@@ -169,8 +170,7 @@ public class AutoScouting extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (exchangeCheckbox.isChecked()) {
-
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PLACEMENT_TYPE.EXCHANGE);
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.EXCHANGE);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             exchangeCheckbox.setChecked(true);
                         } else {
@@ -186,8 +186,7 @@ public class AutoScouting extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (droppedCheckbox.isChecked()) {
-
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PLACEMENT_TYPE.DROPPED);
+                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.DROPPED);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             droppedCheckbox.setChecked(true);
                         } else {
@@ -195,26 +194,13 @@ public class AutoScouting extends AppCompatActivity {
                         }
                     }
                 });
-
-
             }
-
 
         });
 
-
-
     }
 
-
     public void toTeleop(View view) {
-
-
-
-
-
-
-
         Intent intent = new Intent(this, TeleopScouting.class);
         intent.putExtra("PreGameData", getIntent().getSerializableExtra("PreGameData"));
         intent.putExtra("AutoScoutingData", autoScoutingObject2018);

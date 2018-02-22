@@ -621,8 +621,9 @@ public class FileUtils {
     /**
      * Saves the JSON to a file
      * @param commentList
->>>>>>> 6fcee321ecdca58153fce6518be18f416c972f2b
      */
+    private static final String COMMENT_FILE_PATH= "comments.json";
+
     public static void saveTeamComments(CommentList commentList){
 
         JSONObject jsonObject = loadTeamCommentsFromFile(commentList.getTeamNumber());
@@ -711,6 +712,35 @@ public class FileUtils {
 
     }
 
+
+    public static void saveJsonData(JSONObject obj) {
+        try {
+            String filePath = sLocalEventFilePath + "/" + obj.getInt("team") + "/" + "match" +obj.getInt("match_number") + ".json";
+
+            File file = new File(filePath);
+
+            (new File(file.getParent())).mkdirs();
+
+            file.delete();
+
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+
+
+
+            bw.write(obj.toString());
+            bw.flush();
+            bw.close();
+
+        } catch (JSONException  e) {
+            Log.d("JSon error", e.getMessage());
+        } catch (IOException e){
+            Log.d("IOException", e.getMessage());
+
+        }
+    }
+
+
+
     private static void saveJsonFile(JSONArray jsonArray) {
         if (!clearTeamDataFile(FileType.SYNCHED)) {
             Log.d("Deleting file failed", "something probably went wrong");
@@ -721,7 +751,6 @@ public class FileUtils {
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 bw.append(jsonArray.get(i).toString() + "\n");
             }

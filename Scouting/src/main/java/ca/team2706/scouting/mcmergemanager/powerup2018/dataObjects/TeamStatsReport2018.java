@@ -52,8 +52,8 @@ public class TeamStatsReport2018 {
     public double pickupGroundAvgCycleTime, pickupPortalAvgCycleTime, pickupExchangeAvgCycleTime;
     public double placeSwitchAvgCycleTime, placeScaleAvgCycleTime, placeExchangeAvgCycleTime, droppedAvgCycleTime;
 
-    public CubePickupEvent.PICKUP_TYPE favouritePickup;
-    public CubePlacementEvent.PLACEMENT_TYPE favouritePlacement;
+    public CubePickupEvent.PickupType favouritePickup;
+    public CubePlacementEvent.PlacementType favouritePlacement;
 
     // Post game stuff
     public double avgDeadness, highestDeadness, numMatchesNoDeadness;

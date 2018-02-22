@@ -1,4 +1,4 @@
-package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.AutoDataObjects;
+package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto;
 
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 
@@ -9,17 +9,17 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 public class AutoCubePickupEvent extends Event{
     public static final String ID = "auto_cube_pickup";
 
-    public enum PICKUP_TYPE {
+    public enum PickupType {
         PORTAL, GROUND, EXCHANGE
     }
 
-    public PICKUP_TYPE pickupType;
+    public PickupType pickupType;
 
     public AutoCubePickupEvent() {
         // Empty Constructor
     }
 
-    public AutoCubePickupEvent(double timestamp, PICKUP_TYPE pickupType){
+    public AutoCubePickupEvent(double timestamp, PickupType pickupType){
         super(timestamp);
         this.pickupType = pickupType;
 
