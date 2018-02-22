@@ -153,7 +153,7 @@ public class AutoScouting extends AppCompatActivity {
                 final Event scevent;
                 scaleCheckbox.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v
+                    public void onClick(View v) {
                         if (scaleCheckbox.isChecked()) {
 
                             AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.SCALE);

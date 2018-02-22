@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="\t\t- This team is awesome because...\n\t\t-They did this thing I hate.\n\t\t-Their automode is broken"
+            android:text="Nothing to display"
             android:id="@+id/textViewNotes" />
 
         <Space

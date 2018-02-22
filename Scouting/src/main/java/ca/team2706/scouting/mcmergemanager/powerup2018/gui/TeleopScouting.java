@@ -222,7 +222,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
         comment.setOnKeyListener(new OnKeyListener(){
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
-                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, v, getContext());
+                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, view, getContext());
                 teamNumber.setText(teamNum.toString());
                 return true;
             }
