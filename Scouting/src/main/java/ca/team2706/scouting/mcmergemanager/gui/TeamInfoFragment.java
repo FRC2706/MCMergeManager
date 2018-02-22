@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeamStatsReport;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeamStatsActivity;
@@ -30,6 +38,7 @@ import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeamStatsActivity;
 public class TeamInfoFragment extends Fragment
         implements PhotoRequester {
 
+    private String comments;
     private int m_teamNumber;
     private View m_view;
     private String textViewPerformanceString;
@@ -93,7 +102,6 @@ public class TeamInfoFragment extends Fragment
             mTeamStatsReport = (TeamStatsReport) args.getSerializable(getString(R.string.EXTRA_TEAM_STATS_REPORT));
             if (mTeamStatsReport != null) {
                 fillStatsData();
-                fillNotes();
                 m_view.findViewById(R.id.viewCyclesBtn).setEnabled(true);
             }
 
@@ -122,6 +130,29 @@ public class TeamInfoFragment extends Fragment
                 }
             });
 
+
+            try {
+                JSONObject jsonObject = FileUtils.getTeamComments(m_teamNumber);
+                if (jsonObject != null) {
+                    CommentList commentList = new CommentList(jsonObject);
+                    ArrayList<String> arrayList = commentList.getComments();
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        stringBuilder.append(arrayList.get(i) + "\n");
+                    }
+                    comments = stringBuilder.toString();
+                    TextView notesTV = (TextView) m_view.findViewById(R.id.textViewNotes);
+                    notesTV.setText(comments);
+
+                }
+
+            } catch (JSONException e) {
+                comments = "";
+            }
+
+
+
+
         }
 
 
@@ -140,10 +171,7 @@ public class TeamInfoFragment extends Fragment
         statsTV.setText(statsText);
     }
 
-    private void fillNotes() {
-        TextView notesTV = (TextView) m_view.findViewById(R.id.textViewNotes);
-        notesTV.setText(mTeamStatsReport.notes);
-    }
+
 
     @Override
     public void onDetach() {

@@ -38,10 +38,13 @@ public class PostGame extends AppCompatActivity {
     public String notesText;
     public String noEntry = "Notes...";
 
+    TeleopScoutingObject t  = (TeleopScoutingObject) getIntent().getSerializableExtra("TeleopScoutingData");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.steamworks2017_activity_post_game);
+
 
 
         final CheckBox noClimbCheckbox = (CheckBox) findViewById(R.id.climbTypeNoClimb);
@@ -69,18 +72,14 @@ public class PostGame extends AppCompatActivity {
         } else {
             climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
         }
-
-        
-
     }
-
 
         public void returnHome(View view){
             Intent thisIntent = getIntent();
 
             PreGameObject pre = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
             AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
-            TeleopScoutingObject t  = (TeleopScoutingObject) thisIntent.getSerializableExtra("TeleopScoutingData");
+
 
             MatchData.Match match =  new MatchData.Match(pre, a ,t);
 
@@ -97,9 +96,3 @@ public class PostGame extends AppCompatActivity {
 
     }
 }
-
-
-
-
-
-

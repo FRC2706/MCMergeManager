@@ -755,10 +755,7 @@ public class FileUtils {
     }
 
 
-    /* This returns the local match data for a given match and a given team
-    @param teamNumber the given team number
-    @param matchNumber the given matchNumber
-     */
+    // This returns the local match data for a given match and
     public static JSONObject getJsonData(int teamNumber, int matchNumber){
         String json = null;
         JSONObject jsonObject = null;
