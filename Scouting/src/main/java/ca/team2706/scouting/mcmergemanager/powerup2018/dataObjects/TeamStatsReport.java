@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 
@@ -11,7 +12,7 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
  * Created by daniel on 12/02/18.
  */
 
-public class TeamStatsReport2018 {
+public class TeamStatsReport implements Serializable {
 
     // Overall Stats
     public int    teamNumber;
@@ -64,8 +65,7 @@ public class TeamStatsReport2018 {
     public MatchSchedule teamMatcheSchedule;
     public MatchData teamMatchData;
     public ArrayList<CyclesInAMatch> cycleMatches = new ArrayList<>();
-
-
+    public CommentList comments;
 
     /**
      * For feeding the CycleDisplay window..

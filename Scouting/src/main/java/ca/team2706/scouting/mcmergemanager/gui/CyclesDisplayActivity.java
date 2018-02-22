@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Cycle;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeamStatsReport;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport;
 
 
 public class CyclesDisplayActivity extends AppCompatActivity {
@@ -20,7 +20,7 @@ public class CyclesDisplayActivity extends AppCompatActivity {
 
 
         TeamStatsReport teamStatsReport = (TeamStatsReport) getIntent().getSerializableExtra(getString(R.string.EXTRA_TEAM_STATS_REPORT));
-        int teamNo = teamStatsReport.teamNo;
+        int teamNo = teamStatsReport.teamNumber;
 
         ((TextView) findViewById(R.id.cyclesDisplayTitleTv)).setText("Cycles by Team " + teamNo);
 

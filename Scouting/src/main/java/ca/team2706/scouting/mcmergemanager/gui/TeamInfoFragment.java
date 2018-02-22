@@ -23,8 +23,8 @@ import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeamStatsReport;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeamStatsActivity;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.TeamStatsActivity;
 
 
 public class TeamInfoFragment extends Fragment
@@ -133,8 +133,8 @@ public class TeamInfoFragment extends Fragment
 
         statsText += "W/L/T:\t\t " + mTeamStatsReport.wins + "/" + mTeamStatsReport.losses + "/" + mTeamStatsReport.ties + "\n";
         statsText += "OPR:\t\t " + String.format("%.2f", mTeamStatsReport.OPR) + "\n";
-        statsText += "Fav. cycle type: " + mTeamStatsReport.favouriteCycleType + "\n";
-        statsText += "Fav. pickup location: " + mTeamStatsReport.favouritePickupLocation + "\n";
+//        statsText += "Fav. cycle type: " + mTeamStatsReport.favouriteCycleType + "\n";
+        statsText += "Fav. pickup location: " + mTeamStatsReport.favouritePickup + "\n";
 
         TextView statsTV = (TextView) m_view.findViewById(R.id.statsTV);
         statsTV.setText(statsText);
@@ -142,7 +142,7 @@ public class TeamInfoFragment extends Fragment
 
     private void fillNotes() {
         TextView notesTV = (TextView) m_view.findViewById(R.id.textViewNotes);
-        notesTV.setText(mTeamStatsReport.notes);
+//        notesTV.setText(mTeamStatsReport.notes);  // TODO: update to comments
     }
 
     @Override

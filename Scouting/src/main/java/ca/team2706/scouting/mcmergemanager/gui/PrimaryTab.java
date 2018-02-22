@@ -20,7 +20,6 @@ import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.App;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
 import android.view.View.OnKeyListener;
 
 

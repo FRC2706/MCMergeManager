@@ -1,11 +1,11 @@
 package ca.team2706.scouting.mcmergemanager.powerup2018;
 
 
-import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,15 +26,14 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Cycle;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PostGameObject;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport2018;
-import ca.team2706.scouting.mcmergemanager.powerup2018.gui.PostGame;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport;
 
 import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.ALLIANCE_SWITCH;
 import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.DROPPED;
 import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.EXCHANGE;
 import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.SCALE;
 
-public class StatsEngine2018 {
+public class StatsEngine implements Serializable {
 
     public static final String OPR_FILENAME = "OPRs.json";
 
@@ -48,7 +47,7 @@ public class StatsEngine2018 {
     private Map<Integer, Double> DPRs;
     private Map<Integer, WLT> records;  // need for computation of schedule toughness
 
-    public StatsEngine2018(MatchData matchData, MatchSchedule matchSchedule) {
+    public StatsEngine(MatchData matchData, MatchSchedule matchSchedule) {
         this(matchData, matchSchedule, null);
     }
 
@@ -57,18 +56,18 @@ public class StatsEngine2018 {
      *
      * @param repairTimeObjects May be null
      **/
-    public StatsEngine2018(MatchData matchData, MatchSchedule matchSchedule, List<TeamDataObject> repairTimeObjects) {
+    public StatsEngine(MatchData matchData, MatchSchedule matchSchedule, List<TeamDataObject> repairTimeObjects) {
         this.matchData = matchData;
         this.matchSchedule = matchSchedule;
         this.repairTimeObjects = repairTimeObjects;
     }
 
-    public TeamStatsReport2018 getTeamStatsReport(int teamNumber) {
+    public TeamStatsReport getTeamStatsReport(int teamNumber) {
         // If there is no match data then there is no data to compile
         if (matchData == null)
             throw new IllegalStateException("no match data");
 
-        TeamStatsReport2018 teamStatsReport = new TeamStatsReport2018();
+        TeamStatsReport teamStatsReport = new TeamStatsReport();
         teamStatsReport.teamMatchData = matchData.filterByTeam(teamNumber);
 
         // Fill in the stats for the given team
@@ -80,7 +79,7 @@ public class StatsEngine2018 {
     }
 
     // Fill in the stats that don't need to analyse the match
-    private void fillInOverallStats(TeamStatsReport2018 teamStatsReport, int teamNumber) {
+    private void fillInOverallStats(TeamStatsReport teamStatsReport, int teamNumber) {
         teamStatsReport.teamNumber = teamNumber;
 
         teamStatsReport.numMatchesPlayed = 0;
@@ -117,7 +116,7 @@ public class StatsEngine2018 {
 
     // Fill in the stats that are only to do with auto mode
     //TODO: Avg delivery time in auto
-    private void fillInAutoStats(TeamStatsReport2018 teamStatsReport) {
+    private void fillInAutoStats(TeamStatsReport teamStatsReport) {
         for (MatchData.Match match : teamStatsReport.teamMatchData.matches) {
             AutoScoutingObject autoScouting = match.autoScoutingObject;
 
@@ -170,13 +169,13 @@ public class StatsEngine2018 {
             teamStatsReport.autoAvgMalfunctions = teamStatsReport.autoMalfunction / teamStatsReport.numMatchesPlayed;
     }
 
-    private void fillInTeleopStats(TeamStatsReport2018 teamStatsReport) {
+    private void fillInTeleopStats(TeamStatsReport teamStatsReport) {
         // Loop through all the matches, calculate cycles using a big ol state maching
         for (MatchData.Match match : teamStatsReport.teamMatchData.matches) {
             // Process all the events during this match in a big state machine.
             ArrayList<Event> events = match.teleopScoutingObject.getEvents();
 
-            TeamStatsReport2018.CyclesInAMatch cyclesInThisMatch = new TeamStatsReport2018.CyclesInAMatch(match.preGameObject.matchNumber);
+            TeamStatsReport.CyclesInAMatch cyclesInThisMatch = new TeamStatsReport.CyclesInAMatch(match.preGameObject.matchNumber);
 
             // State machine state vars
             boolean inCubePickupCycle = false, inCubePlaceCycle = false;

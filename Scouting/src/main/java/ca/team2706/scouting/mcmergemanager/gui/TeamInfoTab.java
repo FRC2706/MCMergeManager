@@ -2,27 +2,21 @@ package ca.team2706.scouting.mcmergemanager.gui;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 
 import java.util.List;
 
 import ca.team2706.scouting.mcmergemanager.R;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeamStatsReport;
 
 /**
  * Created by cnnr2 on 2015-10-31.

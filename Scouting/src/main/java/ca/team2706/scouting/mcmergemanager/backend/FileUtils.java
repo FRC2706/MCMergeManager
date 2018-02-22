@@ -24,7 +24,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -39,8 +38,7 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.NoteObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
-import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine2018;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
+import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
 
 /**
@@ -910,7 +908,7 @@ public class FileUtils {
     }
     public static JSONObject getOprsFromFile(Context context) {
         try {
-            return new JSONObject(readFile(StatsEngine2018.OPR_FILENAME, context));
+            return new JSONObject(readFile(StatsEngine.OPR_FILENAME, context));
         } catch(JSONException e) {
             Log.d("JSON err ", e.toString());
         }
@@ -921,7 +919,7 @@ public class FileUtils {
             @Override
             public void run() {
                 try {
-                    writeFile(BlueAllianceUtils.getEventOprs().toString(), StatsEngine2018.OPR_FILENAME, context);
+                    writeFile(BlueAllianceUtils.getEventOprs().toString(), StatsEngine.OPR_FILENAME, context);
                 } catch(IOException e) {
                     Log.d("err saving oprs", e.toString());
                 }

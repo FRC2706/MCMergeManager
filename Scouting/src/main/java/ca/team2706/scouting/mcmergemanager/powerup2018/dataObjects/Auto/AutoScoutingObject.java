@@ -20,7 +20,7 @@ public class AutoScoutingObject implements Serializable {
 
     /**
      * Puts all events during auto mode into a list, sorted by timestamp.
-     * Useful for doing cycle analysis in StatsEngine2018.
+     * Useful for doing cycle analysis in StatsEngine.
      */
     public ArrayList<Event> getEvents() {
         Collections.sort(events);

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -45,16 +44,7 @@ import ca.team2706.scouting.mcmergemanager.backend.WebServerUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
-import ca.team2706.scouting.mcmergemanager.backend.interfaces.FTPRequester;
-import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine2018;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 
 @TargetApi(21)
 public class MainActivity extends AppCompatActivity
