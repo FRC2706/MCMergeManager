@@ -33,9 +33,7 @@ import java.io.Serializable;
 public class TeleopScouting extends AppCompatActivity implements FragmentListener{
 
     public static int teamNum = -1;
-
-    private View v;
-
+    
     @Override
     public void editNameDialogComplete(DialogFragment dialogFragment, Bundle data){
 
@@ -43,7 +41,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
     @Override
     public void editNameDialogCancel(DialogFragment dialogFragment){
-
+        dialogFragment.dismiss();
     }
 
 
@@ -224,7 +222,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
         comment.setOnKeyListener(new OnKeyListener(){
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
-                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, v, getContext());
+                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, view, getContext());
                 teamNumber.setText(teamNum.toString());
                 return true;
             }

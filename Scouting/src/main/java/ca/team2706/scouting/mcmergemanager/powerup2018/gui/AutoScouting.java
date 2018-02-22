@@ -45,7 +45,10 @@ public class AutoScouting extends AppCompatActivity {
        // TODO Add the code for comment_bar
 
         m_handler = new Handler();
+
         final TextView tvGameTime = (TextView) findViewById(R.id.autoTimer);
+
+        m_handler = new Handler();
 
         m_handlerTask = new Runnable() {
             @Override

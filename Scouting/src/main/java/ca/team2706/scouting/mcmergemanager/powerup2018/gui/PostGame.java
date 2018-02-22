@@ -10,8 +10,9 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.json.JSONException;
+import android.widget.SeekBar.*;
+
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
@@ -26,9 +27,6 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
 
 
-
-
-
 public class PostGame extends AppCompatActivity {
 
     private PostGameObject postGameObject = new PostGameObject();
@@ -37,8 +35,17 @@ public class PostGame extends AppCompatActivity {
 
     public String notesText;
     public String noEntry = "Notes...";
+    public String textViewDisplayString;
+    public String pointsScoredString;
+    public String test = " seconds to climb";
 
-    TeleopScoutingObject t  = (TeleopScoutingObject) getIntent().getSerializableExtra("TeleopScoutingData");
+    public int pointsScored;
+
+    SeekBar timeDeadSeekBar;
+    SeekBar defenseSeekBar;
+    SeekBar climbTimeSeekBar;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +60,8 @@ public class PostGame extends AppCompatActivity {
         final CheckBox climbAssistCheckbox = (CheckBox) findViewById(R.id.climbTypeAssisted);
         final CheckBox climbWasAssistedCheckbox = (CheckBox) findViewById(R.id.climbTypeWasAssisted);
 
+
+        // TODO Add these to teleop scouting object
         if (noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
             // postGameObject.climbType(PostGameObject.ClimbType.NO_CLIMB);
             climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
@@ -72,14 +81,88 @@ public class PostGame extends AppCompatActivity {
         } else {
             climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
         }
+
+
+
+        final PostGameObject postGameObject = new PostGameObject();
+
+       // postGameObject = (PostGameObject) getIntent().getSerializableExtra("PostGameData");  // climb was set in climbingFragment
+
+        //CLIMB TIME
+        climbTimeSeekBar = (SeekBar) findViewById(R.id.climb_time_seekBar);
+        // perform seek bar change listener event used for getting the progress value
+        climbTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = 0;
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChangedValue = progress;
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Not used by anything, just need to override it in the thing
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                TextView tvd = (TextView) findViewById(R.id.climbTime_tracker_textView);
+                pointsScored = progressChangedValue*5;
+                pointsScoredString = String.valueOf(pointsScored);
+                textViewDisplayString = pointsScoredString + test;
+                tvd.setText(textViewDisplayString);
+            }
+        });
+
+        //DEAD TIME
+        // initiate  views
+        timeDeadSeekBar = (SeekBar) findViewById(R.id.deadTime_seekBar);
+        // perform seek bar change listener event used for getting the progress value
+        timeDeadSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = 0;
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChangedValue = progress;
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Not used by anything, just need to override it in the thing
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                TextView tv = (TextView) findViewById(R.id.deadTime_tracker_textView);
+                tv.setText(progressChangedValue * 5 + " seconds dead");
+                postGameObject.time_dead = progressChangedValue * 5;
+            }
+        });
+
+        //DEFENSE
+        defenseSeekBar = (SeekBar) findViewById(R.id.defense_seekBar);
+
+        defenseSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = 0;
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChangedValue = progress;
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Not used by anything, just need to override it in the thing.
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                TextView tv = (TextView) findViewById(R.id.defense_tracker_textView);
+                tv.setText(progressChangedValue * 5 + " seconds defending");
+                postGameObject.time_defending = progressChangedValue * 5;
+            }
+        });
+
     }
+
 
         public void returnHome(View view){
             Intent thisIntent = getIntent();
 
+            TeleopScoutingObject t  = (TeleopScoutingObject) getIntent().getSerializableExtra("TeleopScoutingData");
             PreGameObject pre = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
             AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
-
 
             MatchData.Match match =  new MatchData.Match(pre, a ,t);
 
