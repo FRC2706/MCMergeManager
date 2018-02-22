@@ -72,15 +72,6 @@
             android:label="Schedule"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".steamworks2017.gui.TeamStatsActivity"
-            android:label="@string/title_activity_team_stats"
-            android:parentActivityName=".gui.MainActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ca.team2706.scouting.mcmergemanager.gui.MainActivity" />
-        </activity>
-        <activity
             android:name=".gui.CyclesDisplayActivity"
             android:label="@string/title_activity_cycles_display"
             android:parentActivityName=".gui.MainActivity"

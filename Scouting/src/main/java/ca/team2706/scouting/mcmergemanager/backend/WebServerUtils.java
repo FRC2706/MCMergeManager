@@ -56,12 +56,12 @@ public class WebServerUtils {
                         "&extra=" + extra)
                 .build();
 
-        System.out.println(request.url().toString());
         try {
             Response response = client.newCall(request).execute();
 
             // If server returns success then the comment posted
             String responseString = response.body().string();
+            System.out.println(responseString);
             if(responseString.equals("success"))
                 return true;
         } catch(IOException e) {
