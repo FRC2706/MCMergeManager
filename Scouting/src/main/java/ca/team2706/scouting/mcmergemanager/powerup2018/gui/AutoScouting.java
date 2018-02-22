@@ -16,7 +16,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLine
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoMalfunctionEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
+
 
 
 public class AutoScouting extends AppCompatActivity {
@@ -121,11 +121,9 @@ public class AutoScouting extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (groundCheckbox.isChecked()) {
-
                     AutoCubePickupEvent autoCubePickupEvent = new AutoCubePickupEvent(15 - remainTime, AutoCubePickupEvent.PickupType.GROUND);
                     autoScoutingObject2018.add(autoCubePickupEvent);
                     groundCheckbox.setChecked(true);
-
                 } else {
                     groundCheckbox.setChecked(false);
                 }
@@ -199,15 +197,8 @@ public class AutoScouting extends AppCompatActivity {
                         }
                     }
                 });
-
-
             }
-
-
         });
-
-
-
     }
 
 
