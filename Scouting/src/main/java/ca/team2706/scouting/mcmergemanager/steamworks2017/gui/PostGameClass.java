@@ -126,7 +126,7 @@ public class PostGameClass extends AppCompatActivity {
             FileUtils.checkLocalFileStructure(this);
             // save the file to the synced file, if posting fails save to unsynced as well
             FileUtils.appendToMatchDataFile(match, FileUtils.FileType.SYNCHED);
-            FileUtils.postMatchToServer(this, match.toJson());
+//            FileUtils.postMatchToServer(this, match.toJson());
 
             startActivity(intent);
 

@@ -5,6 +5,11 @@
 .DS_Store
 /build
 /captures
+<<<<<<< HEAD
 /Scouting/Scouting.iml
 
 Scouting/src/main/java/ca/team2706/scouting/mcmergemanager/powerup2018/gui/PostGame.java
+=======
+Scouting/Scouting.iml
+*.iml
+>>>>>>> ce3010f685ad990487d1fb31ab16576f804eb157

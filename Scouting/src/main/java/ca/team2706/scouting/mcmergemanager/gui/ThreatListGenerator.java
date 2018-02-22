@@ -30,25 +30,25 @@ public class ThreatListGenerator extends AppCompatActivity {
 
     ArrayList<Integer> teamListInt = new ArrayList<>();
 
-    public void parseTBATeamsList() {
-        String jsonTeamsList = BlueAllianceUtils.fetchTeamsRegisteredAtEventString();
-
-        if(jsonTeamsList == null)
-            return;
-
-        JSONArray jsonArray;
-        try {
-            jsonArray = new JSONArray(jsonTeamsList);
-
-            // Loop over each team
-            for(int i = 0; i < jsonArray.length(); i++) {
-                teamListInt.add(Integer.valueOf(jsonArray.get(i).toString().substring(3)));
-            }
-
-            Collections.sort(teamListInt);
-        } catch(JSONException e) {
-            Log.d("Error parsing json: ", e.toString());
-        }
-    }
+//    public void parseTBATeamsList() {
+//        String jsonTeamsList = BlueAllianceUtils.fetchTeamsRegisteredAtEventString();
+//
+//        if(jsonTeamsList == null)
+//            return;
+//
+//        JSONArray jsonArray;
+//        try {
+//            jsonArray = new JSONArray(jsonTeamsList);
+//
+//            // Loop over each team
+//            for(int i = 0; i < jsonArray.length(); i++) {
+//                teamListInt.add(Integer.valueOf(jsonArray.get(i).toString().substring(3)));
+//            }
+//
+//            Collections.sort(teamListInt);
+//        } catch(JSONException e) {
+//            Log.d("Error parsing json: ", e.toString());
+//        }
+//    }
 
 }
