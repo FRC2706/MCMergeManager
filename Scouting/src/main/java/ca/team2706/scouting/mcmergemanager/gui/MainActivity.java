@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.apache.commons.net.ftp.FTPFile;
 
 
 import java.util.ArrayList;

@@ -46,7 +46,7 @@ public class MatchData implements Serializable{
         public AutoScoutingObject autoScoutingObject;
         public PreGameObject preGameObject;
 
-        public Match(PreGameObject preGameObject, TeleopScoutingObject teleopScoutingObject, AutoScoutingObject autoScoutingObject) {
+        public Match(PreGameObject preGameObject, AutoScoutingObject autoScoutingObject, TeleopScoutingObject teleopScoutingObject) {
             this.preGameObject = preGameObject;
             this.autoScoutingObject = autoScoutingObject;
             this.teleopScoutingObject = teleopScoutingObject;

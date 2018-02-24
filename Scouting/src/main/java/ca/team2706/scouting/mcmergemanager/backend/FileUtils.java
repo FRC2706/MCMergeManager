@@ -725,6 +725,7 @@ public class FileUtils {
 
     }
 
+
     public static JSONObject getTeamComments(int teamNumber){
         String json = null;
         JSONObject jsonObject = null;
@@ -754,6 +755,35 @@ public class FileUtils {
     }
 
 
+    // This returns the local match data for a given match and
+    public static JSONObject getJsonData(int teamNumber, int matchNumber){
+        String json = null;
+        JSONObject jsonObject = null;
+
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalEventFilePath + "/" +  teamNumber + "/" + "match" + matchNumber));
+
+            while ((json = bufferedReader.readLine()) != null) {
+                stringBuilder.append(json);
+            }
+
+            jsonObject = new JSONObject(stringBuilder.toString());
+
+        } catch (IOException e) {
+            Log.d("IO Error", e.getMessage());
+            return null;
+        }
+        catch (JSONException e){
+            Log.d("JSON Error", e.getMessage());
+            return null;
+
+        }
+        return jsonObject;
+
+    }
+
+
     public static void saveJsonData(JSONObject obj) {
         try {
             String filePath = sLocalEventFilePath + "/" + obj.getInt("team") + "/" + "match" +obj.getInt("match_number") + ".json";
@@ -766,7 +796,7 @@ public class FileUtils {
 
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
 
-
+            scanDirectoryTree(sLocalEventFilePath);
 
             bw.write(obj.toString());
             bw.flush();
@@ -775,12 +805,13 @@ public class FileUtils {
             scanDirectoryTree(sLocalEventFilePath);
 
         } catch (JSONException  e) {
-            Log.d("JSon error", e.getMessage());
+            Log.d("JSON error", e.getMessage());
         } catch (IOException e){
             Log.d("IOException", e.getMessage());
 
         }
     }
+
 
 
 

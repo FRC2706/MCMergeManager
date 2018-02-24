@@ -91,12 +91,12 @@ public class CommentList {
     // Pack the comments and team number into JSON and return them
     public JSONObject getJson() throws JSONException{
         JSONObject jsonObject = new JSONObject();
-        JSONObject commentHolder = new JSONObject();
+
         JSONArray jsonArray = new JSONArray();
 
         for(int i = 0; i < comments.size(); i++) {
+            JSONObject commentHolder = new JSONObject();
             commentHolder.put("body", comments.get(i));
-
             jsonArray.put(commentHolder);
         }
 
