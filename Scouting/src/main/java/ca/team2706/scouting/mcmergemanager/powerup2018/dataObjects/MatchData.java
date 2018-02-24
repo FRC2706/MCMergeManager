@@ -186,6 +186,7 @@ public class MatchData implements Serializable{
 
             jsonObject.put( "events", jsonArray);
             FileUtils.saveJsonData(jsonObject);
+
         }
 
     }
