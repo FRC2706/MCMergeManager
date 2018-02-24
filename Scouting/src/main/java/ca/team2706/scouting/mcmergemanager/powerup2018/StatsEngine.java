@@ -82,6 +82,8 @@ public class StatsEngine implements Serializable {
     private void fillInOverallStats(TeamStatsReport teamStatsReport, int teamNumber) {
         teamStatsReport.teamNumber = teamNumber;
 
+        teamStatsReport.teamMatcheSchedule = matchSchedule.filterByTeam(teamNumber);
+
         teamStatsReport.numMatchesPlayed = 0;
         for (MatchSchedule.Match match : teamStatsReport.teamMatcheSchedule.getMatches()) {
             if (match.getBlueScore() > 0 && match.getRedScore() > 0)

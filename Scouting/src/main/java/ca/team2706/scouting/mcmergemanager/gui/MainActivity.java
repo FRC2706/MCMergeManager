@@ -45,7 +45,7 @@ import ca.team2706.scouting.mcmergemanager.backend.WebServerUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 
 @TargetApi(21)
 public class MainActivity extends AppCompatActivity
@@ -131,25 +131,25 @@ public class MainActivity extends AppCompatActivity
 
         // In case the schedule is empty, make sure we pass along the list of teams registered at event
         // that we fetched at the beginning.
-       // sMatchData = FileUtils.loadMatchDataFile();
+        sMatchData = FileUtils.loadMatchDataFile();
         if (sMatchData == null) sMatchData = new MatchData();
 
         sRepairTimeObjects = FileUtils.getRepairTimeObjects();
 
         // TODO: test remove
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("post comment: " + WebServerUtils.postCommentToServer(2706, "testing"));
-                System.out.println("teams list: " + WebServerUtils.getTeamList());
-                System.out.println("competitions list: " + WebServerUtils.getCompetitionList());
-                System.out.println("team stats: " + WebServerUtils.getTeamFromServer(2706));
-                System.out.println("Competition: " + WebServerUtils.getCompetitonFromServer("Canadian Rockies Regional"));
-                System.out.println("Get Match: " + WebServerUtils.getMatchFromServer("Canadian Rockies Regional", 1));
-                System.out.println("Post event" + WebServerUtils.postMatchEvent("matchkey", "2706",
-                        "true", "true", "0", "1", "false"));
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                System.out.println("post comment: " + WebServerUtils.postCommentToServer(2706, "testing"));
+//                System.out.println("teams list: " + WebServerUtils.getTeamList());
+//                System.out.println("competitions list: " + WebServerUtils.getCompetitionList());
+//                System.out.println("team stats: " + WebServerUtils.getTeamFromServer(2706));
+//                System.out.println("Competition: " + WebServerUtils.getCompetitonFromServer("Canadian Rockies Regional"));
+//                System.out.println("Get Match: " + WebServerUtils.getMatchFromServer("Canadian Rockies Regional", 1));
+//                System.out.println("Post event" + WebServerUtils.postMatchEvent("matchkey", "2706",
+//                        "true", "true", "0", "1", "false"));
+//            }
+//        }).start();
     }
 
     /**
