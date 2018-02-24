@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
 import android.widget.SeekBar.*;
-
+import org.json.JSONException;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
@@ -174,8 +174,10 @@ public class PostGame extends AppCompatActivity {
             }
 
             Intent intent = new Intent(this, PreGameActivity.class);
-
             startActivity(intent);
+        }
+
+
+
 
     }
-}
