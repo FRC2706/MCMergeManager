@@ -166,4 +166,13 @@
         android:onClick="toTeleop"
         android:text="Go to teleop" />
 
+    <TextView
+        android:id="@+id/autoFieldwatcherTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/auto_fieldwatcher_rs"
+        android:layout_centerHorizontal="true"
+        android:text="TextView"
+        android:textSize="20sp" />
+
 </RelativeLayout>
