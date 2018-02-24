@@ -9,7 +9,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+import org.json.JSONException;
 import android.widget.SeekBar.*;
+import org.json.JSONException;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
@@ -42,10 +45,13 @@ public class PostGame extends AppCompatActivity {
     SeekBar defenseSeekBar;
     SeekBar climbTimeSeekBar;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.steamworks2017_activity_post_game);
+
 
 
         final CheckBox noClimbCheckbox = (CheckBox) findViewById(R.id.climbTypeNoClimb);
@@ -54,6 +60,8 @@ public class PostGame extends AppCompatActivity {
         final CheckBox climbAssistCheckbox = (CheckBox) findViewById(R.id.climbTypeAssisted);
         final CheckBox climbWasAssistedCheckbox = (CheckBox) findViewById(R.id.climbTypeWasAssisted);
 
+
+        // TODO Add these to teleop scouting object
         if (noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
             // postGameObject.climbType(PostGameObject.ClimbType.NO_CLIMB);
             climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
@@ -73,6 +81,8 @@ public class PostGame extends AppCompatActivity {
         } else {
             climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
         }
+
+
 
         final PostGameObject postGameObject = new PostGameObject();
 
@@ -146,23 +156,32 @@ public class PostGame extends AppCompatActivity {
 
     }
 
+
         public void returnHome(View view){
             Intent thisIntent = getIntent();
 
+            TeleopScoutingObject t  = (TeleopScoutingObject) getIntent().getSerializableExtra("TeleopScoutingData");
             PreGameObject pre = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
             AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
-            TeleopScoutingObject t  = (TeleopScoutingObject) thisIntent.getSerializableExtra("TeleopScoutingData");
+
+            MatchData.Match match =  new MatchData.Match(pre, a ,t);
+
+            try {
+                match.toJson();
+            } catch (JSONException e) {
+                Toast.makeText(this, "JSON Failed to save", Toast.LENGTH_SHORT).show();
+            }
 
             Intent intent = new Intent(this, PreGameActivity.class);
+
+//            MatchData.Match match = new MatchData.Match(pre, t, a); TODO
+
+            try {
+                match.toJson();
+            } catch (JSONException e) {}
 
 
             startActivity(intent);
 
     }
 }
-
-
-
-
-
-

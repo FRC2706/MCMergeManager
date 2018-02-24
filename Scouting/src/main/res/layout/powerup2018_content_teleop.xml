@@ -37,7 +37,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/cube_delivery_spinner"
-        android:layout_alignStart="@+id/teleop_header"
         android:text="Pickup from:"
         android:textSize="20sp" />
 

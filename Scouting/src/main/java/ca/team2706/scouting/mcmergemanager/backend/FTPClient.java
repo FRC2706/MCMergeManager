@@ -117,7 +117,7 @@ public class FTPClient {
             return;
         }
 
-        AsyncTask.execute(new Runnable() {
+        AsyncTask.execute( new Runnable() {
             @Override
             public void run() {
                 synchronized (connectedThreadLock) {

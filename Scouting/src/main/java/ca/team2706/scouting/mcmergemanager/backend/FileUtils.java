@@ -624,7 +624,7 @@ public class FileUtils {
 
     public static void saveTeamComments(CommentList commentList){
 
-        JSONObject jsonObject = loadTeamCommentsFromFile(commentList.getTeamNumber());
+        JSONObject jsonObject = getTeamComments(commentList.getTeamNumber());
 
         if(jsonObject == null) {
 
@@ -682,9 +682,9 @@ public class FileUtils {
      * @param teamNumber
      * @return Comments for the given team. May be null if the file failed to load.
      */
-    public static JSONObject loadTeamCommentsFromFile(int teamNumber){
-        String json;
-        JSONObject jsonObject;
+    public static JSONObject getTeamComments(int teamNumber){
+        String json = null;
+        JSONObject jsonObject = null;
 
         StringBuilder stringBuilder = new StringBuilder();
         try {
@@ -696,6 +696,35 @@ public class FileUtils {
 
             jsonObject = new JSONObject(stringBuilder.toString());
 
+
+        } catch (IOException e) {
+            Log.d("IO Error", e.getMessage());
+            return null;
+        }
+        catch (JSONException e){
+            Log.d("JSON Error", e.getMessage());
+            return null;
+
+        }
+        return jsonObject;
+
+    }
+
+
+    // This returns the local match data for a given match and
+    public static JSONObject getJsonData(int teamNumber, int matchNumber){
+        String json = null;
+        JSONObject jsonObject = null;
+
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalEventFilePath + "/" +  teamNumber + "/" + "match" + matchNumber));
+
+            while ((json = bufferedReader.readLine()) != null) {
+                stringBuilder.append(json);
+            }
+
+            jsonObject = new JSONObject(stringBuilder.toString());
 
         } catch (IOException e) {
             Log.d("IO Error", e.getMessage());
@@ -723,19 +752,22 @@ public class FileUtils {
 
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
 
-
+            scanDirectoryTree(sLocalEventFilePath);
 
             bw.write(obj.toString());
             bw.flush();
             bw.close();
 
+            scanDirectoryTree(sLocalEventFilePath);
+
         } catch (JSONException  e) {
-            Log.d("JSon error", e.getMessage());
+            Log.d("JSON error", e.getMessage());
         } catch (IOException e){
             Log.d("IOException", e.getMessage());
 
         }
     }
+
 
 
 
