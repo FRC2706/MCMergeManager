@@ -51,7 +51,7 @@ public class PostGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.steamworks2017_activity_post_game);
-        
+
 
         final PostGameObject postGameObject = new PostGameObject();
 
