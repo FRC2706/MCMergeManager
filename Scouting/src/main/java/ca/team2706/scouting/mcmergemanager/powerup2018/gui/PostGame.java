@@ -174,13 +174,6 @@ public class PostGame extends AppCompatActivity {
 
             Intent intent = new Intent(this, PreGameActivity.class);
 
-            MatchData.Match match = new MatchData.Match(pre, t, a);
-
-            try {
-                match.toJson();
-            } catch (JSONException e) {}
-
-
             startActivity(intent);
 
     }
