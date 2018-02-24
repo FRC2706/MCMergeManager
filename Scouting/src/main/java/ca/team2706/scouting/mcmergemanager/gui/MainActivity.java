@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity
 
         // In case the schedule is empty, make sure we pass along the list of teams registered at event
         // that we fetched at the beginning.
-        sMatchData = FileUtils.loadMatchDataFile();
+//        sMatchData = FileUtils.loadMatchDataFile();
         if (sMatchData == null) sMatchData = new MatchData();
 
         sRepairTimeObjects = FileUtils.getRepairTimeObjects();
