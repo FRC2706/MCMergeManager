@@ -74,6 +74,7 @@ public class PostGame extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 TextView tvd = (TextView) findViewById(R.id.climbTime_tracker_textView);
                 pointsScored = progressChangedValue*5;
+                climbEvent.climb_time = progressChangedValue * 5;
                 pointsScoredString = String.valueOf(pointsScored);
                 textViewDisplayString = pointsScoredString + test;
                 tvd.setText(textViewDisplayString);
@@ -164,6 +165,8 @@ public class PostGame extends AppCompatActivity {
             t.add(climbEvent);
             PreGameObject pre = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
             AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
+            t.add(climbEvent);
+            t.add(postGameObject);
 
             MatchData.Match match =  new MatchData.Match(pre, a ,t);
 
