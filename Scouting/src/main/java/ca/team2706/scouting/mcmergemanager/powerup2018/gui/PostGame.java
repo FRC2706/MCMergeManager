@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
 import android.widget.SeekBar.*;
-
+import org.json.JSONException;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
@@ -173,6 +173,12 @@ public class PostGame extends AppCompatActivity {
             }
 
             Intent intent = new Intent(this, PreGameActivity.class);
+
+            MatchData.Match match = new MatchData.Match(pre, t, a);
+
+            try {
+                match.toJson();
+            } catch (JSONException e) {}
 
 
             startActivity(intent);
