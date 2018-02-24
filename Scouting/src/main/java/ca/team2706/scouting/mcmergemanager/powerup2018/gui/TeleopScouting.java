@@ -33,7 +33,7 @@ import java.io.Serializable;
 public class TeleopScouting extends AppCompatActivity implements FragmentListener{
 
     public static int teamNum = -1;
-    
+
     @Override
     public void editNameDialogComplete(DialogFragment dialogFragment, Bundle data){
 
@@ -166,28 +166,28 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
                         switch (position){
 
-                            case 0:
+                            case 1:
                                 cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.PickupType.PYRAMID);
                                 teleopScoutingObject.add(cubePickupEvent);
-                                cubeDeliverySpinner.setSelection(0);
-                                break;
-
-                            case 1:
-                                cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.PickupType.PORTAL);
-                                teleopScoutingObject.add(cubePickupEvent);
-                                cubeDeliverySpinner.setSelection(0);
+                                cubePickupSpinner.setSelection(0);
                                 break;
 
                             case 2:
-                                cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.PickupType.EXCHANGE);
+                                cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.PickupType.PORTAL);
                                 teleopScoutingObject.add(cubePickupEvent);
-                                cubeDeliverySpinner.setSelection(0);
+                                cubePickupSpinner.setSelection(0);
                                 break;
 
                             case 3:
+                                cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.PickupType.EXCHANGE);
+                                teleopScoutingObject.add(cubePickupEvent);
+                                cubePickupSpinner.setSelection(0);
+                                break;
+
+                            case 4:
                                 cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.PickupType.GROUND);
                                 teleopScoutingObject.add(cubePickupEvent);
-                                cubeDeliverySpinner.setSelection(0);
+                                cubePickupSpinner.setSelection(0);
                                 break;
                         }
                     }
