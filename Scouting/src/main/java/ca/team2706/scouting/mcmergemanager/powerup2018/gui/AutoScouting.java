@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLineCrossEvent;
@@ -17,6 +20,9 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoMalf
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
+
+
+import static ca.team2706.scouting.mcmergemanager.backend.App.getContext;
 
 
 public class AutoScouting extends AppCompatActivity {
@@ -32,6 +38,7 @@ public class AutoScouting extends AppCompatActivity {
     private volatile boolean stopTimer;
     private int remainTime = 15;
     public Event event = new Event();
+    public static int teamNum = -1;
 
 
     @Override
@@ -74,6 +81,39 @@ public class AutoScouting extends AppCompatActivity {
                 }
             }
         };
+
+
+        final EditText teamNumber = (EditText) findViewById(R.id.teamNumber);
+        final EditText comment = (EditText) findViewById(R.id.comment);
+
+        teamNumber.setOnKeyListener(new View.OnKeyListener(){
+
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+
+                teamNum = CommentListener.getTeamNum(keyCode, keyevent, teamNumber, comment);
+                if (teamNum == -1) {
+                    return false;
+                }
+                return true;
+            }
+        });
+
+
+        PreGameObject preGameObject = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
+        final Integer teamNum = preGameObject.teamNumber;
+
+        comment.setOnKeyListener(new View.OnKeyListener(){
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, view, getContext());
+                teamNumber.setText(teamNum.toString());
+                return true;
+            }
+        });
+
+
+        teamNumber.setText(teamNum.toString());
+
+
         m_handlerTask.run();
 
         final CheckBox checkBox = (CheckBox) findViewById(R.id.baselineCheckbox);
@@ -121,11 +161,9 @@ public class AutoScouting extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (groundCheckbox.isChecked()) {
-
                     AutoCubePickupEvent autoCubePickupEvent = new AutoCubePickupEvent(15 - remainTime, AutoCubePickupEvent.PickupType.GROUND);
                     autoScoutingObject2018.add(autoCubePickupEvent);
                     groundCheckbox.setChecked(true);
-
                 } else {
                     groundCheckbox.setChecked(false);
                 }
@@ -200,15 +238,8 @@ public class AutoScouting extends AppCompatActivity {
                         }
                     }
                 });
-
-
             }
-
-
         });
-
-
-
     }
 
 
