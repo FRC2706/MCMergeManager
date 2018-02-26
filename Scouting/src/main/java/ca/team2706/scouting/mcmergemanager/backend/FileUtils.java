@@ -53,7 +53,7 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.FuelPickupEvent;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 
 /**
  * This is a helper class to hold common code for accessing shared scouting data files.
@@ -277,50 +277,7 @@ public class FileUtils {
      * Or, in printf / format strings:
      * "%d,%d,%b,%b,{%d;...},{{%d:%d:%.2f:%d};...},{%d;...},{{%d:%d:%.2f:%d};...},%,2f,{{%d;%,2f}:...},{{%.2f;%d}:...},%s,%b,%d"
      */
-    public static void appendToMatchDataFile(MatchData.Match match, FileType fileType) {
 
-        //TODO: #76, make sure this actually works
-
-        String outFileName;
-        File outfile;
-        if (fileType == FileType.SYNCHED) {
-            outFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileName);
-
-            Log.d(App.getContext().getResources().getString(R.string.app_name), "Saving match data to file: " + outFileName);
-
-            outfile = new File(outFileName);
-            try {
-                // converts match to json, and then uses json.toString method to save in file
-                // create the file path, if it doesn't exist already.
-                (new File(outfile.getParent())).mkdirs();
-
-                BufferedWriter bw = new BufferedWriter(new FileWriter(outfile, true));
-                bw.append(match.toJson().toString() + "\n");
-                bw.flush();
-                bw.close();
-
-                // Force the midea scanner to scan this file so it shows up from a PC over USB.
-                App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(outfile)));
-            } catch (IOException e) {
-                Log.d("synced file", e.toString());
-            }
-        } else if (fileType == FileType.UNSYNCHED) {
-            outFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileNameUNSYNCHED);
-
-            Log.d(App.getContext().getResources().getString(R.string.app_name), "Saving match data to file: " + outFileName);
-
-            outfile = new File(outFileName);
-            try {
-                BufferedWriter bw = new BufferedWriter(new FileWriter(outfile, true));
-                bw.append(match.toJson().toString() + "\n");
-                bw.flush();
-                bw.close();
-            } catch (IOException e) {
-                Log.d("unsynced file", e.toString());
-            }
-        }
-
-    }
 
 
     /**
@@ -341,28 +298,49 @@ public class FileUtils {
         return loadMatchDataFile(FileType.SYNCHED);
     }
 
+    public static MatchData loadMatchData(int teamNum) {
+        MatchData matchData = new MatchData();
+        List<JSONObject> matchJson = new ArrayList<>();
+
+        String inFileName = sLocalEventFilePath +"/" + teamNum;
+
+        try {
+            File dir = new File(inFileName);
+            File[] files = dir.listFiles();
+            JSONObject jsonObject = new JSONObject();
+
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < files.length; ++i) {
+                File file = files[i];
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+
+//                while ((jsonObject = bufferedReader.readLine()) != null) {
+//                    stringBuilder.append(jsonObject);
+//                }
+            }
+        } catch (IOException e) {
+
+        }
+        return null;
+
+    }
+
 
     public static MatchData loadMatchDataFile(FileType fileType) {
 
         MatchData matchData = new MatchData();
         List<JSONObject> matchJson = new ArrayList<>();
 
-        String inFileName;
-        switch (fileType) {
-            case UNSYNCHED:
-                inFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileNameUNSYNCHED);
-                break;
-            case SYNCHED:
-            default:
-                inFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileName);
-        }
+        String inFileName = sLocalEventFilePath;
+
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(inFileName));
             String line = br.readLine();
 
             while (line != null) {
-                // braces are for human readibility, but make parsing harder
+                // braces are for human readability, but make parsing harder
                 matchJson.add(new JSONObject(line));
                 line = br.readLine();
             }
@@ -869,53 +847,7 @@ public class FileUtils {
     /*
         Takes the selected event that you are at
      */
-    public static void postMatchToServer(final Context context, final JSONObject jsonBody) {
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
 
-        final String url = "http://ftp.team2706.ca:3000/competitions/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>") + "/matches.json";
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
-            // Prepares POST data...
-            jsonBody.put("competition_id", SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set"));
-            final String mRequestBody = jsonBody.toString();
-            System.out.println(jsonBody.toString());
-            // Volley request...
-            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.i("VOLLEY", response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("VOLLEY error from: " + url + " - ", error.toString());
-                    FileUtils.appendToMatchDataFile(new MatchData.Match(jsonBody), FileType.UNSYNCHED);
-                    error.printStackTrace();
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
-                                mRequestBody, "utf-8");
-                        return null;
-                    }
-                }
-            };
-            requestQueue.add(request);
-        } catch (Exception e) {
-            Log.d("Somethin interesting", e.toString());
-        }
-    }
 
     public static void postMatchToServer(final Context context, int compID) {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
@@ -972,18 +904,18 @@ public class FileUtils {
     }
 
     public static void syncFiles(Context context) {
-
-        MatchData matchData = loadMatchDataFile(FileType.UNSYNCHED);
-        clearTeamDataFile(FileType.UNSYNCHED);
-
-        // probably need to throw some sort of error catching magic
-        if (matchData.matches != null)
-            for (MatchData.Match match : matchData.matches) {
-                postMatchToServer(context, match.toJson());
-            }
-
-        // delete file on phone and redownload
-        getMatchesFromServer(context);
+//
+//        MatchData matchData = loadMatchDataFile(FileType.UNSYNCHED);
+//        clearTeamDataFile(FileType.UNSYNCHED);
+//
+//        // probably need to throw some sort of error catching magic
+//        if (matchData.matches != null)
+//            for (MatchData.Match match : matchData.matches) {
+//                postMatchToServer(context, match.toJson());
+//            }
+//
+//        // delete file on phone and redownload
+//        getMatchesFromServer(context);
     }
 
     // Checks to see if a file with a certain filename exists

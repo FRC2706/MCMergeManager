@@ -53,8 +53,6 @@ public class PostGame extends AppCompatActivity {
         setContentView(R.layout.steamworks2017_activity_post_game);
 
 
-        final PostGameObject postGameObject = new PostGameObject();
-
        // postGameObject = (PostGameObject) getIntent().getSerializableExtra("PostGameData");  // climb was set in climbingFragment
 
         //CLIMB TIME
@@ -74,7 +72,6 @@ public class PostGame extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 TextView tvd = (TextView) findViewById(R.id.climbTime_tracker_textView);
                 pointsScored = progressChangedValue*5;
-                climbEvent.climb_time = progressChangedValue * 5;
                 pointsScoredString = String.valueOf(pointsScored);
                 textViewDisplayString = pointsScoredString + test;
                 tvd.setText(textViewDisplayString);
@@ -122,10 +119,13 @@ public class PostGame extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 TextView tv = (TextView) findViewById(R.id.defense_tracker_textView);
                 tv.setText(progressChangedValue * 5 + " seconds defending");
+
                 postGameObject.time_defending = progressChangedValue * 5;
+
             }
         });
 
+        postGameObject.timestamp = 140;
     }
 
 
@@ -159,10 +159,6 @@ public class PostGame extends AppCompatActivity {
             Intent thisIntent = getIntent();
 
             TeleopScoutingObject t  = (TeleopScoutingObject) getIntent().getSerializableExtra("TeleopScoutingData");
-
-
-
-            t.add(climbEvent);
             PreGameObject pre = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
             AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
             t.add(climbEvent);
