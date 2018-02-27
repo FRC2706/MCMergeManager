@@ -54,10 +54,10 @@ public class PostGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.steamworks2017_activity_post_game);
 
-
         final PostGameObject postGameObject = new PostGameObject();
 
         // postGameObject = (PostGameObject) getIntent().getSerializableExtra("PostGameData");  // climb was set in climbingFragment
+
 
         //CLIMB TIME
         climbTimeSeekBar = (SeekBar) findViewById(R.id.climb_time_seekBar);
@@ -75,8 +75,10 @@ public class PostGame extends AppCompatActivity {
 
             public void onStopTrackingTouch(SeekBar seekBar) {
                 TextView tvd = (TextView) findViewById(R.id.climbTime_tracker_textView);
+
                 pointsScored = progressChangedValue * 5;
                 climbEvent.climb_time = progressChangedValue * 5;
+                pointsScored = progressChangedValue * 5;
                 pointsScoredString = String.valueOf(pointsScored);
                 textViewDisplayString = pointsScoredString + test;
                 tvd.setText(textViewDisplayString);
@@ -124,10 +126,13 @@ public class PostGame extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 TextView tv = (TextView) findViewById(R.id.defense_tracker_textView);
                 tv.setText(progressChangedValue * 5 + " seconds defending");
+
                 postGameObject.time_defending = progressChangedValue * 5;
+
             }
         });
 
+        postGameObject.timestamp = 140;
     }
 
 
@@ -152,6 +157,7 @@ public class PostGame extends AppCompatActivity {
         } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED_OTHERS;
 
+
         } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && climbWasAssistedCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
 
@@ -160,12 +166,16 @@ public class PostGame extends AppCompatActivity {
         }
         Intent thisIntent = getIntent();
 
+
         TeleopScoutingObject t = (TeleopScoutingObject) getIntent().getSerializableExtra("TeleopScoutingData");
-
-
-        t.add(climbEvent);
         PreGameObject pre = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
         AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
+        climbEvent.timestamp = 140;
+        postGameObject.timestamp = 140;
+        t.add(climbEvent);
+        t.add(postGameObject);
+
+        t.add(climbEvent);
         t.add(climbEvent);
         t.add(postGameObject);
 

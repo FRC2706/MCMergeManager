@@ -17,8 +17,10 @@ public class PostGameObject extends Event implements Serializable {
     // empty constructor
     public PostGameObject() {}
 
-    public PostGameObject(double time_dead, double time_defending) {
+    public PostGameObject(double time_dead, double time_defending, double time_stamp) {
+        super(time_stamp);
         this.time_dead = time_dead;
         this.time_defending = time_defending;
+
     }
 }

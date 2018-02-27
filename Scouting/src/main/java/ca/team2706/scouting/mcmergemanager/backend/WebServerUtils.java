@@ -219,13 +219,18 @@ public class WebServerUtils {
         }).start();
     }
 
-    public static String getMatchKey(int matchNumber) {
-        JSONArray arr = new JSONArray(BlueAllianceUtils.getJsonObject());
+    public static String getMatchKey(int matchNumber)  {
+        JSONArray arr = null;
+        try {
+            arr = new JSONArray(BlueAllianceUtils.getJsonObject(""));
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
 
         // Find the match number
         for(int i = 0; i < arr.length(); i++) {
-            if(arr.getJSONObject(i).getString("match_number").equals(Integer.toString(matchNumber)))
-                return arr.getJSONObject(i).getString("key");
+//            if(arr.getJSONObject(i).getString("match_number").equals(Integer.toString(matchNumber)))
+//                return arr.getJSONObject(i).getString("key");
         }
 
         return null;

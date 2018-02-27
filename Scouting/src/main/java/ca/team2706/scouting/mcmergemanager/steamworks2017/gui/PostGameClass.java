@@ -112,23 +112,26 @@ public class PostGameClass extends AppCompatActivity {
 
     }
 
-        public void returnHome(){
-            Intent thisIntent = getIntent();
+    public void returnHome() {
+        Intent thisIntent = getIntent();
 
-            PreGameObject pre = (PreGameObject) thisIntent.getSerializableExtra("PreGameData");
-            AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
-            TeleopScoutingObject t  = (TeleopScoutingObject) thisIntent.getSerializableExtra("TeleopScoutingData");
+        PreGameObject pre = (PreGameObject) thisIntent.getSerializableExtra("PreGameData");
+        AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
+        TeleopScoutingObject t = (TeleopScoutingObject) thisIntent.getSerializableExtra("TeleopScoutingData");
 
-            Intent intent = new Intent(this,PreGameActivity.class);
+        Intent intent = new Intent(this, PreGameActivity.class);
 
-            MatchData.Match match = new MatchData.Match(pre, postGameObject, t, a);
+        MatchData.Match match = new MatchData.Match(pre, postGameObject, t, a);
 
-            FileUtils.checkLocalFileStructure(this);
-            // save the file to the synced file, if posting fails save to unsynced as well
-            FileUtils.appendToMatchDataFile(match, FileUtils.FileType.SYNCHED);
+        FileUtils.checkLocalFileStructure(this);
+        // save the file to the synced file, if posting fails save to unsynced as well
+
+//            FileUtils.appendToMatchDataFile(match, FileUtils.FileType.SYNCHED);   TODO:
+//            FileUtils.appendToMatchDataFile(match, FileUtils.FileType.SYNCHED);
+
 //            FileUtils.postMatchToServer(this, match.toJson());
 
-            startActivity(intent);
+        startActivity(intent);
 
     }
 }
