@@ -324,6 +324,10 @@ public class FileUtils {
             File dir = new File(inFileName);
             File[] files = dir.listFiles();
 
+            // Check if there is no files
+            if(files == null)
+                return matchData;
+
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < files.length; ++i) {
                 File file = files[i];
