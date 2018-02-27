@@ -33,6 +33,7 @@ public class MatchData implements Serializable{
 
     public static final String CUBE_PLACE_ID = "place_cube";
     public static final String CUBE_PICKUP_ID = "pickup_cube";
+    public static final String CUBE_DROPPED_ID = "cube_dropped";
     public static final String POST_GAME_ID = "post_game";
     public static final String CLIMB_ID = "climb";
 
@@ -90,9 +91,16 @@ public class MatchData implements Serializable{
                                 event = new CubePlacementEvent(obj.getInt(START_TIME), CubePlacementEvent.PlacementType.valueOf(obj.getString(EXTRA)));
                                 teleopScoutingObject.add(event);
                                 break;
-                            case POST_GAME_ID:
-
+                            case CUBE_DROPPED_ID:
+                                event = new CubeDroppedEvent(obj.getInt(START_TIME), CubeDroppedEvent.DropType.valueOf(obj.getString(EXTRA)));
+                                teleopScoutingObject.add(event);
+                            case CLIMB_ID:
+                                event = new ClimbEvent(ClimbEvent.ClimbType.valueOf(obj.getString(EXTRA)), obj.getInt("end_time"));
+                                teleopScoutingObject.add(event);
                                 break;
+                            case POST_GAME_ID:
+                                event = new PostGameObject(obj.getInt(EXTRA), obj.getInt("end_time"));
+                                teleopScoutingObject.add(event);
                             default:
                                 // TODO
                         }
@@ -186,6 +194,7 @@ public class MatchData implements Serializable{
 
             jsonObject.put( "events", jsonArray);
             FileUtils.saveJsonData(jsonObject);
+
         }
 
     }

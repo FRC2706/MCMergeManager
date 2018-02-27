@@ -802,6 +802,8 @@ public class FileUtils {
             bw.flush();
             bw.close();
 
+            scanDirectoryTree(sLocalEventFilePath);
+
         } catch (JSONException  e) {
             Log.d("JSON error", e.getMessage());
         } catch (IOException e){

@@ -21,4 +21,8 @@ public class CubeDroppedEvent extends Event {
 
     }
 
+    public CubeDroppedEvent() {
+
+    }
+
 }
