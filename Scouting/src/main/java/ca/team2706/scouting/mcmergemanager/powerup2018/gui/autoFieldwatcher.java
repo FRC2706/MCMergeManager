@@ -3,14 +3,20 @@ package ca.team2706.scouting.mcmergemanager.powerup2018.gui;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ScaleEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.SwitchEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
+
+import static ca.team2706.scouting.mcmergemanager.backend.App.getContext;
 
 /**
  * Created by awesomedana on 2018-02-24.
@@ -24,6 +30,7 @@ public class autoFieldwatcher extends AppCompatActivity {
     private volatile boolean stopTimer;
     private int remainTime = 15;
     public Event event = new Event();
+    public static int teamNum = -1;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +68,38 @@ public class autoFieldwatcher extends AppCompatActivity {
                 }
             }
         };
+
+
+
+        final EditText teamNumber = (EditText) findViewById(R.id.teamNumber);
+        final EditText comment = (EditText) findViewById(R.id.comment);
+
+        teamNumber.setOnKeyListener(new View.OnKeyListener(){
+
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+
+                teamNum = CommentListener.getTeamNum(keyCode, keyevent, teamNumber, comment);
+                if (teamNum == -1) {
+                    return false;
+                }
+                return true;
+            }
+        });
+
+
+        PreGameObject preGameObject = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
+        final Integer teamNum = preGameObject.teamNumber;
+
+        comment.setOnKeyListener(new View.OnKeyListener(){
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, view, getContext());
+                teamNumber.setText(teamNum.toString());
+                return true;
+            }
+        });
+
+
+        teamNumber.setText(teamNum.toString());
 
 
         final Button blueSwitchBlueButton = (Button) findViewById(R.id.auto_fieldwatcher_bs_b);
