@@ -17,4 +17,8 @@ public class LevitateEvent extends Event{
         super(timestamp);
         this.allianceColour = allianceColour;
     }
+
+    public LevitateEvent(){
+
+    }
 }

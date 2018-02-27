@@ -18,4 +18,7 @@ public class ScaleEvent extends Event {
         super(timestamp);
         this.allianceColour = allianceColour;
     }
+    public ScaleEvent(){
+
+    }
 }

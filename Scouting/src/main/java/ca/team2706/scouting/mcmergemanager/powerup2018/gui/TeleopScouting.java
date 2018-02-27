@@ -55,10 +55,6 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
     private Runnable m_handlerTask;
     private volatile boolean stopTimer;
     private int remainTime = 135;
-    public int ballsHeld;
-    public boolean gearHeld = false;
-    public boolean gearDropped = false;
-    public String ballsHeldString;
 
     ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject teleopScoutingObject;
 

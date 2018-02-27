@@ -17,4 +17,8 @@ public class SwitchEvent extends Event {
         super(timestamp);
         this.allianceColour = allianceColour;
     }
+
+    public SwitchEvent() {
+        //Empty constructor
+    }
 }

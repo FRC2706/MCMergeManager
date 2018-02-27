@@ -18,4 +18,7 @@ public class BoostEvent extends Event {
         super(timestamp);
         this.allianceColour = allianceColour;
     }
+    public BoostEvent(){
+
+    }
 }
