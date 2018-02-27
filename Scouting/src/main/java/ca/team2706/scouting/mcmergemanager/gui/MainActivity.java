@@ -151,11 +151,10 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("team stats: " + WebServerUtils.getTeamFromServer(2706));
                 System.out.println("Competition: " + WebServerUtils.getCompetitonFromServer("Canadian Rockies Regional"));
                 System.out.println("Get Match: " + WebServerUtils.getMatchFromServer("Canadian Rockies Regional", 1));
-                System.out.println("Post event" + WebServerUtils.postMatchEvent("2017onbar_f1m1", "frc2706",
+                System.out.println("Post event" + WebServerUtils.postMatchEvent("2017onbar_f1m1", "2706", /*  <-- no frc before, just team number */
                         "3", "TRUE", "0", "1", "FALSE"));
             }
         }).start();
-
     }
 
     /**
