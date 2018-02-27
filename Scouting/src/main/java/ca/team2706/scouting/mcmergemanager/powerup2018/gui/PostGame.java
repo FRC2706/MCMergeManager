@@ -161,6 +161,8 @@ public class PostGame extends AppCompatActivity {
             TeleopScoutingObject t  = (TeleopScoutingObject) getIntent().getSerializableExtra("TeleopScoutingData");
             PreGameObject pre = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
             AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
+            climbEvent.timestamp = 140;
+            postGameObject.timestamp = 140;
             t.add(climbEvent);
             t.add(postGameObject);
 

@@ -294,9 +294,9 @@ public class FileUtils {
     /**
      * Load the entire file of match data into Objects.
      */
-    public static MatchData loadMatchDataFile() {
-        return loadMatchDataFile(FileType.SYNCHED);
-    }
+//    public static MatchData loadMatchDataFile() {
+//        return loadMatchDataFile(FileType.SYNCHED);
+//    }
 
     public static MatchData loadMatchData(int teamNum) {
         MatchData matchData = new MatchData();
@@ -307,19 +307,44 @@ public class FileUtils {
         try {
             File dir = new File(inFileName);
             File[] files = dir.listFiles();
-            JSONObject jsonObject = new JSONObject();
-
 
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < files.length; ++i) {
                 File file = files[i];
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+                String line = bufferedReader.readLine();
 
-//                while ((jsonObject = bufferedReader.readLine()) != null) {
-//                    stringBuilder.append(jsonObject);
-//                }
+                while ((line != null)) {
+                    stringBuilder.append(line);
+                    line = bufferedReader.readLine();
+                }
+                bufferedReader.close();
+                matchJson.add(new JSONObject(stringBuilder.toString()));
             }
+
+            // parse all the matches into the MatchData object
+            boolean parseFailure = false;
+            for (JSONObject obj : matchJson) {
+
+                try {
+                    MatchData.Match match = new MatchData.Match(obj);
+                    matchData.addMatch(match);
+                } catch (Exception e) {
+                    Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: ", e);
+                    parseFailure = true;
+                    continue;
+                }
+            }
+            if (parseFailure) {
+                Toast.makeText(App.getContext(), "Warning: match data may be corrupted or malformed.", Toast.LENGTH_SHORT).show();
+            }
+
+            return matchData;
+
         } catch (IOException e) {
+
+
+        } catch (JSONException e) {
 
         }
         return null;
@@ -327,48 +352,48 @@ public class FileUtils {
     }
 
 
-    public static MatchData loadMatchDataFile(FileType fileType) {
-
-        MatchData matchData = new MatchData();
-        List<JSONObject> matchJson = new ArrayList<>();
-
-        String inFileName = sLocalEventFilePath;
-
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(inFileName));
-            String line = br.readLine();
-
-            while (line != null) {
-                // braces are for human readability, but make parsing harder
-                matchJson.add(new JSONObject(line));
-                line = br.readLine();
-            }
-            br.close();
-        } catch (Exception e) {
-            Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: " + e.toString());
-            return null;
-        }
-
-        // parse all the matches into the MatchData object
-        boolean parseFailure = false;
-        for (JSONObject obj : matchJson) {
-
-            try {
-                MatchData.Match match = new MatchData.Match(obj);
-                matchData.addMatch(match);
-            } catch (Exception e) {
-                Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: ", e);
-                parseFailure = true;
-                continue;
-            }
-        }
-        if (parseFailure) {
-            Toast.makeText(App.getContext(), "Warning: match data may be corrupted or malformed.", Toast.LENGTH_SHORT).show();
-        }
-
-        return matchData;
-    }
+//    public static MatchData loadMatchDataFile(FileType fileType) {
+//
+//        MatchData matchData = new MatchData();
+//        List<JSONObject> matchJson = new ArrayList<>();
+//
+//        String inFileName = sLocalEventFilePath;
+//
+//
+//        try {
+//            BufferedReader br = new BufferedReader(new FileReader(inFileName));
+//            String line = br.readLine();
+//
+//            while (line != null) {
+//                // braces are for human readability, but make parsing harder
+//                matchJson.add(new JSONObject(line));
+//                line = br.readLine();
+//            }
+//            br.close();
+//        } catch (Exception e) {
+//            Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: " + e.toString());
+//            return null;
+//        }
+//
+//        // parse all the matches into the MatchData object
+//        boolean parseFailure = false;
+//        for (JSONObject obj : matchJson) {
+//
+//            try {
+//                MatchData.Match match = new MatchData.Match(obj);
+//                matchData.addMatch(match);
+//            } catch (Exception e) {
+//                Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: ", e);
+//                parseFailure = true;
+//                continue;
+//            }
+//        }
+//        if (parseFailure) {
+//            Toast.makeText(App.getContext(), "Warning: match data may be corrupted or malformed.", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        return matchData;
+//    }
 
     /**
      * Add a Note for a particular team.
@@ -609,37 +634,37 @@ public class FileUtils {
         gets a competition data from the swagger server
         if compID is 0 will take from current event, if other number will get that competition
      */
-    public static void getMatchesFromServer(final Context context) {
-        RequestQueue queue = Volley.newRequestQueue(context);
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-        final String url = "http://ftp.team2706.ca:3000/competitions/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>") + "/matches.json";
-
-        System.out.println(url);
-
-        // prepare the Request
-        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        // display response
-                        saveJsonFile(response);
-                        System.out.println(response.toString() + "\nWriting should have gone well");
-
-                        loadMatchDataFile();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.toString());
-                        error.printStackTrace();
-                    }
-                }
-        );
-
-        // add it to the RequestQueue
-        queue.add(getRequest);
-    }
+//    public static void getMatchesFromServer(final Context context) {
+//        RequestQueue queue = Volley.newRequestQueue(context);
+//        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+//        final String url = "http://ftp.team2706.ca:3000/competitions/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>") + "/matches.json";
+//
+//        System.out.println(url);
+//
+//        // prepare the Request
+//        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        // display response
+//                        saveJsonFile(response);
+//                        System.out.println(response.toString() + "\nWriting should have gone well");
+//
+//                        loadMatchDataFile();
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.d("Error.Response", error.toString());
+//                        error.printStackTrace();
+//                    }
+//                }
+//        );
+//
+//        // add it to the RequestQueue
+//        queue.add(getRequest);
+//    }
 
 
     /*
@@ -904,18 +929,7 @@ public class FileUtils {
     }
 
     public static void syncFiles(Context context) {
-//
-//        MatchData matchData = loadMatchDataFile(FileType.UNSYNCHED);
-//        clearTeamDataFile(FileType.UNSYNCHED);
-//
-//        // probably need to throw some sort of error catching magic
-//        if (matchData.matches != null)
-//            for (MatchData.Match match : matchData.matches) {
-//                postMatchToServer(context, match.toJson());
-//            }
-//
-//        // delete file on phone and redownload
-//        getMatchesFromServer(context);
+
     }
 
     // Checks to see if a file with a certain filename exists
