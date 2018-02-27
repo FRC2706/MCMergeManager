@@ -103,8 +103,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/teleop_fieldwatcher_powerup_levitate_b"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
         android:text="Scale"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/teleop_fieldwatcher_scale_b"
@@ -214,10 +215,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="13dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Comments..." />
+
+    <TextView
+        android:id="@+id/teleop_fieldwatcher_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/teleop_fieldwatcher_rs_n"
+        android:layout_alignStart="@+id/teleop_fieldwatcher_scale"
+        android:text="2:15"
+        android:textSize="30sp" />
 
 
 </RelativeLayout>
