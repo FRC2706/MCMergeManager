@@ -89,6 +89,11 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check-manifest" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-runtime-classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-verifier" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-resources" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-support" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaPrecompile" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint" />
@@ -116,6 +121,7 @@
     <orderEntry type="library" name="__local_aars__:C.\Users\Merge\Documents\GitHub\MCMergeManager\Scouting\libs\commons-net-3.5.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.squareup.okhttp3:okhttp:3.9.1@jar" level="project" />
     <orderEntry type="library" name="__local_aars__:C.\Users\Daniel Wall\Programming\StudioProjects\MCMergeManager\Scouting\libs\commons-net-3.5.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="__local_aars__:C.\Users\akiri\OneDrive\Documents\GitHub\MCMergeManager\Scouting\libs\json-simple-1.1.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-v13-23.1.1" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-base-8.4.0" level="project" />
     <orderEntry type="library" name="__local_aars__:C.\Users\Daniel Wall\Programming\StudioProjects\MCMergeManager\Scouting\libs\Jama-1.0.3.jar:unspecified@jar" level="project" />

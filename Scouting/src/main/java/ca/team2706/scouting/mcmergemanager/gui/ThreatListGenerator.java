@@ -33,6 +33,7 @@ public class ThreatListGenerator extends AppCompatActivity  {
 
 //    public void parseTBATeamsList() {
 //        String jsonTeamsList = BlueAllianceUtils.fetchTeamsRegisteredAtEvent(this);
+//        String jsonTeamsList = BlueAllianceUtils.fetchTeamsRegisteredAtEventString();
 //
 //        if(jsonTeamsList == null)
 //            return;

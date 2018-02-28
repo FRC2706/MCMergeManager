@@ -28,7 +28,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.apache.commons.net.ftp.FTPFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +86,6 @@ public class MainActivity extends AppCompatActivity
         updateDataSyncLabel();
 
         FileUtils.checkFileReadWritePermissions(this);
-        FileUtils.setContext(this);
 
         getEventKeys();
 
@@ -100,7 +98,6 @@ public class MainActivity extends AppCompatActivity
 //            }
 //        }).start();
     }
-
 
     public void generateThreatList(View view){
         Intent intent = new Intent(this, ThreatListGenerator.class);
@@ -148,6 +145,8 @@ public class MainActivity extends AppCompatActivity
 //                System.out.println("Get Match: " + WebServerUtils.getMatchFromServer("Canadian Rockies Regional", 1));
 //                System.out.println("Post event" + WebServerUtils.postMatchEvent("matchkey", "2706",
 //                        "true", "true", "0", "1", "false"));
+//                System.out.println("Post event" + WebServerUtils.postMatchEvent("2017onbar_f1m1", "2706", /*  <-- no frc before, just team number */
+//                        "3", "TRUE", "0", "1", "FALSE"));
 //            }
 //        }).start();
     }

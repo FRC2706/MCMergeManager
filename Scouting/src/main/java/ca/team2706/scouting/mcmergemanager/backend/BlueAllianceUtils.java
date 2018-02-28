@@ -309,4 +309,30 @@ public class BlueAllianceUtils {
 
         return new JSONObject();
     }
+
+    public static String getJsonObject(String url) {
+        // check if we have internet connectivity
+        ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork == null) { // not connected to the internet
+            return null;
+        }
+
+        // Get a list of the events for a certain year
+        Request request = new Request.Builder()
+                .url(BASE_URL + url)
+                .header("X-TBA-Auth-Key", AUTH_KEY)
+                .build();
+
+        try {
+            Response response = WebServerUtils.client.newCall(request).execute();
+
+            // Add the json file string to be sent back to settings page
+            return response.body().string();
+        } catch(IOException e) {
+            Log.d("OKHTTP err0r ", e.toString());
+        }
+
+        return "";
+    }
 }

@@ -158,6 +158,35 @@ public class FileUtils {
         }.start();
     }
 
+    public static JSONObject getTeamComments(int teamNumber){
+        String json = null;
+        JSONObject jsonObject = null;
+
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalCommentFilePath + "/"  + teamNumber + COMMENT_FILE_PATH));
+
+            while ((json = bufferedReader.readLine()) != null) {
+                stringBuilder.append(json);
+            }
+
+            jsonObject = new JSONObject(stringBuilder.toString());
+
+
+        } catch (IOException e) {
+            Log.d("IO Error", e.getMessage());
+            return null;
+        }
+        catch (JSONException e){
+            Log.d("JSON Error", e.getMessage());
+            return null;
+
+        }
+        return jsonObject;
+
+    }
+
+
 
     /**
      * A flag to make sure only one directory tree scan runs at a time.
@@ -297,6 +326,10 @@ public class FileUtils {
         try {
             File dir = new File(inFileName);
             File[] files = dir.listFiles();
+
+            // Check if there is no files
+            if(files == null)
+                return matchData;
 
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < files.length; ++i) {
@@ -663,6 +696,7 @@ public class FileUtils {
     /*
     @param CommentList Class
     Saves the JSON to a file
+>>>>>>> 6b076f5c6fddbfff9a4a621a8d554b6a2ce08396
      */
     private static final String COMMENT_FILE_PATH= "comments.json";
 
@@ -726,9 +760,9 @@ public class FileUtils {
      * @param teamNumber
      * @return Comments for the given team. May be null if the file failed to load.
      */
-    public static JSONObject getTeamComments(int teamNumber){
-        String json = null;
-        JSONObject jsonObject = null;
+    public static JSONObject loadTeamCommentsFromFile(int teamNumber){
+        String json;
+        JSONObject jsonObject;
 
         StringBuilder stringBuilder = new StringBuilder();
         try {
@@ -863,6 +897,10 @@ public class FileUtils {
                 break;
         }
         return false;
+    }
+
+    public static void syncFiles(Context context) {
+        // TODO
     }
 
     // Checks to see if a file with a certain filename exists
@@ -1002,7 +1040,5 @@ public class FileUtils {
             }
         }).start();
     }
-
-    public static void setContext(Context c) { context = c; }
 
 }
