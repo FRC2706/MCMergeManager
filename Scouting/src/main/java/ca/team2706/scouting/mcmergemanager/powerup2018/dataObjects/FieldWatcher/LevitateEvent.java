@@ -11,6 +11,8 @@ public class LevitateEvent extends Event{
         BLUE, RED
     }
 
+    public static String ID = "field_watcher_levitate";
+
     public AllianceColour allianceColour;
 
     public LevitateEvent(double timestamp, AllianceColour allianceColour) {

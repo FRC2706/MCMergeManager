@@ -16,6 +16,13 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCube
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLineCrossEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoMalfunctionEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.BoostEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.FieldWatcherObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ForceEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.LevitateEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ScaleEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.SwitchEvent;
+import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.FieldWatcher;
 
 
 /**
@@ -42,16 +49,28 @@ public class MatchData implements Serializable{
     public static final String EXTRA = "extra";
     public static final String GOAL = "goal";
 
+    public static final String BOOST = "field_watcher_boost";
+    public static final String FORCE = "field_watcher_force";
+    public static final String LEVITATE = "field_watcher_levitate";
+    public static final String SWITCH = "field_watcher_switch";
+    public static final String SCALE = "field_watcher_scale";
+
     public static class Match implements Serializable {
 
         public TeleopScoutingObject teleopScoutingObject = new TeleopScoutingObject();
         public AutoScoutingObject autoScoutingObject = new AutoScoutingObject();
         public PreGameObject preGameObject = new PreGameObject();
+        public FieldWatcherObject fieldWatcherObject = new FieldWatcherObject();
 
         public Match(PreGameObject preGameObject, AutoScoutingObject autoScoutingObject, TeleopScoutingObject teleopScoutingObject) {
             this.preGameObject = preGameObject;
             this.autoScoutingObject = autoScoutingObject;
             this.teleopScoutingObject = teleopScoutingObject;
+        }
+
+        public Match(PreGameObject preGameObject, FieldWatcherObject fieldWatcherObject){
+            this.preGameObject = preGameObject;
+            this.fieldWatcherObject = fieldWatcherObject;
         }
 
 
@@ -102,8 +121,29 @@ public class MatchData implements Serializable{
                             case POST_GAME_ID:
                                 event = new PostGameObject(obj.getInt(EXTRA), obj.getInt("end_time"), obj.getInt(START_TIME));
                                 teleopScoutingObject.add(event);
+                                break;
+                            case SCALE:
+                                event = new ScaleEvent(obj.getInt(START_TIME), ScaleEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                                fieldWatcherObject.add(event);
+                                break;
+                            case SWITCH:
+                                event = new SwitchEvent(obj.getInt(START_TIME), SwitchEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                                fieldWatcherObject.add(event);
+                                break;
+                            case LEVITATE:
+                                event = new LevitateEvent(obj.getInt(START_TIME), LevitateEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                                fieldWatcherObject.add(event);
+                                break;
+                            case FORCE:
+                                event = new ForceEvent(obj.getInt(START_TIME), ForceEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                                fieldWatcherObject.add(event);
+                                break;
+                            case BOOST:
+                                event = new BoostEvent(obj.getInt(START_TIME), BoostEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                                fieldWatcherObject.add(event);
+                                break;
                             default:
-                                // TODO
+                                break;
                         }
                     } catch (IllegalArgumentException e) {
                         // If an illegal argument is found in the JSON file, the for loop will continue to the next item in the array
@@ -116,7 +156,7 @@ public class MatchData implements Serializable{
         }
 
         public void toJson() throws JSONException {
-            // TODO add auto
+
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
 
@@ -158,7 +198,6 @@ public class MatchData implements Serializable{
 
             for(Event event : teleopScoutingObject.getEvents()){
                 JSONObject obj = new JSONObject();
-                obj.put(START_TIME, event.timestamp);
                 if(event instanceof CubePickupEvent) {
                     CubePickupEvent e = (CubePickupEvent) event;
                     obj.put(GOAL, e.ID);
@@ -194,13 +233,46 @@ public class MatchData implements Serializable{
                 jsonArray.put(obj);
             }
 
+            for (Event event : fieldWatcherObject.getEvents()) {
+                JSONObject obj = new JSONObject();
+                obj.put(START_TIME, event.timestamp);
+                if (event instanceof BoostEvent) {
+                    BoostEvent e = (BoostEvent) event;
+                    obj.put(GOAL, e.ID);
+                    obj.put(START_TIME, e.timestamp);
+                    obj.put(EXTRA, e.allianceColour.toString());
+                } if (event instanceof ForceEvent) {
+                    ForceEvent e = (ForceEvent) event;
+                    obj.put(GOAL, e.ID);
+                    obj.put(START_TIME, e.timestamp);
+                    obj.put(EXTRA, e.allianceColour.toString());
+                } if (event instanceof LevitateEvent) {
+                    LevitateEvent e = (LevitateEvent) event;
+                    obj.put(GOAL, e.ID);
+                    obj.put(START_TIME, e.timestamp);
+                    obj.put(EXTRA, e.allianceColour.toString());
+                } if (event instanceof ScaleEvent) {
+                    ScaleEvent e = (ScaleEvent) event;
+                    obj.put(GOAL, e.ID);
+                    obj.put(START_TIME, e.timestamp);
+                    obj.put(EXTRA, e.allianceColour.toString());
+                } if (event instanceof SwitchEvent) {
+                    SwitchEvent e = (SwitchEvent) event;
+                    obj.put(GOAL, e.ID);
+                    obj.put(START_TIME, e.timestamp);
+                    obj.put(EXTRA, e.allianceColour.toString());
+                }
+
+                jsonArray.put(obj);
+
+            }
+
             for (int i = 0; i < jsonArray.length() -1; i++) {
                 int index = i;
                 for (int j = i + 1; j < jsonArray.length(); j++)
                     if (jsonArray.getJSONObject(j).getInt(START_TIME) < jsonArray.getJSONObject(i).getInt(START_TIME)) {
                         index = j;
                     }
-
                 int smallerNumber = jsonArray.getJSONObject(index).getInt(START_TIME);
                 jsonArray.getJSONObject(index).put(START_TIME, jsonArray.getJSONObject(i).getInt(START_TIME));
                 jsonArray.getJSONObject(i).put(START_TIME, smallerNumber);
@@ -210,7 +282,6 @@ public class MatchData implements Serializable{
             FileUtils.saveJsonData(jsonObject);
 
         }
-
     }
 
     // Member Variables

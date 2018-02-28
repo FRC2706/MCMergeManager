@@ -11,6 +11,7 @@ public class FieldWatcherObject implements Serializable {
 
     private ArrayList<Event> events = new ArrayList<>();
 
+
     public void add(Event e) {
         events.add(e);
     }
