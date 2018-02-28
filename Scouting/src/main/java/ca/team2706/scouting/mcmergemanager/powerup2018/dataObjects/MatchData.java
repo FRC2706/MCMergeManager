@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePlacementEvent;
@@ -25,12 +26,12 @@ public class MatchData implements Serializable{
     // Timestamp for events that happen in the post game
     public static final int POST_GAME_TIMESTAMP = 140;
 
-    public static final String AUTO_CUBE_PLACE_ID = "auto_place_cube";
-    public static final String AUTO_CUBE_PICKUP_ID = "auto_pickup_cube";
+    public static final String AUTO_CUBE_PLACE_ID = "auto_cube_placement";
+    public static final String AUTO_CUBE_PICKUP_ID = "auto_cube_pickup";
     public static final String AUTO_MALFUNCTION_ID = "auto_malfunction";
     public static final String AUTO_LINE_CROSS_ID = "auto_line_cross";
 
-    public static final String CUBE_PLACE_ID = "place_cube";
+    public static final String CUBE_PLACE_ID = "cube_placement";
     public static final String CUBE_PICKUP_ID = "pickup_cube";
     public static final String CUBE_DROPPED_ID = "cube_dropped";
     public static final String POST_GAME_ID = "post_game";
@@ -42,9 +43,9 @@ public class MatchData implements Serializable{
 
     public static class Match implements Serializable {
 
-        public TeleopScoutingObject teleopScoutingObject;
-        public AutoScoutingObject autoScoutingObject;
-        public PreGameObject preGameObject;
+        public TeleopScoutingObject teleopScoutingObject = new TeleopScoutingObject();
+        public AutoScoutingObject autoScoutingObject = new AutoScoutingObject();
+        public PreGameObject preGameObject = new PreGameObject();
 
         public Match(PreGameObject preGameObject, AutoScoutingObject autoScoutingObject, TeleopScoutingObject teleopScoutingObject) {
             this.preGameObject = preGameObject;
@@ -94,11 +95,11 @@ public class MatchData implements Serializable{
                                 event = new CubeDroppedEvent(obj.getInt(START_TIME), CubeDroppedEvent.DropType.valueOf(obj.getString(EXTRA)));
                                 teleopScoutingObject.add(event);
                             case CLIMB_ID:
-                                event = new ClimbEvent(ClimbEvent.ClimbType.valueOf(obj.getString(EXTRA)), obj.getInt("end_time"));
+                                event = new ClimbEvent(ClimbEvent.ClimbType.valueOf(obj.getString(EXTRA)), obj.getInt("end_time"), obj.getInt(START_TIME));
                                 teleopScoutingObject.add(event);
                                 break;
                             case POST_GAME_ID:
-                                event = new PostGameObject(obj.getInt(EXTRA), obj.getInt("end_time"));
+                                event = new PostGameObject(obj.getInt(EXTRA), obj.getInt("end_time"), obj.getInt(START_TIME));
                                 teleopScoutingObject.add(event);
                             default:
                                 // TODO
@@ -110,6 +111,7 @@ public class MatchData implements Serializable{
                     }
 
                 }
+
         }
 
         public void toJson() throws JSONException {
@@ -191,7 +193,19 @@ public class MatchData implements Serializable{
                 jsonArray.put(obj);
             }
 
-            jsonObject.put( "events", jsonArray);
+            for (int i = 0; i < jsonArray.length() -1; i++) {
+                int index = i;
+                for (int j = i + 1; j < jsonArray.length(); j++)
+                    if (jsonArray.getJSONObject(j).getInt(START_TIME) < jsonArray.getJSONObject(i).getInt(START_TIME)) {
+                        index = j;
+                    }
+
+                int smallerNumber = jsonArray.getJSONObject(index).getInt(START_TIME);
+                jsonArray.getJSONObject(index).put(START_TIME, jsonArray.getJSONObject(i).getInt(START_TIME));
+                jsonArray.getJSONObject(i).put(START_TIME, smallerNumber);
+            }
+
+            jsonObject.put("events", jsonArray);
             FileUtils.saveJsonData(jsonObject);
 
         }

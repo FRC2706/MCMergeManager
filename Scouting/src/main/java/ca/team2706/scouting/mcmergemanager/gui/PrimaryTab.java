@@ -18,8 +18,12 @@ import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.App;
+import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
+
+
 import android.view.View.OnKeyListener;
 
 
@@ -34,6 +38,8 @@ public class PrimaryTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.primary_fragment_tab, null);
         m_savedInstanceState = savedInstanceState;
+
+        MatchData matchData = FileUtils.loadMatchData(118);
 
         TextView matchNoTV = (TextView) v.findViewById(R.id.matchNoET);
 
