@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
 
 
     Intent globalIntent;
-    static MainActivity me;
+    public static MainActivity me;
 
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;

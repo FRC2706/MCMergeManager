@@ -63,12 +63,12 @@ public class StatsEngine implements Serializable {
     }
 
     public TeamStatsReport getTeamStatsReport(int teamNumber) {
-        // If there is no match data then there is no data to compile
-        if (matchData == null)
-            throw new IllegalStateException("no match data");
-
         TeamStatsReport teamStatsReport = new TeamStatsReport();
-        teamStatsReport.teamMatchData = matchData.filterByTeam(teamNumber);
+        teamStatsReport.teamMatchData = FileUtils.loadMatchData(teamNumber);
+
+        // If there is no match data then there is no data to compile
+        if(teamStatsReport.teamMatchData == null)
+            throw new IllegalStateException("no match data");
 
         // Fill in the stats for the given team
         fillInOverallStats(teamStatsReport, teamNumber);
@@ -86,7 +86,7 @@ public class StatsEngine implements Serializable {
 
         teamStatsReport.numMatchesPlayed = 0;
         for (MatchSchedule.Match match : teamStatsReport.teamMatcheSchedule.getMatches()) {
-            if (match.getBlueScore() > 0 && match.getRedScore() > 0)
+            if (match.getBlueScore() > 0 || match.getRedScore() > 0)
                 teamStatsReport.numMatchesPlayed++;
         }
 
@@ -272,7 +272,8 @@ public class StatsEngine implements Serializable {
                     teamStatsReport.avgClimbTime += c.climb_time;
                     if(c.climb_time > teamStatsReport.maxClimbTime) {
                         teamStatsReport.maxClimbTime = c.climb_time;
-                    } else if(c.climb_time < teamStatsReport.minClimbTime) {
+                    }
+                    if(c.climb_time < teamStatsReport.minClimbTime) {
                         teamStatsReport.minClimbTime = c.climb_time;
                     }
                 } else if(event instanceof PostGameObject) {
@@ -304,7 +305,7 @@ public class StatsEngine implements Serializable {
 
 
         // Calculate the averages for the team, make sure not dividing by zero
-        int numMatchesPlayed = matchData.matches.size();
+        int numMatchesPlayed = teamStatsReport.teamMatchData.matches.size();
         if (teamStatsReport.numMatchesPlayed != 0) {
 
             // Avg times
@@ -332,6 +333,7 @@ public class StatsEngine implements Serializable {
 
             // Climbing
             teamStatsReport.avgClimbTime /= numMatchesPlayed;
+
 
             // Defending
             teamStatsReport.avgTimeDefending /= numMatchesPlayed;

@@ -42,7 +42,7 @@ public class Cycle implements Serializable{
     }
 
     public double getCycleTime() {
-        return startTime - endTime;
+        return Math.abs(startTime - endTime);
     }
 
 }

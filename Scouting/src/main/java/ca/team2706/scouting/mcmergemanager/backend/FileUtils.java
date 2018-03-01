@@ -38,6 +38,7 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.NoteObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
+import ca.team2706.scouting.mcmergemanager.gui.MainActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 
@@ -48,8 +49,6 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
  * Created by Mike Ounsworth
  */
 public class FileUtils {
-
-    private static Context context; // TODO: probably not the best way to do this
 
     public static String sLocalToplevelFilePath;
     public static String sLocalEventFilePath;
@@ -333,22 +332,16 @@ public class FileUtils {
 
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < files.length; ++i) {
-                File file = files[i];
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-                String line = bufferedReader.readLine();
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(files[i]));
 
-                while ((line != null)) {
-                    stringBuilder.append(line);
-                    line = bufferedReader.readLine();
-                }
+                // Each file should be one line, so just read the one line, TODO: get justin to make al matches in one file
+                matchJson.add(new JSONObject(bufferedReader.readLine()));
                 bufferedReader.close();
-                matchJson.add(new JSONObject(stringBuilder.toString()));
             }
 
             // parse all the matches into the MatchData object
             boolean parseFailure = false;
             for (JSONObject obj : matchJson) {
-
                 try {
                     MatchData.Match match = new MatchData.Match(obj);
                     matchData.addMatch(match);
@@ -365,13 +358,12 @@ public class FileUtils {
             return matchData;
 
         } catch (IOException e) {
-
-
+            Log.d("matchdata load failure", e.toString());
         } catch (JSONException e) {
-
+            Log.d("JSON error" ,e.toString());
         }
-        return null;
 
+        return null;
     }
 
 
@@ -1018,7 +1010,7 @@ public class FileUtils {
 
     // Returns a json oject containg the opr, dpr and ccwm of a certain event for all teams
     public static JSONObject getOprsFromFile() {
-        return getOprsFromFile(context);
+        return getOprsFromFile(MainActivity.me);
     }
     public static JSONObject getOprsFromFile(Context context) {
         try {

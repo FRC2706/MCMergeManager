@@ -85,16 +85,16 @@ public class TeamStatsActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.autoTotalPlacedCubesTV)).setText((m_teamStatsReport.totalPlaceExchange
                     + m_teamStatsReport.totalPlaceScale + m_teamStatsReport.totalPlaceSwitch) + " / " + m_teamStatsReport.autoTotalPlacedCubes);
 
-            ((TextView) findViewById(R.id.autoPickupPortalTV)).setText(m_teamStatsReport.autoPickupPortal);
-            ((TextView) findViewById(R.id.autoPickupGroundTV)).setText(m_teamStatsReport.autoPickupGround);
-            ((TextView) findViewById(R.id.autoPickupExchangeTV)).setText(m_teamStatsReport.autoPickupExchange);
+            ((TextView) findViewById(R.id.autoPickupPortalTV)).setText(Integer.toString(m_teamStatsReport.autoPickupPortal));
+            ((TextView) findViewById(R.id.autoPickupGroundTV)).setText(Integer.toString(m_teamStatsReport.autoPickupGround));
+            ((TextView) findViewById(R.id.autoPickupExchangeTV)).setText(Integer.toString(m_teamStatsReport.autoPickupExchange));
 
-            ((TextView) findViewById(R.id.autoPlacedAllianceSwitchTV)).setText(m_teamStatsReport.autoPlaceAllianceSwitch);
-            ((TextView) findViewById(R.id.autoPlacedExchangeTV)).setText(m_teamStatsReport.autoPlaceExchange);
-            ((TextView) findViewById(R.id.autoPlacedScaleTV)).setText(m_teamStatsReport.autoPlaceScale);
-            ((TextView) findViewById(R.id.autoPlacedExchangeTV)).setText(m_teamStatsReport.autoPlaceExchange);
+            ((TextView) findViewById(R.id.autoPlacedAllianceSwitchTV)).setText(Integer.toString(m_teamStatsReport.autoPlaceAllianceSwitch));
+            ((TextView) findViewById(R.id.autoPlacedExchangeTV)).setText(Integer.toString(m_teamStatsReport.autoPlaceExchange));
+            ((TextView) findViewById(R.id.autoPlacedScaleTV)).setText(Integer.toString(m_teamStatsReport.autoPlaceScale));
+            ((TextView) findViewById(R.id.autoPlacedExchangeTV)).setText(Integer.toString(m_teamStatsReport.autoPlaceExchange));
 
-            ((TextView) findViewById(R.id.autoDroppedTV)).setText(m_teamStatsReport.autoPlaceDropped);
+            ((TextView) findViewById(R.id.autoDroppedTV)).setText(Integer.toString(m_teamStatsReport.autoPlaceDropped));
 
             ((TextView) findViewById(R.id.autoMalfunctionsTV)).setText(m_teamStatsReport.autoMalfunction
                     + " / " + m_teamStatsReport.numMatchesPlayed);
@@ -135,11 +135,11 @@ public class TeamStatsActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.minClimbTimeTV)).setText(String.format("%.2f", m_teamStatsReport.minClimbTime));
             ((TextView) findViewById(R.id.maxClimbTimeTV)).setText(String.format("%.2f", m_teamStatsReport.maxClimbTime));
 
-            ((TextView) findViewById(R.id.noClimbTV)).setText(String.format("%.2f", m_teamStatsReport.noClimb));
-            ((TextView) findViewById(R.id.failClimbTV)).setText(String.format("%.2f", m_teamStatsReport.failClimb));
-            ((TextView) findViewById(R.id.independentClimbTV)).setText(String.format("%.2f", m_teamStatsReport.independentClimb));
-            ((TextView) findViewById(R.id.assistedClimbTV)).setText(String.format("%.2f", m_teamStatsReport.assistedClimb));
-            ((TextView) findViewById(R.id.assistedOthersClimbTV)).setText(String.format("%.2f", m_teamStatsReport.assistedOthersClimb));
+            ((TextView) findViewById(R.id.noClimbTV)).setText(Integer.toString(m_teamStatsReport.noClimb));
+            ((TextView) findViewById(R.id.failClimbTV)).setText(Integer.toString(m_teamStatsReport.failClimb));
+            ((TextView) findViewById(R.id.independentClimbTV)).setText(Integer.toString(m_teamStatsReport.independentClimb));
+            ((TextView) findViewById(R.id.assistedClimbTV)).setText(Integer.toString(m_teamStatsReport.assistedClimb));
+            ((TextView) findViewById(R.id.assistedOthersClimbTV)).setText(Integer.toString(m_teamStatsReport.assistedOthersClimb));
 
         }
 
