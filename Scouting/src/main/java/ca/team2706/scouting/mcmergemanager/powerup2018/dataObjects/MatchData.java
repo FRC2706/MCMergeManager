@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
@@ -22,7 +21,6 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.LevitateEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ScaleEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.SwitchEvent;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.FieldWatcher;
 
 
 /**
@@ -34,21 +32,25 @@ public class MatchData implements Serializable{
     // Timestamp for events that happen in the post game
     public static final int POST_GAME_TIMESTAMP = 140;
 
+    // Auto ID's
     public static final String AUTO_CUBE_PLACE_ID = "auto_cube_placement";
     public static final String AUTO_CUBE_PICKUP_ID = "auto_cube_pickup";
     public static final String AUTO_MALFUNCTION_ID = "auto_malfunction";
     public static final String AUTO_LINE_CROSS_ID = "auto_line_cross";
 
+    // Teleop ID's
     public static final String CUBE_PLACE_ID = "cube_placement";
     public static final String CUBE_PICKUP_ID = "pickup_cube";
     public static final String CUBE_DROPPED_ID = "cube_dropped";
     public static final String POST_GAME_ID = "post_game";
     public static final String CLIMB_ID = "climb";
 
+    // JSON keys
     public static final String START_TIME = "start_time";
     public static final String EXTRA = "extra";
     public static final String GOAL = "goal";
 
+    // Field Watcher ID's
     public static final String BOOST = "field_watcher_boost";
     public static final String FORCE = "field_watcher_force";
     public static final String LEVITATE = "field_watcher_levitate";
@@ -219,7 +221,7 @@ public class MatchData implements Serializable{
                     // For this event, we set extra to time_dead and end_time to time_defending
                     PostGameObject e = (PostGameObject) event;
                     obj.put(GOAL, e.ID);
-                    obj.put(START_TIME, 140);
+                    obj.put(START_TIME, POST_GAME_TIMESTAMP);
                     obj.put(EXTRA, Double.toString(e.time_dead));
                     obj.put("end_time", e.time_defending);
                 } if (event instanceof ClimbEvent) {
@@ -227,7 +229,7 @@ public class MatchData implements Serializable{
                     ClimbEvent e = (ClimbEvent) event;
                     obj.put(GOAL, e.ID);
                     obj.put(EXTRA, e.climbType.toString());
-                    obj.put(START_TIME, 140);
+                    obj.put(START_TIME, POST_GAME_TIMESTAMP);
                     obj.put("end_time", e.climb_time);
                 }
                 jsonArray.put(obj);
