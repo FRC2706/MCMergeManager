@@ -38,6 +38,8 @@ public class PrimaryTab extends Fragment {
         v = inflater.inflate(R.layout.primary_fragment_tab, null);
         m_savedInstanceState = savedInstanceState;
 
+        MatchData matchData = FileUtils.loadMatchData(118);
+
 
         TextView matchNoTV = (TextView) v.findViewById(R.id.matchNoET);
 

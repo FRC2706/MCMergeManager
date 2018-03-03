@@ -116,6 +116,7 @@ public class MatchData implements Serializable{
                             case CUBE_DROPPED_ID:
                                 event = new CubeDroppedEvent(obj.getInt(START_TIME), CubeDroppedEvent.DropType.valueOf(obj.getString(EXTRA)));
                                 teleopScoutingObject.add(event);
+                                break;
                             case CLIMB_ID:
                                 event = new ClimbEvent(ClimbEvent.ClimbType.valueOf(obj.getString(EXTRA)), obj.getInt("end_time"), obj.getInt(START_TIME));
                                 teleopScoutingObject.add(event);
