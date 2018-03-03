@@ -270,21 +270,24 @@ public class MatchData implements Serializable{
 
             }
 
-            for (int i = 0; i < jsonArray.length() -1; i++) {
-                int index = i;
-                for (int j = i + 1; j < jsonArray.length(); j++)
-                    if (jsonArray.getJSONObject(j).getInt(START_TIME) < jsonArray.getJSONObject(i).getInt(START_TIME)) {
-                        index = j;
-                    }
-                int smallerNumber = jsonArray.getJSONObject(index).getInt(START_TIME);
-                jsonArray.getJSONObject(index).put(START_TIME, jsonArray.getJSONObject(i).getInt(START_TIME));
-                jsonArray.getJSONObject(i).put(START_TIME, smallerNumber);
-            }
-
-            jsonObject.put("events", jsonArray);
+            jsonObject.put("events", jsonArraySelectionSort(jsonArray));
             FileUtils.saveJsonData(jsonObject);
 
         }
+    }
+
+    private static JSONArray jsonArraySelectionSort(JSONArray jsonArray) throws JSONException{
+        for (int i = 0; i < jsonArray.length() -1; i++) {
+            int index = i;
+            for (int j = i + 1; j < jsonArray.length(); j++)
+                if (jsonArray.getJSONObject(j).getInt(START_TIME) < jsonArray.getJSONObject(i).getInt(START_TIME)) {
+                    index = j;
+                }
+            int smallerNumber = jsonArray.getJSONObject(index).getInt(START_TIME);
+            jsonArray.getJSONObject(index).put(START_TIME, jsonArray.getJSONObject(i).getInt(START_TIME));
+            jsonArray.getJSONObject(i).put(START_TIME, smallerNumber);
+        }
+        return jsonArray;
     }
 
     // Member Variables
