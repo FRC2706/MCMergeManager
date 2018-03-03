@@ -8,6 +8,8 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 
 public class ScaleEvent extends Event {
 
+    public static String ID = "field_watcher_scale";
+
     public enum AllianceColour{
         BLUE, RED
     }

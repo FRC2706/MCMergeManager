@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,6 +8,8 @@
         android:id="@+id/editText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_x="2dp"
+        android:layout_y="0dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Picklist based on current match data" />
@@ -15,7 +18,87 @@
         android:id="@+id/editText3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_x="1dp"
+        android:layout_y="47dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="No current data" />
-</LinearLayout>
+
+    <SeekBar
+        android:layout_width="289dp"
+        android:layout_height="39dp"
+        android:layout_x="0dp"
+        android:layout_y="203dp"
+        android:max="20" />
+
+    <SeekBar
+        android:layout_width="289dp"
+        android:layout_height="39dp"
+        android:layout_x="0dp"
+        android:layout_y="168dp"
+        android:max="20" />
+
+    <SeekBar
+        android:id="@+id/scale_seek_bar"
+        android:layout_width="289dp"
+        android:layout_height="39dp"
+        android:layout_x="0dp"
+        android:layout_y="93dp"
+        android:max="20" />
+
+    <SeekBar
+        android:id="@+id/seekBar3"
+        android:layout_width="289dp"
+        android:layout_height="39dp"
+        android:layout_x="0dp"
+        android:layout_y="130dp"
+        android:max="20" />
+
+    <EditText
+        android:id="@+id/editText4"
+        android:layout_width="97dp"
+        android:layout_height="39dp"
+        android:layout_x="290dp"
+        android:layout_y="93dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Scale"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="236dp" />
+
+    <EditText
+        android:id="@+id/editText5"
+        android:layout_width="97dp"
+        android:layout_height="39dp"
+        android:layout_x="287dp"
+        android:layout_y="168dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Exchange"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="236dp" />
+
+    <EditText
+        android:id="@+id/editText7"
+        android:layout_width="95dp"
+        android:layout_height="39dp"
+        android:layout_x="289dp"
+        android:layout_y="202dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Defense"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="236dp" />
+
+    <EditText
+        android:id="@+id/editText6"
+        android:layout_width="97dp"
+        android:layout_height="39dp"
+        android:layout_x="288dp"
+        android:layout_y="131dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Switch"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="236dp" />
+</AbsoluteLayout>
