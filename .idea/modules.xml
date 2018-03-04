@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MCMergeManager.iml" filepath="$PROJECT_DIR$/MCMergeManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/Scouting/Scouting.iml" filepath="$PROJECT_DIR$/Scouting/Scouting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mcmergemanager.iml" filepath="$PROJECT_DIR$/mcmergemanager.iml" />
     </modules>
   </component>
 </project>

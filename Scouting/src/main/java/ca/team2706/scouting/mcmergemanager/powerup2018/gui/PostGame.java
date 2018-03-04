@@ -54,8 +54,6 @@ public class PostGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.steamworks2017_activity_post_game);
 
-        final PostGameObject postGameObject = new PostGameObject();
-
         // postGameObject = (PostGameObject) getIntent().getSerializableExtra("PostGameData");  // climb was set in climbingFragment
 
 

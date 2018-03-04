@@ -305,38 +305,38 @@ public class StatsEngine implements Serializable {
 
 
         // Calculate the averages for the team, make sure not dividing by zero
-        int numMatchesPlayed = teamStatsReport.teamMatchData.matches.size();
+        teamStatsReport.numMatchesPlayed = teamStatsReport.teamMatchData.matches.size();
         if (teamStatsReport.numMatchesPlayed != 0) {
 
             // Avg times
-            teamStatsReport.pickupGroundAvgCycleTime /= teamStatsReport.totalPickupGround;
-            teamStatsReport.pickupPortalAvgCycleTime /= teamStatsReport.totalPickupPortal;
-            teamStatsReport.pickupExchangeAvgCycleTime /= teamStatsReport.totalPickupExchange;
+            teamStatsReport.pickupGroundAvgCycleTime /= (double) teamStatsReport.totalPickupGround;
+            teamStatsReport.pickupPortalAvgCycleTime /= (double) teamStatsReport.totalPickupPortal;
+            teamStatsReport.pickupExchangeAvgCycleTime /= (double) teamStatsReport.totalPickupExchange;
 
-            teamStatsReport.placeSwitchAvgCycleTime /= teamStatsReport.totalPlaceSwitch;
-            teamStatsReport.placeScaleAvgCycleTime /= teamStatsReport.totalPlaceScale;
-            teamStatsReport.placeExchangeAvgCycleTime /= teamStatsReport.totalPlaceExchange;
-            teamStatsReport.droppedAvgCycleTime /= teamStatsReport.totalPlaceDropped;
+            teamStatsReport.placeSwitchAvgCycleTime /= (double) teamStatsReport.totalPlaceSwitch;
+            teamStatsReport.placeScaleAvgCycleTime /= (double) teamStatsReport.totalPlaceScale;
+            teamStatsReport.placeExchangeAvgCycleTime /= (double) teamStatsReport.totalPlaceExchange;
+            teamStatsReport.droppedAvgCycleTime /= (double) teamStatsReport.totalPlaceDropped;
 
             // Avg per match
-            teamStatsReport.pickupGroundAvgMatch /= numMatchesPlayed;
-            teamStatsReport.pickupPortalAvgMatch /= numMatchesPlayed;
-            teamStatsReport.pickupExchangeAvgMatch /= numMatchesPlayed;
+            teamStatsReport.pickupGroundAvgMatch = (double) teamStatsReport.totalPickupGround / teamStatsReport.numMatchesPlayed;
+            teamStatsReport.pickupPortalAvgMatch = (double) teamStatsReport.totalPickupPortal / teamStatsReport.numMatchesPlayed;
+            teamStatsReport.pickupExchangeAvgMatch = (double) teamStatsReport.totalPickupExchange / teamStatsReport.numMatchesPlayed;
 
-            teamStatsReport.placeSwitchAvgMatch /= numMatchesPlayed;
-            teamStatsReport.placeScaleAvgMatch /= numMatchesPlayed;
-            teamStatsReport.placeExchangeAvgMatch /= numMatchesPlayed;
-            teamStatsReport.droppedAvgMatch /= numMatchesPlayed;
+            teamStatsReport.placeSwitchAvgMatch = (double) teamStatsReport.totalPlaceSwitch / teamStatsReport.numMatchesPlayed;
+            teamStatsReport.placeScaleAvgMatch = (double) teamStatsReport.totalPlaceScale / teamStatsReport.numMatchesPlayed;
+            teamStatsReport.placeExchangeAvgMatch = (double) teamStatsReport.totalPlaceExchange / teamStatsReport.numMatchesPlayed;
+            teamStatsReport.droppedAvgMatch = (double) teamStatsReport.totalPlaceDropped / teamStatsReport.numMatchesPlayed;
 
             // Deadness
-            teamStatsReport.avgDeadness /= numMatchesPlayed;
+            teamStatsReport.avgDeadness /= teamStatsReport.numMatchesPlayed;
 
             // Climbing
-            teamStatsReport.avgClimbTime /= numMatchesPlayed;
+            teamStatsReport.avgClimbTime /= teamStatsReport.numMatchesPlayed;
 
 
             // Defending
-            teamStatsReport.avgTimeDefending /= numMatchesPlayed;
+            teamStatsReport.avgTimeDefending /= teamStatsReport.numMatchesPlayed;
         }
 
         // Find the favourites of teams
