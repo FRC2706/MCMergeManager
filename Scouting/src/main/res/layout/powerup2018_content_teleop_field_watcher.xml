@@ -1,230 +1,251 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/teleop_fieldwatcher_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Teleop- Field Watcher"
-        android:textSize="30sp" />
-
-    <TextView
-        android:id="@+id/teleop_fieldwatcher_bs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/teleop_fieldwatcher_title"
-        android:layout_marginTop="15dp"
-        android:layout_toStartOf="@+id/teleop_fieldwatcher_powerup_levitate_r"
-        android:text="Blue switch"
-        android:textSize="24sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_bs_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_bs"
-        android:layout_below="@+id/teleop_fieldwatcher_bs"
-        android:layout_marginTop="22dp"
-        android:background="#2950D9"
-        android:text="Blue alliance"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_bs_n"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_bs_b"
-        android:layout_below="@+id/teleop_fieldwatcher_bs_b"
-        android:layout_marginTop="18dp"
-        android:text="neutral" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_bs_r"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_bs_n"
-        android:layout_below="@+id/teleop_fieldwatcher_rs_n"
-        android:layout_marginTop="17dp"
-        android:background="#D93629"
-        android:text="Red Alliance"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/teleop_fieldwatcher_rs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/teleop_fieldwatcher_bs_b"
-        android:layout_toEndOf="@+id/teleop_fieldwatcher_powerup_levitate_r"
-        android:text="Red Switch"
-        android:textSize="24sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_rs_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/teleop_fieldwatcher_bs_b"
-        android:layout_alignBottom="@+id/teleop_fieldwatcher_bs_b"
-        android:layout_alignEnd="@+id/teleop_fieldwatcher_rs"
-        android:background="#2950D9"
-        android:text="Blue alliance"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_rs_n"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/teleop_fieldwatcher_bs_n"
-        android:layout_alignBottom="@+id/teleop_fieldwatcher_bs_n"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_rs_b"
-        android:text="Neutral" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_rs_r"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/teleop_fieldwatcher_bs_r"
-        android:layout_alignBottom="@+id/teleop_fieldwatcher_bs_r"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_rs_b"
-        android:background="#D93629"
-        android:text="Red Alliance"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/teleop_fieldwatcher_scale"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/teleop_fieldwatcher_powerup_levitate_b"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
-        android:text="Scale"
-        android:textSize="20sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_scale_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/teleop_fieldwatcher_scale_n"
-        android:layout_alignBottom="@+id/teleop_fieldwatcher_scale_n"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_bs_r"
-        android:background="#2950D9"
-        android:text="Blue Alliance"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_scale_n"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/teleop_fieldwatcher_scale"
-        android:layout_centerHorizontal="true"
-        android:text="Neutral"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_scale_r"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/teleop_fieldwatcher_scale_n"
-        android:layout_alignBottom="@+id/teleop_fieldwatcher_scale_n"
-        android:layout_alignEnd="@+id/teleop_fieldwatcher_rs_n"
-        android:text="Red Alliance"
-        android:textSize="12sp"
-        android:textColor="#FFFFFF"
-        android:background="#D93629"/>
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_powerup_force_r"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_powerup_force_b"
-        android:layout_below="@+id/teleop_fieldwatcher_bs_r"
-        android:layout_marginTop="34dp"
-        android:background="#D93629"
-        android:text="Force"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_powerup_levitate_r"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/teleop_fieldwatcher_powerup_force_r"
-        android:layout_alignBottom="@+id/teleop_fieldwatcher_powerup_force_r"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_scale_n"
-        android:background="#D93629"
-        android:text="Levitate"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_powerup_boost_r"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/teleop_fieldwatcher_powerup_boost_b"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_powerup_boost_b"
-        android:background="#D93629"
-        android:text="Boost"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_powerup_force_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_scale_b"
-        android:layout_below="@+id/teleop_fieldwatcher_powerup_force_r"
-        android:background="#2950D9"
-        android:text="Force"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_powerup_levitate_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_powerup_levitate_r"
-        android:layout_below="@+id/teleop_fieldwatcher_powerup_levitate_r"
-        android:background="#2950D9"
-        android:text="levitate"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/teleop_fieldwatcher_powerup_boost_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/teleop_fieldwatcher_powerup_levitate_b"
-        android:layout_alignBottom="@+id/teleop_fieldwatcher_powerup_levitate_b"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_rs_r"
-        android:background="#2950D9"
-        android:text="Boost"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/teleop_fieldwatcher_timer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/teleop_fieldwatcher_rs_n"
-        android:layout_alignStart="@+id/teleop_fieldwatcher_scale"
-        android:text="2:15"
-        android:textSize="30sp" />
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <RelativeLayout
-        android:id="@+id/comments"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" >
+        android:orientation="vertical">
 
-        <include layout="@layout/comment_bar" />
+        <TextView
+            android:id="@+id/teleop_fieldwatcher_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Teleop- Field Watcher"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/teleop_fieldwatcher_bs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/teleop_fieldwatcher_title"
+            android:layout_marginTop="15dp"
+            android:layout_toStartOf="@+id/teleop_fieldwatcher_powerup_levitate_r"
+            android:text="Blue switch"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_bs_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_bs"
+            android:layout_below="@+id/teleop_fieldwatcher_bs"
+            android:layout_marginTop="22dp"
+            android:background="#2950D9"
+            android:text="Blue alliance"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_bs_n"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_bs_b"
+            android:layout_below="@+id/teleop_fieldwatcher_bs_b"
+            android:layout_marginTop="18dp"
+            android:text="neutral" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_bs_r"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_bs_n"
+            android:layout_below="@+id/teleop_fieldwatcher_rs_n"
+            android:layout_marginTop="17dp"
+            android:background="#D93629"
+            android:text="Red Alliance"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/teleop_fieldwatcher_rs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/teleop_fieldwatcher_bs_b"
+            android:layout_toEndOf="@+id/teleop_fieldwatcher_powerup_levitate_r"
+            android:text="Red Switch"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_rs_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/teleop_fieldwatcher_bs_b"
+            android:layout_alignBottom="@+id/teleop_fieldwatcher_bs_b"
+            android:layout_alignEnd="@+id/teleop_fieldwatcher_rs"
+            android:background="#2950D9"
+            android:text="Blue alliance"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_rs_n"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/teleop_fieldwatcher_bs_n"
+            android:layout_alignBottom="@+id/teleop_fieldwatcher_bs_n"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_rs_b"
+            android:text="Neutral" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_rs_r"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/teleop_fieldwatcher_bs_r"
+            android:layout_alignBottom="@+id/teleop_fieldwatcher_bs_r"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_rs_b"
+            android:background="#D93629"
+            android:text="Red Alliance"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/teleop_fieldwatcher_scale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/teleop_fieldwatcher_powerup_levitate_b"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:text="Scale"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_scale_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/teleop_fieldwatcher_scale_n"
+            android:layout_alignBottom="@+id/teleop_fieldwatcher_scale_n"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_bs_r"
+            android:background="#2950D9"
+            android:text="Blue Alliance"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_scale_n"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/teleop_fieldwatcher_scale"
+            android:layout_centerHorizontal="true"
+            android:text="Neutral"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_scale_r"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/teleop_fieldwatcher_scale_n"
+            android:layout_alignBottom="@+id/teleop_fieldwatcher_scale_n"
+            android:layout_alignEnd="@+id/teleop_fieldwatcher_rs_n"
+            android:background="#D93629"
+            android:text="Red Alliance"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_powerup_force_r"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_powerup_force_b"
+            android:layout_below="@+id/teleop_fieldwatcher_bs_r"
+            android:layout_marginTop="34dp"
+            android:background="#D93629"
+            android:text="Force"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_powerup_levitate_r"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/teleop_fieldwatcher_powerup_force_r"
+            android:layout_alignBottom="@+id/teleop_fieldwatcher_powerup_force_r"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_scale_n"
+            android:background="#D93629"
+            android:text="Levitate"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_powerup_boost_r"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/teleop_fieldwatcher_powerup_boost_b"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_powerup_boost_b"
+            android:background="#D93629"
+            android:text="Boost"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_powerup_force_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_scale_b"
+            android:layout_below="@+id/teleop_fieldwatcher_powerup_force_r"
+            android:background="#2950D9"
+            android:text="Force"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_powerup_levitate_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_powerup_levitate_r"
+            android:layout_below="@+id/teleop_fieldwatcher_powerup_levitate_r"
+            android:background="#2950D9"
+            android:text="levitate"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/teleop_fieldwatcher_powerup_boost_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/teleop_fieldwatcher_powerup_levitate_b"
+            android:layout_alignBottom="@+id/teleop_fieldwatcher_powerup_levitate_b"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_rs_r"
+            android:background="#2950D9"
+            android:text="Boost"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/teleop_fieldwatcher_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/teleop_fieldwatcher_rs_b"
+            android:layout_centerHorizontal="true"
+            android:text="2:15"
+            android:textSize="30sp" />
+
+        <RelativeLayout
+            android:id="@+id/comments"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/teleop_fieldwatcher_scale_b"
+            android:layout_marginTop="14dp">
+
+            <include layout="@layout/comment_bar" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/done_button"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_alignStart="@+id/teleop_fieldwatcher_powerup_levitate_r"
+            android:layout_alignTop="@+id/teleop_fieldwatcher_rs_n"
+            android:background="#663399"
+            android:onClick="returnHome"
+            android:text="DONE"
+            android:textColor="#FFF"
+            android:textSize="24sp" />
     </RelativeLayout>
-
-</RelativeLayout>
+</ScrollView>

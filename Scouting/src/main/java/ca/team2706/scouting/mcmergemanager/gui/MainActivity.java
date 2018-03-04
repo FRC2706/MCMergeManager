@@ -60,6 +60,8 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.TeleopFieldWatcher;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.autoFieldwatcher;
 
 @TargetApi(21)
 public class MainActivity extends AppCompatActivity
@@ -426,6 +428,15 @@ public class MainActivity extends AppCompatActivity
         FileUtils.checkLocalFileStructure(this);
         FileUtils.syncFiles(this);
     }
+
+
+
+    public void toFieldWatcher(View view){
+        Intent intent = new Intent(this, autoFieldwatcher.class);
+        startActivity(intent);
+    }
+
+
 
 
 }

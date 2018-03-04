@@ -26,7 +26,7 @@ tools:context=".steamworks2017.gui.FieldWatcher">
     android:layout_height="wrap_content"
     android:id="@+id/autoBallTextView" />
 
-<include layout="@layout/powerup2018_content_auto_scouting"
+<include layout="@layout/powerup2018_content_auto_field_watcher"
     android:id="@+id/include" />
 
 

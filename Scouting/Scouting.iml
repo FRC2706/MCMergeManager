@@ -98,7 +98,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-support" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaPrecompile" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/prebuild" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/reload-dex" />
@@ -115,9 +114,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="__local_aars__:C.\Users\Tzavelas\Documents\GitHub\MCMergeManager\Scouting\libs\gson-2.2.2.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-appindexing-8.4.0" level="project" />
-    <orderEntry type="library" name="__local_aars__:C.\Users\Tzavelas\Documents\GitHub\MCMergeManager\Scouting\libs\json-simple-1.1.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-identity-8.4.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-v4-23.1.1" level="project" />
     <orderEntry type="library" name="com.squareup.okhttp3:okhttp:3.9.1@jar" level="project" />
@@ -126,14 +123,12 @@
     <orderEntry type="library" name="__local_aars__:C.\Users\akiri\OneDrive\Documents\GitHub\MCMergeManager\Scouting\libs\commons-net-3.5.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-base-8.4.0" level="project" />
     <orderEntry type="library" name="com.android.support:appcompat-v7-23.1.1" level="project" />
-    <orderEntry type="library" name="__local_aars__:C.\Users\Tzavelas\Documents\GitHub\MCMergeManager\Scouting\libs\commons-net-3.5.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.support:design-23.1.1" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-drive-8.4.0" level="project" />
     <orderEntry type="library" name="__local_aars__:C.\Users\akiri\OneDrive\Documents\GitHub\MCMergeManager\Scouting\libs\gson-2.2.2.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.volley:volley-1.0.0" level="project" />
     <orderEntry type="library" name="__local_aars__:C.\Users\akiri\OneDrive\Documents\GitHub\MCMergeManager\Scouting\libs\Jama-1.0.3.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-annotations:23.1.1@jar" level="project" />
-    <orderEntry type="library" name="__local_aars__:C.\Users\Tzavelas\Documents\GitHub\MCMergeManager\Scouting\libs\Jama-1.0.3.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="com.squareup.okio:okio:1.13.0@jar" level="project" />
     <orderEntry type="library" name="com.android.support:recyclerview-v7-23.1.1" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-basement-8.4.0" level="project" />

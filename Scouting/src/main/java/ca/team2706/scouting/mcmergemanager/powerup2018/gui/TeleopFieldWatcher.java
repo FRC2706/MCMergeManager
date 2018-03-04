@@ -1,5 +1,6 @@
 package ca.team2706.scouting.mcmergemanager.powerup2018.gui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -11,14 +12,17 @@ import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
+import ca.team2706.scouting.mcmergemanager.gui.PreGameActivity;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.FieldWatcherObject;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.SwitchEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.BlueSwitchEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ForceEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.LevitateEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.BoostEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.RedSwitchEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ScaleEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.FieldWatcher;
 
 import static ca.team2706.scouting.mcmergemanager.backend.App.getContext;
 
@@ -28,7 +32,7 @@ import static ca.team2706.scouting.mcmergemanager.backend.App.getContext;
 
 public class TeleopFieldWatcher extends AppCompatActivity{
 
-    SwitchEvent switchEvent = new SwitchEvent();
+    BlueSwitchEvent blueSwitchEvent = new BlueSwitchEvent();
     ForceEvent forceEvent = new ForceEvent();
     LevitateEvent levitateEvent = new LevitateEvent();
     BoostEvent boostEvent = new BoostEvent();
@@ -40,11 +44,22 @@ public class TeleopFieldWatcher extends AppCompatActivity{
     private Runnable m_handlerTask;
     private volatile boolean stopTimer;
 
+
+
+    FieldWatcherObject fieldWatcherObject;
+    Event event;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Intent thisIntent = getIntent();
+        fieldWatcherObject = (FieldWatcherObject) thisIntent.getSerializableExtra("FieldWatcherObject");
+
+        setContentView(R.layout.powerup2018_activity_teleop_field_watcher);
+
         final TextView tvGameTime = (TextView) findViewById(R.id.teleop_fieldwatcher_timer);
+
 
 
         m_handler = new Handler();
@@ -75,11 +90,14 @@ public class TeleopFieldWatcher extends AppCompatActivity{
         };
         m_handlerTask.run();
 
+
+
     //Blue alliance switch
         final Button blueSwitchBluebutton = (Button) findViewById(R.id.teleop_fieldwatcher_bs_b);
         blueSwitchBluebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                switchEvent = new SwitchEvent(135 - remainTime, SwitchEvent.AllianceColour.BLUE);
+                event = new BlueSwitchEvent(135 - remainTime, BlueSwitchEvent.AllianceColour.BLUE);
+                fieldWatcherObject.add(event);
 
             }
         });
@@ -87,14 +105,16 @@ public class TeleopFieldWatcher extends AppCompatActivity{
         final Button blueSwitchNeutralButton = (Button) findViewById(R.id.teleop_fieldwatcher_bs_n);
         blueSwitchNeutralButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                event = new BlueSwitchEvent(135 - remainTime, BlueSwitchEvent.AllianceColour.NEUTRAL);
+                fieldWatcherObject.add(event);
             }
         });
 
         final Button blueSwitchRedButton = (Button) findViewById(R.id.teleop_fieldwatcher_bs_r);
         blueSwitchRedButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                switchEvent = new SwitchEvent(135 - remainTime, SwitchEvent.AllianceColour.RED);
+                event = new BlueSwitchEvent(135 - remainTime, BlueSwitchEvent.AllianceColour.RED);
+                fieldWatcherObject.add(event);
             }
         });
 
@@ -102,21 +122,24 @@ public class TeleopFieldWatcher extends AppCompatActivity{
         final Button redSwitchBlueButton = (Button) findViewById(R.id.teleop_fieldwatcher_rs_b);
         redSwitchBlueButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                switchEvent = new SwitchEvent(135 - remainTime, SwitchEvent.AllianceColour.BLUE);
+                event = new RedSwitchEvent(135 - remainTime, RedSwitchEvent.AllianceColour.BLUE);
+                fieldWatcherObject.add(event);
             }
         });
 
         final Button redSwitchNeutralButton = (Button) findViewById(R.id.teleop_fieldwatcher_rs_n);
         redSwitchNeutralButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                event = new RedSwitchEvent(135 - remainTime, RedSwitchEvent.AllianceColour.NEUTRAL);
+                fieldWatcherObject.add(event);
             }
         });
 
         final Button redSwitchRedButton = (Button) findViewById(R.id.teleop_fieldwatcher_rs_r);
         redSwitchRedButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                switchEvent = new SwitchEvent(135 - remainTime, SwitchEvent.AllianceColour.RED);
+                event = new RedSwitchEvent(135 - remainTime, RedSwitchEvent.AllianceColour.RED);
+                fieldWatcherObject.add(event);
             }
         });
 
@@ -125,14 +148,16 @@ public class TeleopFieldWatcher extends AppCompatActivity{
         final Button redForceButton = (Button) findViewById(R.id.teleop_fieldwatcher_powerup_force_r);
         redForceButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                forceEvent = new ForceEvent(135 - remainTime, ForceEvent.AllianceColour.RED);
+                event = new ForceEvent(135 - remainTime, ForceEvent.AllianceColour.RED);
+                fieldWatcherObject.add(event);
             }
         });
 
         final Button blueForceButton = (Button) findViewById(R.id.teleop_fieldwatcher_powerup_force_b);
         blueForceButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                forceEvent = new ForceEvent(135 - remainTime, ForceEvent.AllianceColour.BLUE);
+                event = new ForceEvent(135 - remainTime, ForceEvent.AllianceColour.BLUE);
+                fieldWatcherObject.add(event);
             }
         });
 
@@ -140,14 +165,16 @@ public class TeleopFieldWatcher extends AppCompatActivity{
         final Button redLevitateButton = (Button) findViewById(R.id.teleop_fieldwatcher_powerup_levitate_r);
         redLevitateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                levitateEvent = new LevitateEvent(135 - remainTime, LevitateEvent.AllianceColour.RED);
+                event = new LevitateEvent(135 - remainTime, LevitateEvent.AllianceColour.RED);
+                fieldWatcherObject.add(event);
             }
         });
 
         final Button blueLevitateButton = (Button) findViewById(R.id.teleop_fieldwatcher_powerup_levitate_b);
         blueLevitateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                levitateEvent = new LevitateEvent(135 - remainTime, LevitateEvent.AllianceColour.BLUE);
+                event = new LevitateEvent(135 - remainTime, LevitateEvent.AllianceColour.BLUE);
+                fieldWatcherObject.add(event);
             }
         });
 
@@ -155,14 +182,16 @@ public class TeleopFieldWatcher extends AppCompatActivity{
         final Button redBoostButton = (Button) findViewById(R.id.teleop_fieldwatcher_powerup_boost_r);
         redBoostButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                boostEvent = new BoostEvent(135 - remainTime, BoostEvent.AllianceColour.RED);
+                event = new BoostEvent(135 - remainTime, BoostEvent.AllianceColour.RED);
+                fieldWatcherObject.add(event);
             }
         });
 
         final Button blueBoostButton = (Button) findViewById(R.id.teleop_fieldwatcher_powerup_boost_b);
         blueBoostButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                levitateEvent = new LevitateEvent(135 - remainTime, LevitateEvent.AllianceColour.BLUE);
+                event = new LevitateEvent(135 - remainTime, LevitateEvent.AllianceColour.BLUE);
+                fieldWatcherObject.add(event);
             }
         });
 
@@ -171,21 +200,24 @@ public class TeleopFieldWatcher extends AppCompatActivity{
         final Button scaleBlueButton = (Button) findViewById(R.id.teleop_fieldwatcher_scale_b);
         scaleBlueButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                scaleEvent = new ScaleEvent(135 - remainTime, ScaleEvent.AllianceColour.BLUE);
+                event = new ScaleEvent(135 - remainTime, ScaleEvent.AllianceColour.BLUE);
+                fieldWatcherObject.add(event);
             }
         });
 
         final Button scaleNeutralButton = (Button) findViewById(R.id.teleop_fieldwatcher_scale_n);
         scaleNeutralButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                event = new ScaleEvent(135 - remainTime, ScaleEvent.AllianceColour.NEUTRAL);
+                fieldWatcherObject.add(event);
             }
         });
 
         final Button scaleRedButton = (Button) findViewById(R.id.teleop_fieldwatcher_scale_r);
         scaleRedButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                scaleEvent = new ScaleEvent(135 - remainTime, ScaleEvent.AllianceColour.RED);
+                event = new ScaleEvent(135 - remainTime, ScaleEvent.AllianceColour.RED);
+                fieldWatcherObject.add(event);
             }
         });
 
@@ -207,19 +239,21 @@ public class TeleopFieldWatcher extends AppCompatActivity{
         });
 
 
-        PreGameObject preGameObject = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
-        final Integer teamNum = preGameObject.teamNumber;
-
         comment.setOnKeyListener(new View.OnKeyListener(){
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
                 CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, view, getContext());
-                teamNumber.setText(teamNum.toString());
                 return true;
             }
         });
 
+    }
 
-        teamNumber.setText(teamNum.toString());
+    public void returnHome(View view){
+        PreGameObject preGameObject = new PreGameObject(-1, 1);
+        FieldWatcherObject fieldWatcherObject1 = fieldWatcherObject;
 
+
+        Intent intent = new Intent(this, PreGameActivity.class);
+        startActivity(intent);
     }
 }

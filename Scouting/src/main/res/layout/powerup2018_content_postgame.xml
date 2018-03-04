@@ -20,6 +20,12 @@
         android:textColor="#663399"
         android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/noLevitateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="*Levitate doesn't count as climbing" />
+
     <CheckBox
         android:id="@+id/climbTypeNoClimb"
         android:layout_width="wrap_content"
@@ -27,7 +33,7 @@
         android:layout_below="@+id/climb_type_title_textView"
         android:layout_marginTop="11dp"
         android:layout_toStartOf="@+id/defense_textView"
-        android:text="No climb"
+        android:text="No climber mechanism"
         android:textSize="18sp" />
 
     <CheckBox
