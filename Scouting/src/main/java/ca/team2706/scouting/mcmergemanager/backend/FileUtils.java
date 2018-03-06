@@ -298,6 +298,20 @@ public class FileUtils {
 //        return loadMatchDataFile(FileType.SYNCHED);
 //    }
 
+    public static ArrayList<String> getTeams(){
+        ArrayList<String> teamNums = new ArrayList<>();
+
+        String inFileName = sLocalEventFilePath;
+        File dir = new File(inFileName);
+        File[] files = dir.listFiles();
+
+        for (int i = 0; i < files.length; ++i) {
+            teamNums.add(files[i].getName());
+        }
+        return teamNums;
+
+    }
+
     public static MatchData loadMatchData(int teamNum) {
         MatchData matchData = new MatchData();
         List<JSONObject> matchJson = new ArrayList<>();
