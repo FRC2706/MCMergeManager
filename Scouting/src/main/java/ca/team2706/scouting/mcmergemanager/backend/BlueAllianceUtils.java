@@ -310,7 +310,7 @@ public class BlueAllianceUtils {
         return new JSONObject();
     }
 
-    public static String getJsonObject(String url) {
+    public static String getObject(String url) {
         // check if we have internet connectivity
         ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();

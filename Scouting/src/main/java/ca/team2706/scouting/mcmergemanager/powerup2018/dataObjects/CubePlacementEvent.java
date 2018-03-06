@@ -9,7 +9,7 @@ public class CubePlacementEvent extends Event {
     public static final String ID = "cube_placement";
 
     public enum PlacementType {
-        ALLIANCE_SWITCH, OPPOSING_SWITCH, SCALE, EXCHANGE, DROPPED
+        ALLIANCE_SWITCH, OPPOSING_SWITCH, SCALE, EXCHANGE
     }
 
     public PlacementType placementType;

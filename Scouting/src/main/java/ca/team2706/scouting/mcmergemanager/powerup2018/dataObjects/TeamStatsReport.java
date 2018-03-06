@@ -46,12 +46,12 @@ public class TeamStatsReport implements Serializable {
     // Teleop vars
     public int totalPickupPortal, totalPickupGround, totalPickupExchange;
     public int totalPlaceSwitch, totalPlaceScale, totalPlaceExchange, totalPlaceDropped;
+    public int totalFumbles, totalEasyDrop, totalLeftIt;
 
     public double pickupPortalAvgMatch, pickupGroundAvgMatch, pickupExchangeAvgMatch;
     public double placeSwitchAvgMatch, placeScaleAvgMatch, placeExchangeAvgMatch, droppedAvgMatch;
 
-    public double pickupGroundAvgCycleTime, pickupPortalAvgCycleTime, pickupExchangeAvgCycleTime;
-    public double placeSwitchAvgCycleTime, placeScaleAvgCycleTime, placeExchangeAvgCycleTime, droppedAvgCycleTime;
+    public double switchAvgCycleTime, scaleAvgCycleTime, exchangeAvgCycleTime, droppedAvgCycleTime;
 
     public CubePickupEvent.PickupType favouritePickup;
     public CubePlacementEvent.PlacementType favouritePlacement;

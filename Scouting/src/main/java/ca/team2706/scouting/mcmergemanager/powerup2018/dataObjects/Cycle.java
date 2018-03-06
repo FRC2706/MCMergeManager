@@ -5,7 +5,7 @@ import java.io.Serializable;
 // For feeding the CycleDisplay window
 public class Cycle implements Serializable{
     public enum CycleType {
-        PICKUP_GROUND, PICKUP_PORTAL, PICKUP_EXCHANGE, CLIMB, PLACE_SWITCH, PLACE_SCALE, PLACE_EXCHANGE, PLACE_DROPPED;
+        CLIMB, SWITCH, SCALE, EXCHANGE, DROPPED;
     }
 
     public CycleType cycleType;

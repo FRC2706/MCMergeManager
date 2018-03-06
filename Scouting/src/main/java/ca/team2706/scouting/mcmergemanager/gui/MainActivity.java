@@ -115,6 +115,8 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
+        WebServerUtils.uploadUnsyncedMatches();
+
         // tell the user where they are syncing their gearDeliveryData to
         updateDataSyncLabel();
 
@@ -134,9 +136,9 @@ public class MainActivity extends AppCompatActivity
         sRepairTimeObjects = FileUtils.getRepairTimeObjects();
 
         // TODO: test remove
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 //                System.out.println("post comment: " + WebServerUtils.postCommentToServer(2706, "testing"));
 //                System.out.println("teams list: " + WebServerUtils.getTeamList());
 //                System.out.println("competitions list: " + WebServerUtils.getCompetitionList());
@@ -147,8 +149,9 @@ public class MainActivity extends AppCompatActivity
 //                        "true", "true", "0", "1", "false"));
 //                System.out.println("Post event" + WebServerUtils.postMatchEvent("2017onbar_f1m1", "2706", /*  <-- no frc before, just team number */
 //                        "3", "TRUE", "0", "1", "FALSE"));
-//            }
-//        }).start();
+                System.out.println(WebServerUtils.syncMatchData());
+            }
+        }).start();
     }
 
     /**

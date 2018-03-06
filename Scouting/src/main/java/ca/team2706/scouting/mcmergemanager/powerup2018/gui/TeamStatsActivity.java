@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport;
 
@@ -80,9 +78,7 @@ public class TeamStatsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.autoTotalPlacedCubesTV)).setText((m_teamStatsReport.totalPlaceExchange
                 + m_teamStatsReport.totalPlaceScale + m_teamStatsReport.totalPlaceSwitch) + " / " + m_teamStatsReport.autoTotalPlacedCubes);
 
-        ((TextView) findViewById(R.id.autoPickupPortalTV)).setText(Integer.toString(m_teamStatsReport.autoPickupPortal));
         ((TextView) findViewById(R.id.autoPickupGroundTV)).setText(Integer.toString(m_teamStatsReport.autoPickupGround));
-        ((TextView) findViewById(R.id.autoPickupExchangeTV)).setText(Integer.toString(m_teamStatsReport.autoPickupExchange));
 
         ((TextView) findViewById(R.id.autoPlacedAllianceSwitchTV)).setText(Integer.toString(m_teamStatsReport.autoPlaceAllianceSwitch));
         ((TextView) findViewById(R.id.autoPlacedExchangeTV)).setText(Integer.toString(m_teamStatsReport.autoPlaceExchange));
@@ -104,15 +100,13 @@ public class TeamStatsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.telePlacedSwitchTV)).setText(String.format("%.2f", m_teamStatsReport.placeSwitchAvgMatch));
         ((TextView) findViewById(R.id.telePlacedScaleTV)).setText(String.format("%.2f", m_teamStatsReport.placeScaleAvgMatch));
 
-        ((TextView) findViewById(R.id.teleDroppedTV)).setText(String.format("%.2f", m_teamStatsReport.droppedAvgMatch));
+        ((TextView) findViewById(R.id.teleEasyDropTV)).setText(Integer.toString(m_teamStatsReport.totalEasyDrop));
+        ((TextView) findViewById(R.id.teleLeftItTV)).setText(Integer.toString(m_teamStatsReport.totalLeftIt));
+        ((TextView) findViewById(R.id.teleFumbleTV)).setText(Integer.toString(m_teamStatsReport.totalFumbles));
 
-        ((TextView) findViewById(R.id.avgGroundPickupTimeTV)).setText(String.format("%.2f", m_teamStatsReport.pickupGroundAvgCycleTime));
-        ((TextView) findViewById(R.id.avgPortalPickupTimeTV)).setText(String.format("%.2f", m_teamStatsReport.pickupPortalAvgCycleTime));
-        ((TextView) findViewById(R.id.avgExchangePickupTimeTV)).setText(String.format("%.2f", m_teamStatsReport.pickupExchangeAvgCycleTime));
-
-        ((TextView) findViewById(R.id.avgSwitchPlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.placeSwitchAvgCycleTime));
-        ((TextView) findViewById(R.id.avgScalePlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.placeScaleAvgCycleTime));
-        ((TextView) findViewById(R.id.avgExchangePlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.placeExchangeAvgCycleTime));
+        ((TextView) findViewById(R.id.avgSwitchPlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.switchAvgCycleTime));
+        ((TextView) findViewById(R.id.avgScalePlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.scaleAvgCycleTime));
+        ((TextView) findViewById(R.id.avgExchangePlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.exchangeAvgCycleTime));
 
         ((TextView) findViewById(R.id.favouritePickupTV)).setText(m_teamStatsReport.favouritePickup.toString());
         ((TextView) findViewById(R.id.favouritePlacementTV)).setText(m_teamStatsReport.favouritePlacement.toString());

@@ -148,24 +148,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Pickup portal:"
-                android:id="@+id/autoPickupPortalLBL"
-                android:layout_row="4"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0"
-                android:id="@+id/autoPickupPortalTV"
-                android:layout_row="4"
-                android:layout_column="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Pickup ground:"
                 android:id="@+id/autoPickupGroundLBL"
                 android:layout_row="5"
@@ -178,24 +160,6 @@
                 android:text="0"
                 android:id="@+id/autoPickupGroundTV"
                 android:layout_row="5"
-                android:layout_column="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Pickup exchange:"
-                android:id="@+id/autoPickupExchangeLBL"
-                android:layout_row="6"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0"
-                android:id="@+id/autoPickupExchangeTV"
-                android:layout_row="6"
                 android:layout_column="1" />
 
             <TextView
@@ -420,8 +384,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Dropped:"
-                android:id="@+id/teleDroppedLBL"
+                android:text="Easy drop:"
+                android:id="@+id/teleEasyDropLBL"
                 android:layout_row="13"
                 android:layout_column="0" />
 
@@ -430,7 +394,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0%"
-                android:id="@+id/teleDroppedTV"
+                android:id="@+id/teleEasyDropTV"
                 android:layout_row="13"
                 android:layout_column="1" />
 
@@ -438,8 +402,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Avg ground pickup time:  "
-                android:id="@+id/avgGroundPickupTimeLBL"
+                android:text="Left it:"
+                android:id="@+id/teleLeftItLBL"
                 android:layout_row="14"
                 android:layout_column="0" />
 
@@ -447,8 +411,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0.0s"
-                android:id="@+id/avgGroundPickupTimeTV"
+                android:text="0%"
+                android:id="@+id/teleLeftItTV"
                 android:layout_row="14"
                 android:layout_column="1" />
 
@@ -456,43 +420,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Avg portal pickup time: "
-                android:id="@+id/avgPortalPickupTimeLBL"
-                android:layout_row="16"
+                android:text="Fumble:"
+                android:id="@+id/teleFumbleLBL"
+                android:layout_row="15"
                 android:layout_column="0" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0.0s"
-                android:id="@+id/avgPortalPickupTimeTV"
-                android:layout_row="16"
+                android:text="0%"
+                android:id="@+id/teleFumbleTV"
+                android:layout_row="15"
                 android:layout_column="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Avg exchange pickup time: "
-                android:id="@+id/avgExchangePickupTimeLBL"
-                android:layout_row="17"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0.0 s"
-                android:id="@+id/avgExchangePickupTimeTV"
-                android:layout_row="17"
-                android:layout_column="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Avg switch place time:"
+                android:text="Avg switch time:"
                 android:id="@+id/avgSwitchPlaceTimeLBL"
                 android:layout_row="18"
                 android:layout_column="0" />
@@ -510,7 +456,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Avg scale place time: "
+                android:text="Avg scale time: "
                 android:id="@+id/avgScalePlaceTimeLBL"
                 android:layout_row="19"
                 android:layout_column="0" />
@@ -528,7 +474,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Avg exchange place time: "
+                android:text="Avg exchange time: "
                 android:id="@+id/avgExchangePlaceTimeLBL"
                 android:layout_row="20"
                 android:layout_column="0" />

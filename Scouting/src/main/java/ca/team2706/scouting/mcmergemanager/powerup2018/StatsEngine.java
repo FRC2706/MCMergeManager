@@ -20,6 +20,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLine
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoMalfunctionEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.ClimbEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubeDroppedEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Cycle;
@@ -29,8 +30,6 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PostGameObjec
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport;
 
 import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.ALLIANCE_SWITCH;
-import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.DROPPED;
-import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.EXCHANGE;
 import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.SCALE;
 
 public class StatsEngine implements Serializable {
@@ -180,7 +179,7 @@ public class StatsEngine implements Serializable {
             TeamStatsReport.CyclesInAMatch cyclesInThisMatch = new TeamStatsReport.CyclesInAMatch(match.preGameObject.matchNumber);
 
             // State machine state vars
-            boolean inCubePickupCycle = false, inCubePlaceCycle = false;
+            boolean inSwitchCycle = false, inScaleCycle = false, inExchangeCycle = false;
             Cycle cubeCycle = new Cycle();
 
             // Loop through all events in the match
@@ -189,25 +188,38 @@ public class StatsEngine implements Serializable {
                 if (event instanceof CubePickupEvent) {
                     CubePickupEvent c = (CubePickupEvent) event;
 
+                    double cycleTime = c.timestamp - cubeCycle.startTime;
+
+                    if(inSwitchCycle) {
+                        teamStatsReport.switchAvgCycleTime += cycleTime;
+                        cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.SWITCH));
+                        inSwitchCycle = false;
+                    }
+                    if(inScaleCycle) {
+                        teamStatsReport.scaleAvgCycleTime += cycleTime;
+                        cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.SCALE));
+                        inScaleCycle = false;
+                    }
+                    if(inExchangeCycle) {
+                        teamStatsReport.exchangeAvgCycleTime += cycleTime;
+                        cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.EXCHANGE));
+                        inExchangeCycle = false;
+                    }
+
                     // Get the timestamp
                     cubeCycle.startTime = c.timestamp;
+
 
                     // Add the stats and
                     switch (c.pickupType) {
                         case EXCHANGE:
-                            teamStatsReport.pickupExchangeAvgCycleTime += cubeCycle.getCycleTime();
                             teamStatsReport.totalPickupExchange++;
-                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PICKUP_EXCHANGE));
                             break;
                         case GROUND:
-                            teamStatsReport.pickupGroundAvgCycleTime += cubeCycle.getCycleTime();
                             teamStatsReport.totalPickupGround++;
-                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PICKUP_GROUND));
                             break;
                         case PORTAL:
-                            teamStatsReport.pickupPortalAvgCycleTime += cubeCycle.getCycleTime();
                             teamStatsReport.totalPickupPortal++;
-                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PICKUP_PORTAL));
                             break;
                     }
                 } else if (event instanceof CubePlacementEvent) {
@@ -216,36 +228,44 @@ public class StatsEngine implements Serializable {
                     // Time stamp stuff
                     cubeCycle.endTime = c.timestamp;
 
-                    // If dropped fail the cycle
-                    if (c.placementType == DROPPED)
-                        cubeCycle.success = false;
-                    else
-                        cubeCycle.success = true;
+                    // Cycle has succeeded
+                    cubeCycle.success = true;
 
                     // Add stats and cycle
                     switch (c.placementType) {
                         case EXCHANGE:
-                            teamStatsReport.placeExchangeAvgCycleTime += cubeCycle.getCycleTime();
                             teamStatsReport.totalPlaceExchange++;
-                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PLACE_EXCHANGE));
+                            inExchangeCycle = true;
                             break;
                         case ALLIANCE_SWITCH:   // TODO: Could change, but the opposing switch and ours are basically the same thing
                         case OPPOSING_SWITCH:
-                            teamStatsReport.placeSwitchAvgCycleTime += cubeCycle.getCycleTime();
                             teamStatsReport.totalPlaceSwitch++;
-                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PLACE_SWITCH));
-                            break;
-                        case DROPPED:
-                            teamStatsReport.droppedAvgCycleTime += cubeCycle.getCycleTime();
-                            teamStatsReport.totalPlaceDropped++;
-                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PLACE_DROPPED));
+                            inSwitchCycle = true;
                             break;
                         case SCALE:
-                            teamStatsReport.placeScaleAvgCycleTime += cubeCycle.getCycleTime();
                             teamStatsReport.totalPlaceScale++;
-                            cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.PLACE_SCALE));
+                            inScaleCycle = true;
                             break;
                     }
+                } else if(event instanceof CubeDroppedEvent) {
+                    CubeDroppedEvent c = (CubeDroppedEvent) event;
+
+                    cubeCycle.endTime = c.timestamp;
+
+                    switch(c.dropType) {
+                        case FUMBLE:
+                            teamStatsReport.totalFumbles++;
+                            break;
+                        case LEFT_IT:
+                            teamStatsReport.totalLeftIt++;
+                            break;
+                        case EASY_PICKUP:
+                            teamStatsReport.totalEasyDrop++;
+                            break;
+                    }
+
+                    teamStatsReport.droppedAvgCycleTime += cubeCycle.getCycleTime();
+                    cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.DROPPED));
                 } else if(event instanceof ClimbEvent) {
                     ClimbEvent c = (ClimbEvent) event;
 
@@ -273,7 +293,8 @@ public class StatsEngine implements Serializable {
                     if(c.climb_time > teamStatsReport.maxClimbTime) {
                         teamStatsReport.maxClimbTime = c.climb_time;
                     }
-                    if(c.climb_time < teamStatsReport.minClimbTime) {
+                    // Don't include climb times of zero
+                    if(c.climb_time != 0 && c.climb_time < teamStatsReport.minClimbTime) {
                         teamStatsReport.minClimbTime = c.climb_time;
                     }
                 } else if(event instanceof PostGameObject) {
@@ -309,13 +330,9 @@ public class StatsEngine implements Serializable {
         if (teamStatsReport.numMatchesPlayed != 0) {
 
             // Avg times
-            teamStatsReport.pickupGroundAvgCycleTime /= (double) teamStatsReport.totalPickupGround;
-            teamStatsReport.pickupPortalAvgCycleTime /= (double) teamStatsReport.totalPickupPortal;
-            teamStatsReport.pickupExchangeAvgCycleTime /= (double) teamStatsReport.totalPickupExchange;
-
-            teamStatsReport.placeSwitchAvgCycleTime /= (double) teamStatsReport.totalPlaceSwitch;
-            teamStatsReport.placeScaleAvgCycleTime /= (double) teamStatsReport.totalPlaceScale;
-            teamStatsReport.placeExchangeAvgCycleTime /= (double) teamStatsReport.totalPlaceExchange;
+            teamStatsReport.switchAvgCycleTime /= (double) teamStatsReport.totalPlaceSwitch;
+            teamStatsReport.scaleAvgCycleTime /= (double) teamStatsReport.totalPlaceScale;
+            teamStatsReport.exchangeAvgCycleTime /= (double) teamStatsReport.totalPlaceExchange;
             teamStatsReport.droppedAvgCycleTime /= (double) teamStatsReport.totalPlaceDropped;
 
             // Avg per match
@@ -334,7 +351,6 @@ public class StatsEngine implements Serializable {
             // Climbing
             teamStatsReport.avgClimbTime /= teamStatsReport.numMatchesPlayed;
 
-
             // Defending
             teamStatsReport.avgTimeDefending /= teamStatsReport.numMatchesPlayed;
         }
@@ -350,16 +366,12 @@ public class StatsEngine implements Serializable {
         }
 
         if(teamStatsReport.placeExchangeAvgMatch > teamStatsReport.placeScaleAvgMatch &&
-                teamStatsReport.placeExchangeAvgMatch > teamStatsReport.placeSwitchAvgMatch &&
-                teamStatsReport.placeExchangeAvgMatch > teamStatsReport.droppedAvgMatch) {
-            teamStatsReport.favouritePlacement = EXCHANGE;
-        } else if(teamStatsReport.placeScaleAvgMatch > teamStatsReport.placeSwitchAvgMatch &&
-                teamStatsReport.placeScaleAvgMatch > teamStatsReport.droppedAvgMatch) {
+                teamStatsReport.placeExchangeAvgMatch > teamStatsReport.placeSwitchAvgMatch) {
+            teamStatsReport.favouritePlacement = CubePlacementEvent.PlacementType.EXCHANGE;
+        } else if(teamStatsReport.placeScaleAvgMatch > teamStatsReport.placeSwitchAvgMatch) {
             teamStatsReport.favouritePlacement = SCALE;
-        } else if(teamStatsReport.placeSwitchAvgMatch > teamStatsReport.droppedAvgMatch) {
-            teamStatsReport.favouritePlacement = ALLIANCE_SWITCH;   // Either alliance or opposing switch
         } else {
-            teamStatsReport.favouritePlacement = CubePlacementEvent.PlacementType.DROPPED;
+            teamStatsReport.favouritePlacement = ALLIANCE_SWITCH;   // Either alliance or opposing switch
         }
 
     }
