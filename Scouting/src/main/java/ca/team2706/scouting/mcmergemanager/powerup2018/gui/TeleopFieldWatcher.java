@@ -253,7 +253,7 @@ public class TeleopFieldWatcher extends AppCompatActivity{
         FieldWatcherObject fieldWatcherObject1 = fieldWatcherObject;
 
 
-        Intent intent = new Intent(this, PreGameActivity.class);
+        Intent intent = new Intent(this, PreGameFieldWatcher.class);
         startActivity(intent);
     }
 }

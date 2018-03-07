@@ -154,7 +154,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
             );
 
         }else{
-            Toast.makeText(this, "You are not holding a cube. Jedi Scum.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You are not holding a cube.", Toast.LENGTH_SHORT).show();
         }
 
         //Recording data for pickup

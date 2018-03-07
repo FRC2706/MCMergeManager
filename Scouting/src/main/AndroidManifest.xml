@@ -57,6 +57,16 @@
                 android:value="ca.team2706.scouting.mcmergemanager.gui.MainActivity" />
         </activity>
         <activity
+            android:name=".powerup2018.gui.PreGameFieldWatcher"
+            android:label="title_activity_new_teleop_fieldwatcher"
+            android:parentActivityName=".gui.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.team2706.scouting.mcmergemanager.gui.MainActivity" />
+        </activity>
+        <activity
             android:name=".powerup2018.gui.autoFieldwatcher"
             android:label="title_activity_new_auto_fieldwatcher"
             android:parentActivityName=".gui.MainActivity"

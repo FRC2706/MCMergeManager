@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="#c3aee8"
-                android:onClick="toFieldWatcher"
+                android:onClick="toPreFieldWatcher"
                 android:text="Field Watcher"
                 android:textSize="18sp" />
 
