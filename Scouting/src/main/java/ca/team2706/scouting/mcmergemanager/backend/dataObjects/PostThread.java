@@ -21,8 +21,8 @@ public class PostThread extends Thread {
     private String extra;
 
 
-    public PostThread(String matchKey, String teamNumber, String goal, String success,
-                      String startTime, String endTime, String extra) {
+    public PostThread(String matchKey, String teamNumber, String extra, String success,
+                      String startTime, String endTime, String goal) {
         this.matchKey = matchKey;
         this.teamNumber = teamNumber;
         this.goal = goal;

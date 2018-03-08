@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.PostThread;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.PullThread;
+import ca.team2706.scouting.mcmergemanager.gui.MainActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLineCrossEvent;
@@ -165,9 +166,12 @@ public class WebServerUtils {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                // Check if has internet
+                if(BlueAllianceUtils.checkInternetPermissions(MainActivity.me))
+                    return;
+
                 // Load the files
                 MatchData matchData = FileUtils.loadMatchData(2706);
-
 
                 // Loop through all matches and events
                 for(MatchData.Match match : matchData.matches) {
@@ -256,19 +260,15 @@ public class WebServerUtils {
         String TBA_Event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
 
         // Get the competition form the server
-        JSONObject competiton = getCompetitonFromServer(TBA_Event);
+        JSONObject competition = getCompetitonFromServer(TBA_Event);
         JSONArray matches = new JSONArray();
 
         ArrayList<PullThread> threads = new ArrayList<>();
         try {
-            // Create threads
-            for (int i = 0; i < competiton.getJSONArray("matches").length(); i++) {
-                threads.add(new PullThread(TBA_Event, ((JSONObject) competiton.getJSONArray("matches").get(i)).getString("key")));
-            }
-
-            // Start threads
-            for(PullThread t : threads) {
-                t.run();
+            // Create threads and run them
+            for (int i = 0; i < competition.getJSONArray("matches").length(); i++) {
+                threads.add(new PullThread(TBA_Event, ((JSONObject) competition.getJSONArray("matches").get(i)).getString("key")));
+                threads.get(i).run();
             }
 
             // Wait for threads to stop
@@ -276,6 +276,10 @@ public class WebServerUtils {
                 t.join();
                 matches.put(t.getResponse());
             }
+
+            // Save the match data
+            FileUtils.saveServerData(matches);
+            Log.d("Syncing match data:", "done");
         } catch(JSONException e) {
             e.printStackTrace();
         } catch(InterruptedException e) {

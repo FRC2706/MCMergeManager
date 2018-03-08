@@ -316,6 +316,104 @@ public class FileUtils {
 //        return loadMatchDataFile(FileType.SYNCHED);
 //    }
 
+    public static void saveServerData(JSONArray matches) throws JSONException {
+        for(int i = 0; i < matches.length(); i++) {
+            JSONObject match = matches.getJSONObject(i);
+
+            JSONObject jsonBlue1 = new JSONObject();
+            jsonBlue1.put("team_number", match.getString("blue1"));
+            jsonBlue1.put("match_number", match.getString("match_number"));
+            jsonBlue1.put("events", new JSONArray());
+            JSONObject jsonBlue2 = new JSONObject();
+            jsonBlue2.put("team_number", match.getString("blue2"));
+            jsonBlue2.put("match_number", match.getString("match_number"));
+            jsonBlue2.put("events", new JSONArray());
+            JSONObject jsonBlue3 = new JSONObject();
+            jsonBlue3.put("team_number", match.getString("blue3"));
+            jsonBlue3.put("match_number", match.getString("match_number"));
+            jsonBlue3.put("events", new JSONArray());
+            JSONObject jsonRed1 = new JSONObject();
+            jsonRed1.put("team_number", match.getString("red1"));
+            jsonRed1.put("match_number", match.getString("match_number"));
+            jsonRed1.put("events", new JSONArray());
+            JSONObject jsonRed2 = new JSONObject();
+            jsonRed2.put("team_number", match.getString("red2"));
+            jsonRed2.put("match_number", match.getString("match_number"));
+            jsonRed2.put("events", new JSONArray());
+            JSONObject jsonRed3 = new JSONObject();
+            jsonRed3.put("team_number", match.getString("red3"));
+            jsonRed3.put("match_number", match.getString("match_number"));
+            jsonRed3.put("events", new JSONArray());
+
+            JSONArray arr = (JSONArray) match.get("events");
+            for(int j = 0; j < arr.length(); j++) {
+                JSONObject event = (JSONObject) arr.get(i);
+
+                if (event.getString("team_key").substring(3).equals(jsonBlue1.getString("team_number"))) {
+                    jsonBlue1.getJSONArray("events").put(makeEvent(
+                            event.getString("start_time"),
+                            event.getString("goal"),
+                            event.getString("extra"),
+                            event.getString("end_time")
+                    ));
+                } else if(event.getString("team_key").substring(3).equals(jsonBlue2.getString("team_number"))) {
+                    jsonBlue2.getJSONArray("events").put(makeEvent(
+                            event.getString("start_time"),
+                            event.getString("goal"),
+                            event.getString("extra"),
+                            event.getString("end_time")
+                    ));
+                } else if(event.getString("team_key").substring(3).equals(jsonBlue3.getString("team_number"))) {
+                    jsonBlue3.getJSONArray("events").put(makeEvent(
+                            event.getString("start_time"),
+                            event.getString("goal"),
+                            event.getString("extra"),
+                            event.getString("end_time")
+                    ));
+                } else if(event.getString("team_key").substring(3).equals(jsonRed1.getString("team_number"))) {
+                    jsonRed1.getJSONArray("events").put(makeEvent(
+                            event.getString("start_time"),
+                            event.getString("goal"),
+                            event.getString("extra"),
+                            event.getString("end_time")
+                    ));
+                } else if(event.getString("team_key").substring(3).equals(jsonRed2.getString("team_number"))) {
+                    jsonRed2.getJSONArray("events").put(makeEvent(
+                            event.getString("start_time"),
+                            event.getString("goal"),
+                            event.getString("extra"),
+                            event.getString("end_time")
+                    ));
+                } else if(event.getString("team_key").substring(3).equals(jsonRed3.getString("team_number"))) {
+                    jsonRed3.getJSONArray("events").put(makeEvent(
+                            event.getString("start_time"),
+                            event.getString("goal"),
+                            event.getString("extra"),
+                            event.getString("end_time")
+                    ));
+                }
+            }
+
+            FileUtils.sa new MatchData.Match(jsonBlue1);
+            MatchData.Match blue2 = new MatchData.Match(jsonBlue2);
+            MatchData.Match blue3 = new MatchData.Match(jsonBlue3);
+            MatchData.Match red1 = new MatchData.Match(jsonRed1);
+            MatchData.Match red2 = new MatchData.Match(jsonRed2);
+            MatchData.Match red3 = new MatchData.Match(jsonRed3);
+        }
+    }
+
+    public static JSONObject makeEvent(String startTime, String goal, String extra, String endTime) throws JSONException {
+        JSONObject json = new JSONObject();
+
+        json.put("start_time", startTime);
+        json.put("goal", goal);
+        json.put("extra", extra);
+        json.put("end_time", endTime);
+
+        return json;
+    }
+
     public static MatchData loadMatchData(int teamNum) {
         MatchData matchData = new MatchData();
         List<JSONObject> matchJson = new ArrayList<>();
@@ -812,7 +910,7 @@ public class FileUtils {
 
     public static void saveJsonData(JSONObject obj) {
         try {
-            String filePath = sLocalEventFilePath + "/" + obj.getInt("team") + "/" + "match" +obj.getInt("match_number") + ".json";
+            String filePath = sLocalEventFilePath + "/matchData.json";
 
             File file = new File(filePath);
 
@@ -830,12 +928,30 @@ public class FileUtils {
 
             scanDirectoryTree(sLocalEventFilePath);
 
+        } catch (IOException e){
+            Log.d("IOException", e.getMessage());
+
+        }
+    }
+
+    public static JSONObject getJsonData() {
+        try {
+            scanDirectoryTree(sLocalEventFilePath);
+            String filePath = sLocalEventFilePath + "/matchData.json";
+
+            File file = new File(filePath);
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            return new JSONObject(br.readLine());
         } catch (JSONException  e) {
             Log.d("JSON error", e.getMessage());
         } catch (IOException e){
             Log.d("IOException", e.getMessage());
 
         }
+
+        return null;
     }
 
 

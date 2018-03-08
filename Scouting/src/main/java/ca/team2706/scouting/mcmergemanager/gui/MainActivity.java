@@ -29,6 +29,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -88,15 +90,6 @@ public class MainActivity extends AppCompatActivity
         FileUtils.checkFileReadWritePermissions(this);
 
         getEventKeys();
-
-//        System.out.println("Writing a csv file of the data");
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                CreateCsvFile.saveCsvFile("Csv.csv");
-//            }
-//        }).start();
     }
 
     public void generateThreatList(View view){
@@ -128,30 +121,9 @@ public class MainActivity extends AppCompatActivity
         // Make sure all files are there, and visible to the USB Media Scanner.
         FileUtils.checkLocalFileStructure(this);
 
-        // In case the schedule is empty, make sure we pass along the list of teams registered at event
-        // that we fetched at the beginning.
-//        sMatchData = FileUtils.loadMatchDataFile();
-        if (sMatchData == null) sMatchData = new MatchData();
+        if(sMatchData == null) { sMatchData = new MatchData(); }
 
         sRepairTimeObjects = FileUtils.getRepairTimeObjects();
-
-        // TODO: test remove
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-//                System.out.println("post comment: " + WebServerUtils.postCommentToServer(2706, "testing"));
-//                System.out.println("teams list: " + WebServerUtils.getTeamList());
-//                System.out.println("competitions list: " + WebServerUtils.getCompetitionList());
-//                System.out.println("team stats: " + WebServerUtils.getTeamFromServer(2706));
-//                System.out.println("Competition: " + WebServerUtils.getCompetitonFromServer("Canadian Rockies Regional"));
-//                System.out.println("Get Match: " + WebServerUtils.getMatchFromServer("Canadian Rockies Regional", 1));
-//                System.out.println("Post event" + WebServerUtils.postMatchEvent("matchkey", "2706",
-//                        "true", "true", "0", "1", "false"));
-//                System.out.println("Post event" + WebServerUtils.postMatchEvent("2017onbar_f1m1", "2706", /*  <-- no frc before, just team number */
-//                        "3", "TRUE", "0", "1", "FALSE"));
-                System.out.println(WebServerUtils.syncMatchData());
-            }
-        }).start();
     }
 
     /**
@@ -425,8 +397,18 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    public void onClick(View v) {
-        // TODO: sync the match files on the phone
+    public void onClickSyncMatchData(View v) {
+        FileUtils.getJsonData().toString();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Get data from server
+                WebServerUtils.syncMatchData();
+
+                // Reload the match data
+                FileUtils.getJsonData();
+            }
+        }).start();
     }
 
     public void onClickGetOprs(View view) {

@@ -374,6 +374,9 @@ public class StatsEngine implements Serializable {
             teamStatsReport.favouritePlacement = ALLIANCE_SWITCH;   // Either alliance or opposing switch
         }
 
+        // Make sure min climb isnt a huuge number
+        if(teamStatsReport.minClimbTime > 150)
+            teamStatsReport.minClimbTime = 0;
     }
 
     // Determines the wlt of team
