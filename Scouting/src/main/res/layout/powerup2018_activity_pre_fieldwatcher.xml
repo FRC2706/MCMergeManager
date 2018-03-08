@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <include
-        layout="@layout/powerup2018_content_teleop_field_watcher"
+        layout="@layout/content_pre_game_fieldwatcher"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

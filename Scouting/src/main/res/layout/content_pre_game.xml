@@ -24,15 +24,17 @@
         android:gravity="center" />
 
     <Button
-        android:background="?attr/colorPrimaryDark"
+        android:id="@+id/startGameButton"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:text="Start Game!"
-        android:id="@+id/startGameButton"
-        android:onClick="startGame"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="?attr/colorPrimaryDark"
+        android:onClick="startGame"
+        android:text="Start Game!"
+        android:textColor="#FFF"
+        android:textSize="24sp" />
 
     <EditText
         android:id="@+id/team_num_field"

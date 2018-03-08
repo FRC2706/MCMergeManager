@@ -137,22 +137,44 @@ public class PostGame extends AppCompatActivity {
             final CheckBox climbAssistCheckbox = (CheckBox) findViewById(R.id.climbTypeAssisted);
             final CheckBox climbWasAssistedCheckbox = (CheckBox) findViewById(R.id.climbTypeWasAssisted);
 
+                //   [1] No climber mechanism
             if (noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
                 // postGameObject.climbType(PostGameObject.ClimbType.NO_CLIMB);
                 climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
+                climbFailCheckbox.toggle(); //2
+                climbBarCheckbox.toggle(); //3
+                climbAssistCheckbox.toggle(); //4
 
+                //   [2] Failed climb
             } else if (!noClimbCheckbox.isChecked() && climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
                 climbEvent.climbType = ClimbEvent.ClimbType.FAIL;
+                noClimbCheckbox.setEnabled(false); //1
+                climbBarCheckbox.setEnabled(false); //3
+                climbAssistCheckbox.setEnabled(false); //4
+                climbWasAssistedCheckbox.setEnabled(false); //5
 
+                //   [3] Climb success: bar
             } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
                 climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_INDEPENDENT;
+                noClimbCheckbox.setEnabled(false); //1
+                climbFailCheckbox.setEnabled(false); //2
+                climbWasAssistedCheckbox.setEnabled(false); //5
 
+                //   [4] Assisted a climb
             } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
                 climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED_OTHERS;
+                noClimbCheckbox.setEnabled(false); //1
+                climbFailCheckbox.setEnabled(false); //2
+                climbWasAssistedCheckbox.setEnabled(false); //5
 
+                //   [5] Was assisted
             } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && climbWasAssistedCheckbox.isChecked()) {
                 climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
+                climbFailCheckbox.setEnabled(false); //2
+                climbBarCheckbox.setEnabled(false); //3
+                climbAssistCheckbox.setEnabled(false); //4
 
+                //No checkboxes chosen
             } else {
                 climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
             }
