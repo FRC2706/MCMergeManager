@@ -47,6 +47,9 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.PreGameFieldWatcher;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.TeleopFieldWatcher;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.autoFieldwatcher;
 
 @TargetApi(21)
 public class MainActivity extends AppCompatActivity
@@ -414,5 +417,13 @@ public class MainActivity extends AppCompatActivity
     public void onClickGetOprs(View view) {
         FileUtils.saveOprsToFile(this);
     }
+
+    public void toPreFieldWatcher(View view){
+        Intent intent = new Intent(this, PreGameFieldWatcher.class);
+        startActivity(intent);
+    }
+
+
+
 
 }

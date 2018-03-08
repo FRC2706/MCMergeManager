@@ -6,22 +6,22 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
  * Created by Merge on 2018-02-24.
  */
 
-public class ForceEvent extends Event {
+public class BlueSwitchEvent extends Event {
 
-    public static String ID = "field_watcher_force";
+    public static final String ID = "field_watcher_blue_switch_event";
 
     public enum AllianceColour{
-        BLUE, RED
+        BLUE, RED, NEUTRAL
     }
 
     public AllianceColour allianceColour;
 
-    public ForceEvent(double timestamp, AllianceColour allianceColour) {
+    public BlueSwitchEvent(double timestamp, AllianceColour allianceColour) {
         super(timestamp);
         this.allianceColour = allianceColour;
     }
 
-    public ForceEvent() {
-
-    };
+    public BlueSwitchEvent() {
+        //Empty constructor
+    }
 }

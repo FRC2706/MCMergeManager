@@ -309,12 +309,6 @@ public class FileUtils {
         return file.delete();
     }
 
-    /**
-     * Load the entire file of match data into Objects.
-     */
-//    public static MatchData loadMatchDataFile() {
-//        return loadMatchDataFile(FileType.SYNCHED);
-//    }
 
     public static void saveServerData(JSONArray matches) throws JSONException {
         for(int i = 0; i < matches.length(); i++) {
@@ -394,7 +388,7 @@ public class FileUtils {
                 }
             }
 
-            FileUtils.sa new MatchData.Match(jsonBlue1);
+//            FileUtils.sa new MatchData.Match(jsonBlue1);
             MatchData.Match blue2 = new MatchData.Match(jsonBlue2);
             MatchData.Match blue3 = new MatchData.Match(jsonBlue3);
             MatchData.Match red1 = new MatchData.Match(jsonRed1);
@@ -412,6 +406,20 @@ public class FileUtils {
         json.put("end_time", endTime);
 
         return json;
+    }
+
+    public static ArrayList<String> getTeams(){
+        ArrayList<String> teamNums = new ArrayList<>();
+
+        String inFileName = sLocalEventFilePath;
+        File dir = new File(inFileName);
+        File[] files = dir.listFiles();
+
+        for (int i = 0; i < files.length; ++i) {
+            teamNums.add(files[i].getName());
+        }
+
+        return teamNums;
     }
 
     public static MatchData loadMatchData(int teamNum) {
@@ -465,71 +473,8 @@ public class FileUtils {
     }
 
 
-//    public static MatchData loadMatchDataFile(FileType fileType) {
-//
-//        MatchData matchData = new MatchData();
-//        List<JSONObject> matchJson = new ArrayList<>();
-//
-//        String inFileName = sLocalEventFilePath;
-//
-//
-//        try {
-//            BufferedReader br = new BufferedReader(new FileReader(inFileName));
-//            String line = br.readLine();
-//
-//            while (line != null) {
-//                // braces are for human readability, but make parsing harder
-//                matchJson.add(new JSONObject(line));
-//                line = br.readLine();
-//            }
-//            br.close();
-//        } catch (Exception e) {
-//            Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: " + e.toString());
-//            return null;
-//        }
-//
-//        // parse all the matches into the MatchData object
-//        boolean parseFailure = false;
-//        for (JSONObject obj : matchJson) {
-//
-//            try {
-//                MatchData.Match match = new MatchData.Match(obj);
-//                matchData.addMatch(match);
-//            } catch (Exception e) {
-//                Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: ", e);
-//                parseFailure = true;
-//                continue;
-//            }
-//        }
-//        if (parseFailure) {
-//            Toast.makeText(App.getContext(), "Warning: match data may be corrupted or malformed.", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        return matchData;
-//    }
+    
 
-    /**
-     * Add a Note for a particular team.
-     * <p/>
-     * The intention of Notes is for the drive team to be able to read them quickly.
-     * They should be short and fit on one line, so they will be truncated to 80 characters.
-     */
-    public static void addNote(int teamNumber, String note) {
-        // TODO #41
-    }
-
-    /**
-     * Retrieves all the notes for a particular team.
-     *
-     * @param teamNumber the team number you want notes for.
-     * @return All the notes for this team concatenated into a single string, with each note beginning with a bullet "-",
-     * and ending with a newline (except for the last one).
-     */
-    public static String getNotesForTeam(int teamNumber) {
-        // TODO #41
-
-        return "";
-    }
 
 
     public static void appendToTeamDataFile(TeamDataObject teamDataObject) {
@@ -879,14 +824,24 @@ public class FileUtils {
     }
 
 
+
     // This returns the local match data for a given match and
     public static JSONObject getJsonData(int teamNumber, int matchNumber){
         String json = null;
         JSONObject jsonObject = null;
 
+        String fileName;
+        String filePath;
+        if (teamNumber == -1) {
+            filePath = sLocalEventFilePath + "/" + "FieldWatcherData" + "/" + "match" + matchNumber + ".json";
+
+        } else {
+            filePath = sLocalEventFilePath + "/" + matchNumber + "/" + "match" + matchNumber + ".json";
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalEventFilePath + "/" +  teamNumber + "/" + "match" + matchNumber));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 
             while ((json = bufferedReader.readLine()) != null) {
                 stringBuilder.append(json);
@@ -909,9 +864,16 @@ public class FileUtils {
 
 
     public static void saveJsonData(JSONObject obj) {
-        try {
-            String filePath = sLocalEventFilePath + "/matchData.json";
 
+
+        try {
+            String filePath;
+
+            if (obj.getInt("team") == -1) {
+                filePath = sLocalEventFilePath + "/" + "FieldWatcherData" + "/" + "match" + obj.getInt("match_number") + ".json";
+            } else {
+                filePath = sLocalEventFilePath + "/" + obj.getInt("team") + "/" + "match" + obj.getInt("match_number") + ".json";
+            }
             File file = new File(filePath);
 
             (new File(file.getParent())).mkdirs();
@@ -930,7 +892,8 @@ public class FileUtils {
 
         } catch (IOException e){
             Log.d("IOException", e.getMessage());
-
+        } catch(JSONException e) {
+            Log.d("JSON errr", e.toString());
         }
     }
 

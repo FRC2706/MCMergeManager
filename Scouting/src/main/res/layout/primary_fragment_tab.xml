@@ -69,6 +69,15 @@
                 android:textStyle="bold" />
 
 
+            <Button
+                android:id="@+id/fieldwatcher_button"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="#c3aee8"
+                android:onClick="toPreFieldWatcher"
+                android:text="Field Watcher"
+                android:textSize="18sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="51dp"
