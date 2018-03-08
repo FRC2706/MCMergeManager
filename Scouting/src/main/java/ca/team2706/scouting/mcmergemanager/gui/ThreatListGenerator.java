@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,8 +49,7 @@ public class ThreatListGenerator extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_threatlist);
-
+         setContentView(R.layout.activity_threatlist);
 
         switch_weight   = (EditText) findViewById(R.id.switch_weight);
         scale_weight    = (EditText) findViewById(R.id.scale_weight);
@@ -76,11 +76,18 @@ public class ThreatListGenerator extends AppCompatActivity {
     
     private Integer getTotal(){
 
-        int i = Integer.parseInt(switch_weight.getText().toString())
-                + Integer.parseInt(scale_weight.getText().toString())
-                + Integer.parseInt(defense_weight.getText().toString())
-                + Integer.parseInt(exchange_weight.getText().toString());
-        return i;
+        int total;
+
+        try {
+            total = Integer.parseInt(switch_weight.getText().toString())
+                    + Integer.parseInt(scale_weight.getText().toString())
+                    + Integer.parseInt(defense_weight.getText().toString())
+                    + Integer.parseInt(exchange_weight.getText().toString());
+        } catch (NumberFormatException e) {
+            total = 100;
+        }
+
+        return total;
     }
 
 
