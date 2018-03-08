@@ -16,7 +16,8 @@ public class ClimbEvent extends Event{
     public ClimbType climbType;
     public double climb_time;
 
-    public ClimbEvent(ClimbType climbType, double climb_time) {
+    public ClimbEvent(ClimbType climbType, double climb_time, double time_stamp) {
+        super(time_stamp);
         this.climb_time = climb_time;
         this.climbType = climbType;
     }
