@@ -7,6 +7,9 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
  */
 
 public class ForceEvent extends Event {
+
+    public static String ID = "field_watcher_force";
+
     public enum AllianceColour{
         BLUE, RED
     }

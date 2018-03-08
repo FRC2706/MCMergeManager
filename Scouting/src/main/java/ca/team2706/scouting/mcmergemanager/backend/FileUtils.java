@@ -298,6 +298,20 @@ public class FileUtils {
 //        return loadMatchDataFile(FileType.SYNCHED);
 //    }
 
+    public static ArrayList<String> getTeams(){
+        ArrayList<String> teamNums = new ArrayList<>();
+
+        String inFileName = sLocalEventFilePath;
+        File dir = new File(inFileName);
+        File[] files = dir.listFiles();
+
+        for (int i = 0; i < files.length; ++i) {
+            teamNums.add(files[i].getName());
+        }
+        return teamNums;
+
+    }
+
     public static MatchData loadMatchData(int teamNum) {
         MatchData matchData = new MatchData();
         List<JSONObject> matchJson = new ArrayList<>();
@@ -352,71 +366,8 @@ public class FileUtils {
     }
 
 
-//    public static MatchData loadMatchDataFile(FileType fileType) {
-//
-//        MatchData matchData = new MatchData();
-//        List<JSONObject> matchJson = new ArrayList<>();
-//
-//        String inFileName = sLocalEventFilePath;
-//
-//
-//        try {
-//            BufferedReader br = new BufferedReader(new FileReader(inFileName));
-//            String line = br.readLine();
-//
-//            while (line != null) {
-//                // braces are for human readability, but make parsing harder
-//                matchJson.add(new JSONObject(line));
-//                line = br.readLine();
-//            }
-//            br.close();
-//        } catch (Exception e) {
-//            Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: " + e.toString());
-//            return null;
-//        }
-//
-//        // parse all the matches into the MatchData object
-//        boolean parseFailure = false;
-//        for (JSONObject obj : matchJson) {
-//
-//            try {
-//                MatchData.Match match = new MatchData.Match(obj);
-//                matchData.addMatch(match);
-//            } catch (Exception e) {
-//                Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: ", e);
-//                parseFailure = true;
-//                continue;
-//            }
-//        }
-//        if (parseFailure) {
-//            Toast.makeText(App.getContext(), "Warning: match data may be corrupted or malformed.", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        return matchData;
-//    }
+    
 
-    /**
-     * Add a Note for a particular team.
-     * <p/>
-     * The intention of Notes is for the drive team to be able to read them quickly.
-     * They should be short and fit on one line, so they will be truncated to 80 characters.
-     */
-    public static void addNote(int teamNumber, String note) {
-        // TODO #41
-    }
-
-    /**
-     * Retrieves all the notes for a particular team.
-     *
-     * @param teamNumber the team number you want notes for.
-     * @return All the notes for this team concatenated into a single string, with each note beginning with a bullet "-",
-     * and ending with a newline (except for the last one).
-     */
-    public static String getNotesForTeam(int teamNumber) {
-        // TODO #41
-
-        return "";
-    }
 
 
     public static void appendToTeamDataFile(TeamDataObject teamDataObject) {
