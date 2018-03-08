@@ -758,14 +758,24 @@ public class FileUtils {
     }
 
 
+
     // This returns the local match data for a given match and
     public static JSONObject getJsonData(int teamNumber, int matchNumber){
         String json = null;
         JSONObject jsonObject = null;
 
+        String fileName;
+        String filePath;
+        if (teamNumber == -1) {
+            filePath = sLocalEventFilePath + "/" + "FieldWatcherData" + "/" + "match" + matchNumber + ".json";
+
+        } else {
+            filePath = sLocalEventFilePath + "/" + matchNumber + "/" + "match" + matchNumber + ".json";
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalEventFilePath + "/" +  teamNumber + "/" + "match" + matchNumber));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 
             while ((json = bufferedReader.readLine()) != null) {
                 stringBuilder.append(json);
@@ -788,9 +798,16 @@ public class FileUtils {
 
 
     public static void saveJsonData(JSONObject obj) {
-        try {
-            String filePath = sLocalEventFilePath + "/" + obj.getInt("team") + "/" + "match" +obj.getInt("match_number") + ".json";
 
+
+        try {
+            String filePath;
+            if (obj.getInt("team") == -1) {
+                filePath = sLocalEventFilePath + "/" + "FieldWatcherData" + "/" + "match" + obj.getInt("match_number") + ".json";
+
+            } else {
+                filePath = sLocalEventFilePath + "/" + obj.getInt("team") + "/" + "match" + obj.getInt("match_number") + ".json";
+            }
             File file = new File(filePath);
 
             (new File(file.getParent())).mkdirs();

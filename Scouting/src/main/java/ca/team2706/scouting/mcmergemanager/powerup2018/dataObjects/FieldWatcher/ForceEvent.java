@@ -17,4 +17,8 @@ public class ForceEvent extends Event {
         super(timestamp);
         this.allianceColour = allianceColour;
     }
+
+    public ForceEvent() {
+
+    };
 }

@@ -6,19 +6,19 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
  * Created by Merge on 2018-02-24.
  */
 
-public class ScaleEvent extends Event {
-
+public class RedSwitchEvent extends Event {
     public enum AllianceColour{
         BLUE, RED, NEUTRAL
     }
 
     public AllianceColour allianceColour;
 
-    public ScaleEvent(double timestamp, AllianceColour allianceColour) {
+    public RedSwitchEvent(double timestamp, AllianceColour allianceColour) {
         super(timestamp);
         this.allianceColour = allianceColour;
     }
-    public ScaleEvent(){
 
+    public RedSwitchEvent() {
+        //Empty constructor
     }
 }

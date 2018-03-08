@@ -27,12 +27,14 @@ import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.Popups.FragmentLis
 import static ca.team2706.scouting.mcmergemanager.backend.App.getContext;
 
 import android.view.View.OnKeyListener;
+import android.widget.Toast;
 
 import java.io.Serializable;
 
 public class TeleopScouting extends AppCompatActivity implements FragmentListener{
 
     public static int teamNum = -1;
+    volatile boolean cubeHolding;
 
     @Override
     public void editNameDialogComplete(DialogFragment dialogFragment, Bundle data){
@@ -55,10 +57,6 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
     private Runnable m_handlerTask;
     private volatile boolean stopTimer;
     private int remainTime = 135;
-    public int ballsHeld;
-    public boolean gearHeld = false;
-    public boolean gearDropped = false;
-    public String ballsHeldString;
 
     ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject teleopScoutingObject;
 
@@ -109,49 +107,55 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
         //Recording data for delivery
         final Spinner cubeDeliverySpinner = (Spinner) findViewById(R.id.cube_delivery_spinner);
 
-        cubeDeliverySpinner.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        String text = (String) cubeDeliverySpinner.getItemAtPosition(position);
+        if(cubeHolding) {
+            cubeDeliverySpinner.setOnItemSelectedListener(
+                    new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                            String text = (String) cubeDeliverySpinner.getItemAtPosition(position);
 
-                        CubePlacementEvent cubePlacementEvent;
+                            CubePlacementEvent cubePlacementEvent;
 
-                        CubeDroppedEvent cubeDroppedEvent;
+                            CubeDroppedEvent cubeDroppedEvent;
 
-                        switch (position){
+                            switch (position) {
 
-                            case 1:
-                                cubePlacementEvent = new CubePlacementEvent(135 - remainTime, CubePlacementEvent.PlacementType.ALLIANCE_SWITCH);
-                                teleopScoutingObject.add(cubePlacementEvent);
-                                cubeDeliverySpinner.setSelection(0);
-                                break;
+                                case 1:
+                                    cubePlacementEvent = new CubePlacementEvent(135 - remainTime, CubePlacementEvent.PlacementType.ALLIANCE_SWITCH);
+                                    teleopScoutingObject.add(cubePlacementEvent);
+                                    cubeDeliverySpinner.setSelection(0);
+                                    break;
 
-                            case 2:
-                                cubePlacementEvent = new CubePlacementEvent(135 - remainTime, CubePlacementEvent.PlacementType.SCALE);
-                                teleopScoutingObject.add(cubePlacementEvent);
-                                cubeDeliverySpinner.setSelection(0);
-                                break;
+                                case 2:
+                                    cubePlacementEvent = new CubePlacementEvent(135 - remainTime, CubePlacementEvent.PlacementType.SCALE);
+                                    teleopScoutingObject.add(cubePlacementEvent);
+                                    cubeDeliverySpinner.setSelection(0);
+                                    break;
 
-                            case 3:
-                                cubePlacementEvent = new CubePlacementEvent(135 - remainTime, CubePlacementEvent.PlacementType.EXCHANGE);
-                                teleopScoutingObject.add(cubePlacementEvent);
-                                cubeDeliverySpinner.setSelection(0);
-                                break;
+                                case 3:
+                                    cubePlacementEvent = new CubePlacementEvent(135 - remainTime, CubePlacementEvent.PlacementType.EXCHANGE);
+                                    teleopScoutingObject.add(cubePlacementEvent);
+                                    cubeDeliverySpinner.setSelection(0);
+                                    break;
 
-                            case 4:
-                                //show the cube dropped popup
-                                showCubeDropped();
+                                case 4:
+                                    //show the cube dropped popup
+                                    showCubeDropped();
 
-                                cubeDeliverySpinner.setSelection(0);
-                                break;
+                                    cubeDeliverySpinner.setSelection(0);
+                                    break;
+                            }
+                        }
+
+                        public void onNothingSelected(AdapterView<?> parent) {
                         }
                     }
-                    public  void onNothingSelected(AdapterView<?> parent){}
-                }
 
-        );
+            );
 
+        }else{
+            Toast.makeText(this, "You are not holding a cube.", Toast.LENGTH_SHORT).show();
+        }
 
         //Recording data for pickup
         final Spinner cubePickupSpinner = (Spinner) findViewById(R.id.cube_pickup_spinner);
@@ -170,24 +174,28 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
                                 cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.PickupType.PYRAMID);
                                 teleopScoutingObject.add(cubePickupEvent);
                                 cubePickupSpinner.setSelection(0);
+                                cubeHolding = true;
                                 break;
 
                             case 2:
                                 cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.PickupType.PORTAL);
                                 teleopScoutingObject.add(cubePickupEvent);
                                 cubePickupSpinner.setSelection(0);
+                                cubeHolding = true;
                                 break;
 
                             case 3:
                                 cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.PickupType.EXCHANGE);
                                 teleopScoutingObject.add(cubePickupEvent);
                                 cubePickupSpinner.setSelection(0);
+                                cubeHolding = true;
                                 break;
 
                             case 4:
                                 cubePickupEvent = new CubePickupEvent(135 - remainTime, CubePickupEvent.PickupType.GROUND);
                                 teleopScoutingObject.add(cubePickupEvent);
                                 cubePickupSpinner.setSelection(0);
+                                cubeHolding = true;
                                 break;
                         }
                     }
@@ -233,6 +241,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
         teamNumber.setText(teamNum.toString());
 
       //  int i = preGameObject.teamNumber;
+
 
     }
 
