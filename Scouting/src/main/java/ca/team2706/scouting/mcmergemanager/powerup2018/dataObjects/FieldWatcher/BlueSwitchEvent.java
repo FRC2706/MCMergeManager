@@ -7,6 +7,9 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
  */
 
 public class BlueSwitchEvent extends Event {
+
+    public static final String ID = "field_watcher_blue_switch_event";
+
     public enum AllianceColour{
         BLUE, RED, NEUTRAL
     }

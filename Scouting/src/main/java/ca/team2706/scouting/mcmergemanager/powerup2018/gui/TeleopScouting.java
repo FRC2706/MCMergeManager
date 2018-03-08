@@ -107,7 +107,7 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
         //Recording data for delivery
         final Spinner cubeDeliverySpinner = (Spinner) findViewById(R.id.cube_delivery_spinner);
 
-        if(cubeHolding) {
+//        if(cubeHolding) {
             cubeDeliverySpinner.setOnItemSelectedListener(
                     new AdapterView.OnItemSelectedListener() {
                         @Override
@@ -153,9 +153,9 @@ public class TeleopScouting extends AppCompatActivity implements FragmentListene
 
             );
 
-        }else{
-            Toast.makeText(this, "You are not holding a cube.", Toast.LENGTH_SHORT).show();
-        }
+//        }else{
+//            Toast.makeText(this, "You are not holding a cube.", Toast.LENGTH_SHORT).show();
+//        }
 
         //Recording data for pickup
         final Spinner cubePickupSpinner = (Spinner) findViewById(R.id.cube_pickup_spinner);

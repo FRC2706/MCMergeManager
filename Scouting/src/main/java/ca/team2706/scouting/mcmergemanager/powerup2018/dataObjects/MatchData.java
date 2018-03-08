@@ -15,12 +15,13 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCube
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLineCrossEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoMalfunctionEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.BlueSwitchEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.BoostEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.FieldWatcherObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ForceEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.LevitateEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.RedSwitchEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ScaleEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.SwitchEvent;
 
 
 /**
@@ -54,7 +55,8 @@ public class MatchData implements Serializable{
     public static final String BOOST = "field_watcher_boost";
     public static final String FORCE = "field_watcher_force";
     public static final String LEVITATE = "field_watcher_levitate";
-    public static final String SWITCH = "field_watcher_switch";
+    public static final String RED_SWITCH = "field_watcher_red_switch_event";;
+    public static final String BLUE_SWITCH = "field_watcher_blue_switch_event";;
     public static final String SCALE = "field_watcher_scale";
 
     public static class Match implements Serializable {
@@ -129,8 +131,12 @@ public class MatchData implements Serializable{
                                 event = new ScaleEvent(obj.getInt(START_TIME), ScaleEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
                                 fieldWatcherObject.add(event);
                                 break;
-                            case SWITCH:
-                                event = new SwitchEvent(obj.getInt(START_TIME), SwitchEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                            case RED_SWITCH:
+                                event = new RedSwitchEvent(obj.getInt(START_TIME), RedSwitchEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                                fieldWatcherObject.add(event);
+                                break;
+                            case BLUE_SWITCH:
+                                event = new BlueSwitchEvent(obj.getInt(START_TIME), BlueSwitchEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
                                 fieldWatcherObject.add(event);
                                 break;
                             case LEVITATE:
@@ -150,7 +156,7 @@ public class MatchData implements Serializable{
                         }
                     } catch (IllegalArgumentException e) {
                         // If an illegal argument is found in the JSON file, the for loop will continue to the next item in the array
-                        Log.d("Invalid Argument", "INVALID");
+                        Log.d("Invalid Argument", "INVALID ARGUMENT EXCEPTION");
                         i++;
                     }
 
@@ -259,13 +265,17 @@ public class MatchData implements Serializable{
                     obj.put(GOAL, e.ID);
                     obj.put(START_TIME, e.timestamp);
                     obj.put(EXTRA, e.allianceColour.toString());
-                } if (event instanceof SwitchEvent) {
-                    SwitchEvent e = (SwitchEvent) event;
+                } if (event instanceof BlueSwitchEvent) {
+                    BlueSwitchEvent e = (BlueSwitchEvent) event;
                     obj.put(GOAL, e.ID);
                     obj.put(START_TIME, e.timestamp);
                     obj.put(EXTRA, e.allianceColour.toString());
-                }
-
+                }  if (event instanceof RedSwitchEvent) {
+                    RedSwitchEvent e = (RedSwitchEvent) event;
+                    obj.put(GOAL, e.ID);
+                    obj.put(START_TIME, e.timestamp);
+                    obj.put(EXTRA, e.allianceColour.toString());
+            }
                 jsonArray.put(obj);
 
             }
