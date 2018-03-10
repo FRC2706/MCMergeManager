@@ -3,6 +3,7 @@ package ca.team2706.scouting.mcmergemanager.powerup2018.gui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,6 +17,7 @@ import org.json.JSONException;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.gui.PreGameActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.ClimbEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
@@ -26,15 +28,14 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PostGameObjec
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
 
+import static ca.team2706.scouting.mcmergemanager.backend.App.getContext;
+
 
 public class PostGame extends AppCompatActivity {
 
     private PostGameObject postGameObject = new PostGameObject();
     private ClimbEvent climbEvent = new ClimbEvent();
-    private DefenseEvent defenseEvent = new DefenseEvent();
 
-    public String notesText;
-    public String noEntry = "Notes...";
     public String textViewDisplayString;
     public String pointsScoredString;
     public String test = " seconds to climb";
@@ -45,7 +46,7 @@ public class PostGame extends AppCompatActivity {
     SeekBar defenseSeekBar;
     SeekBar climbTimeSeekBar;
 
-
+    public static int teamNum = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +127,38 @@ public class PostGame extends AppCompatActivity {
         });
 
         postGameObject.timestamp = 140;
+
+        final EditText teamNumber = (EditText) findViewById(R.id.teamNumber);
+
+        final EditText comment = (EditText) findViewById(R.id.comment);
+
+
+        teamNumber.setOnKeyListener(new View.OnKeyListener(){
+
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+
+                teamNum = CommentListener.getTeamNum(keyCode, keyevent, teamNumber, comment);
+                if (teamNum == -1) {
+                    return false;
+                }
+                return true;
+            }
+        });
+
+
+        PreGameObject preGameObject = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
+        final Integer teamNum = preGameObject.teamNumber;
+
+        comment.setOnKeyListener(new View.OnKeyListener(){
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, view, getContext());
+                teamNumber.setText(teamNum.toString());
+                return true;
+            }
+        });
+
+
+        teamNumber.setText(teamNum.toString());
     }
 
 
