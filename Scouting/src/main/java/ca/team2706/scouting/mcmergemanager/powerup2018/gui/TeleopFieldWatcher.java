@@ -3,12 +3,16 @@ package ca.team2706.scouting.mcmergemanager.powerup2018.gui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.json.JSONException;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
@@ -150,6 +154,8 @@ public class TeleopFieldWatcher extends AppCompatActivity{
             public void onClick(View v) {
                 event = new ForceEvent(135 - remainTime, ForceEvent.AllianceColour.RED);
                 fieldWatcherObject.add(event);
+
+                redForceButton.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -158,6 +164,8 @@ public class TeleopFieldWatcher extends AppCompatActivity{
             public void onClick(View v) {
                 event = new ForceEvent(135 - remainTime, ForceEvent.AllianceColour.BLUE);
                 fieldWatcherObject.add(event);
+
+                blueForceButton.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -167,6 +175,8 @@ public class TeleopFieldWatcher extends AppCompatActivity{
             public void onClick(View v) {
                 event = new LevitateEvent(135 - remainTime, LevitateEvent.AllianceColour.RED);
                 fieldWatcherObject.add(event);
+
+                redLevitateButton.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -175,6 +185,8 @@ public class TeleopFieldWatcher extends AppCompatActivity{
             public void onClick(View v) {
                 event = new LevitateEvent(135 - remainTime, LevitateEvent.AllianceColour.BLUE);
                 fieldWatcherObject.add(event);
+
+                blueLevitateButton.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -184,6 +196,8 @@ public class TeleopFieldWatcher extends AppCompatActivity{
             public void onClick(View v) {
                 event = new BoostEvent(135 - remainTime, BoostEvent.AllianceColour.RED);
                 fieldWatcherObject.add(event);
+
+                redBoostButton.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -192,6 +206,8 @@ public class TeleopFieldWatcher extends AppCompatActivity{
             public void onClick(View v) {
                 event = new LevitateEvent(135 - remainTime, LevitateEvent.AllianceColour.BLUE);
                 fieldWatcherObject.add(event);
+
+                blueBoostButton.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -249,8 +265,20 @@ public class TeleopFieldWatcher extends AppCompatActivity{
     }
 
     public void returnHome(View view){
-        PreGameObject preGameObject = new PreGameObject(-1, 1);
+        Intent thisIntent = getIntent();
+        PreGameObject preGameObject = (PreGameObject) thisIntent.getSerializableExtra("PreGameObject");
+        int i = preGameObject.teamNumber;
         FieldWatcherObject fieldWatcherObject1 = fieldWatcherObject;
+
+
+        MatchData.Match match = new MatchData.Match(preGameObject, fieldWatcherObject);
+
+        try {
+            match.toJson();
+        }catch(JSONException e) {
+            Log.d("JSON error", e.getMessage());
+        }
+
 
 
         Intent intent = new Intent(this, PreGameFieldWatcher.class);
