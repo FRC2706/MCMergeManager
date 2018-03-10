@@ -11,8 +11,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="161dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Match #"
+        android:inputType="number"
+        android:hint="Match #"
         android:textSize="20sp" />
 
     <Button
