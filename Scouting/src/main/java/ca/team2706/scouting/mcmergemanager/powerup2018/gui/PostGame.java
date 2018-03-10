@@ -19,6 +19,7 @@ import org.json.JSONException;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
+import ca.team2706.scouting.mcmergemanager.backend.WebServerUtils;
 import ca.team2706.scouting.mcmergemanager.gui.PreGameActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.ClimbEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
@@ -233,11 +234,13 @@ public class PostGame extends AppCompatActivity {
 
         MatchData.Match match = new MatchData.Match(pre, a, t);
 
-        try {
-            match.toJson();
-        } catch (JSONException e) {
-            Toast.makeText(this, "JSON Failed to save", Toast.LENGTH_SHORT).show();
-        }
+        // Make sure it doesn't run on main thread
+        WebServerUtils.uploadMatch(match);
+//        try {
+//            match.toJson();
+//        } catch (JSONException e) {
+//            Toast.makeText(this, "JSON Failed to save", Toast.LENGTH_SHORT).show();
+//        }
 
         Intent intent = new Intent(this, PreGameActivity.class);
         startActivity(intent);

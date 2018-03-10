@@ -111,7 +111,12 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        WebServerUtils.uploadUnsyncedMatches();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                WebServerUtils.uploadUnsyncedMatches();
+            }
+        }).start();
 
         // tell the user where they are syncing their gearDeliveryData to
         updateDataSyncLabel();
@@ -401,15 +406,17 @@ public class MainActivity extends AppCompatActivity
 
 
     public void onClickSyncMatchData(View v) {
-        FileUtils.getJsonData().toString();
         new Thread(new Runnable() {
             @Override
             public void run() {
+                // Post all data to server
+                WebServerUtils.uploadUnsyncedMatches();
+
                 // Get data from server
                 WebServerUtils.syncMatchData();
 
                 // Reload the match data
-                FileUtils.getJsonData();
+                System.out.println(FileUtils.readUnpostedMatches().toString());
             }
         }).start();
     }

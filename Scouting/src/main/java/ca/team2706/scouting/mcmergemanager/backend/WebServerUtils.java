@@ -15,16 +15,10 @@ import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.PostThread;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.PullThread;
 import ca.team2706.scouting.mcmergemanager.gui.MainActivity;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePlacementEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLineCrossEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoMalfunctionEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.ClimbEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubeDroppedEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -73,13 +67,15 @@ public class WebServerUtils {
                         "&extra=" + extra)
                 .build();
 
+        System.out.println(request.url());
+
         try {
             Response response = client.newCall(request).execute();
 
             // If server returns success then the comment posted
-            if(response.body().string().equals("success"))
+            if (response.body().string().equals("success"))
                 return true;
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.d("Okhttp3 error", e.toString());
         }
 
@@ -161,106 +157,190 @@ public class WebServerUtils {
     }
 
 
-    public static void uploadUnsyncedMatches() {
-        // Networking so needs to be in own thread
+    public static void uploadMatch(final MatchData.Match match) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                // Check if has internet
-                if(BlueAllianceUtils.checkInternetPermissions(MainActivity.me))
+                // Get the match key
+                String matchKey = getMatchKey(match.preGameObject.matchNumber, match.preGameObject.teamNumber);
+
+                // If the match key doesnt get anything that just set the match to be reuploaded later, and go to next match
+                if (matchKey == null) {
+                    FileUtils.saveUnpostedMatch(match.toJsonObject());
                     return;
+                }
 
-                // Load the files
-                MatchData matchData = FileUtils.loadMatchData(2706);
+                // JSONObject
+                ArrayList<Event> unpostedEvents = new ArrayList<>();
 
-                // Loop through all matches and events
-                for(MatchData.Match match : matchData.matches) {
-                    // Get the match key
-                    String matchKey = getMatchKey(match.preGameObject.matchNumber, match.preGameObject.teamNumber);
+                // If the match key is null then something didn't work, therefore don't continue in current loop
+                ArrayList<PostThread> threads = new ArrayList<PostThread>();
 
-                    // If the match key is null then something didn't work, therefore don't continue in current loop
-                    if(matchKey == null)
-                        continue;
+                for (Event event : match.autoScoutingObject.getEvents()) {
+                    threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+                }
 
-                    ArrayList<PostThread> threads = new ArrayList<PostThread>();
+                for (Event event : match.teleopScoutingObject.getEvents()) {
+                    threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+                }
 
-                    for(Event event : match.teleopScoutingObject.getEvents()) {
-                        if(event instanceof AutoCubePickupEvent) {
-                            threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), MatchData.AUTO_CUBE_PICKUP_ID, "",
-                                    Double.toString(event.timestamp), "", ((AutoCubePickupEvent) event).pickupType.toString()));
-                        } else if(event instanceof AutoCubePlacementEvent) {
-                            threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), MatchData.AUTO_CUBE_PLACE_ID, "",
-                                    Double.toString(event.timestamp), "", ((AutoCubePlacementEvent) event).placementType.toString()));
-                        } else if(event instanceof AutoLineCrossEvent) {
-                            threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), MatchData.AUTO_LINE_CROSS_ID,
-                                    Boolean.toString(((AutoLineCrossEvent) event).crossedAutoLine), Double.toString(event.timestamp), "", ""));
-                        } else if(event instanceof AutoMalfunctionEvent) {
-                            threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), MatchData.AUTO_MALFUNCTION_ID,
-                                    Boolean.toString(((AutoMalfunctionEvent) event).autoMalfunction), Double.toString(event.timestamp), "", ""));
-                        } else if(event instanceof ClimbEvent) {
-                            threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), MatchData.CLIMB_ID, "",
-                                    Double.toString(event.timestamp), Double.toString(((ClimbEvent) event).climb_time), ((ClimbEvent) event).climbType.toString()));
-                        } else if(event instanceof CubeDroppedEvent) {
-                            threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), MatchData.CUBE_DROPPED_ID, "",
-                                    Double.toString(event.timestamp), "", ((CubeDroppedEvent) event).dropType.toString()));
-                        } else if(event instanceof CubePickupEvent) {
-                            threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), MatchData.CUBE_PICKUP_ID, "",
-                                    Double.toString(event.timestamp), "", ((CubePickupEvent) event).pickupType.toString()));
-                        } else if(event instanceof CubePlacementEvent) {
-                            threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), MatchData.CUBE_PLACE_ID, "",
-                                    Double.toString(event.timestamp), "", ((CubePlacementEvent) event).placementType.toString()));
+                // Run all the threads
+                for (PostThread t : threads) {
+                    t.run();
+                }
+
+                // Wait for threads
+                try {
+                    for (PostThread t : threads) {
+                        t.join();
+
+                        // If not posted then add to stuff that needs to be reposted
+                        if (!t.getPosted()) {
+                            unpostedEvents.add(t.getEvent());
                         }
                     }
+                } catch (InterruptedException e) {
+                    e.toString();
+                }
 
-                    // Run all the threads
-                    for(PostThread t : threads) {
-                        t.run();
-                    }
 
-                    // Wait for threads
-                    try {
-                        for (PostThread t : threads) {
-                            t.join();
-                        }
-                    } catch (InterruptedException e) {
-                        e.toString();
-                    }
+                // If there are any events in the aray that some stuff failed, save in order to retry later
+                if (unpostedEvents.size() > 0) {
+                    TeleopScoutingObject unpostedTeleopObject = new TeleopScoutingObject();
+                    for (Event e : unpostedEvents)
+                        unpostedTeleopObject.add(e);
+
+                    // Autoscouting is null because I can just save all events in teleop array
+
+                    FileUtils.saveUnpostedMatch(new MatchData.Match(match.preGameObject, new AutoScoutingObject(), unpostedTeleopObject).toJsonObject());
                 }
             }
         }).start();
     }
 
-    public static String getMatchKey(int matchNumber, int teamNumber)  {
+    public static void uploadUnsyncedMatches() {
+        // Used for saving matches that failed to post
+        JSONArray unpostedMatches = new JSONArray();
+
+        // Load the files
+        JSONArray matchData = FileUtils.readUnpostedMatches();
+
+        // Loop through all matches and events
+        for (int i = 0; i < matchData.length(); i++) {
+            MatchData.Match match = null;
+            try {
+                match = new MatchData.Match(matchData.getJSONObject(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (match == null) {
+                unpostedMatches.put(match.toJsonObject());
+                continue;
+            }
+
+            // JSONObject
+            ArrayList<Event> unpostedEvents = new ArrayList<>();
+
+            // Get the match key which is required for posting
+            String matchKey = getMatchKey(match.preGameObject.matchNumber, match.preGameObject.teamNumber);
+
+            // If the match key doesnt get anything that just set the match to be reuploaded later, and go to next match
+            if (matchKey == null) {
+                unpostedMatches.put(match.toJsonObject());
+                continue;
+            } else if(matchKey.equals("WrongMatchNumber")) {
+                FileUtils.saveWrongMatchNumberMatch(match.toJsonObject());
+                continue;
+            }
+
+            ArrayList<PostThread> threads = new ArrayList<PostThread>();
+
+            for (Event event : match.autoScoutingObject.getEvents()) {
+                threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+            }
+
+            for (Event event : match.teleopScoutingObject.getEvents()) {
+                threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+            }
+
+            // Run all the threads
+            for (PostThread t : threads) {
+                t.run();
+            }
+
+            // Wait for threads
+            try {
+                for (PostThread t : threads) {
+                    t.join();
+
+                    // If not posted then add to stuff that needs to be reposted
+                    if (!t.getPosted()) {
+                        unpostedEvents.add(t.getEvent());
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.toString();
+            }
+
+            // If there are any events in the aray that some stuff failed, save in order to retry later
+            if (unpostedEvents.size() > 0) {
+                TeleopScoutingObject unpostedTeleopObject = new TeleopScoutingObject();
+                for (Event e : unpostedEvents)
+                    unpostedTeleopObject.add(e);
+
+                // Autoscouting is null because I can just save all events in teleop array
+                unpostedMatches.put(new MatchData.Match(match.preGameObject, new AutoScoutingObject(), unpostedTeleopObject).toJsonObject());
+            }
+        }
+
+        // Delete the file so we don't get duplicates
+        FileUtils.deleteUnsyncedMatches();
+
+        // Check if there are any failed matches, then save
+        if (unpostedMatches.length() > 0) {
+            FileUtils.saveUnpostedMatches(unpostedMatches);
+        }
+
+        System.out.println("Done posting matches.");
+
+        // Scan the directory tree
+        FileUtils.checkLocalFileStructure(MainActivity.me);
+    }
+
+    public static String getMatchKey(int matchNumber, int teamNumber) {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
         String TBA_Event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
 
-        JSONArray arr = null;
         try {
-            arr = new JSONArray(BlueAllianceUtils.getObject("team/frc" + teamNumber + "/event/" + TBA_Event + "/matches/simple"));
-        } catch(JSONException e) {
-            e.printStackTrace();
-        }
+            String s = BlueAllianceUtils.getObject("team/frc" + teamNumber + "/event/" + TBA_Event + "/matches/simple");
+            if (s.length() == 0)
+                return null;
+            JSONArray arr = new JSONArray(s);
 
-        // Find the match number
-        try {
+            // Find the match number
             for (int i = 0; i < arr.length(); i++) {
                 if (arr.getJSONObject(i).getString("match_number").equals(Integer.toString(matchNumber))) {
                     return arr.getJSONObject(i).getString("key");
                 }
             }
-        } catch(JSONException e) {
-            e.printStackTrace();
+
+            // If didn't find the match key then person entered wrong match number
+            return "WrongMatchNumber";
+        } catch (JSONException e) {
+            Log.d("Err match key", e.toString());
         }
 
         return null;
     }
 
-    public static String syncMatchData() {
+    public static void syncMatchData() {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
         String TBA_Event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
 
         // Get the competition form the server
         JSONObject competition = getCompetitonFromServer(TBA_Event);
+        if(competition == null)
+            return;
         JSONArray matches = new JSONArray();
 
         ArrayList<PullThread> threads = new ArrayList<>();
@@ -272,20 +352,18 @@ public class WebServerUtils {
             }
 
             // Wait for threads to stop
-            for(PullThread t : threads) {
+            for (PullThread t : threads) {
                 t.join();
-                matches.put(t.getResponse());
+
+                // Save the match data
+                FileUtils.saveServerData(new JSONObject(t.getResponse()));
             }
 
-            // Save the match data
-            FileUtils.saveServerData(matches);
             Log.d("Syncing match data:", "done");
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        return matches.toString();
     }
 }

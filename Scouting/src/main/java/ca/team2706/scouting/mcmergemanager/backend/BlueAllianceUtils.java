@@ -315,7 +315,7 @@ public class BlueAllianceUtils {
         ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork == null) { // not connected to the internet
-            return null;
+            return "";
         }
 
         // Get a list of the events for a certain year
