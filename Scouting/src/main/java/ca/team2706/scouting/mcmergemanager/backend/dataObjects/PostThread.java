@@ -46,14 +46,14 @@ public class PostThread extends Thread {
             extra = ((AutoCubePlacementEvent) event).placementType.toString();
         } else if (event instanceof AutoLineCrossEvent) {
             goal = MatchData.AUTO_LINE_CROSS_ID;
-            success = Boolean.toString(((AutoLineCrossEvent) event).crossedAutoLine);
+            extra = Boolean.toString(((AutoLineCrossEvent) event).crossedAutoLine);
         } else if (event instanceof AutoMalfunctionEvent) {
             goal = MatchData.AUTO_MALFUNCTION_ID;
-            success = Boolean.toString(((AutoMalfunctionEvent) event).autoMalfunction);
+            extra = Boolean.toString(((AutoMalfunctionEvent) event).autoMalfunction);
         } else if (event instanceof ClimbEvent) {
             goal = MatchData.CLIMB_ID;
-            endTime = Double.toString(((ClimbEvent) event).climb_time);
             extra = ((ClimbEvent) event).climbType.toString();
+            endTime = Double.toString(((ClimbEvent) event).climb_time);
         } else if (event instanceof CubeDroppedEvent) {
             goal = MatchData.CUBE_DROPPED_ID;
             extra = ((CubeDroppedEvent) event).dropType.toString();
@@ -65,7 +65,7 @@ public class PostThread extends Thread {
             extra = ((CubePlacementEvent) event).placementType.toString();
         } else if(event instanceof PostGameObject) {
             goal = MatchData.POST_GAME_ID;
-            startTime = Double.toString(((PostGameObject) event).time_dead);
+            extra = Double.toString(((PostGameObject) event).time_dead);
             endTime = Double.toString(((PostGameObject) event).time_defending);
         }
 
