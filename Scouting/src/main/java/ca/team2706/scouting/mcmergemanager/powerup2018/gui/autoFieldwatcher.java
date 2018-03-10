@@ -126,6 +126,7 @@ public class autoFieldwatcher extends AppCompatActivity {
     public void toTeleopFieldWatcher(View view){
         Intent intent = new Intent(this, TeleopFieldWatcher.class);
         intent.putExtra("FieldWatcherObject", fieldWatcherObject);
+        intent.putExtra("PreGameObject", getIntent().getSerializableExtra("PreGameObject"));
         startActivity(intent);
     }
 }
