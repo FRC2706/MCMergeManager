@@ -5,7 +5,10 @@ import java.io.Serializable;
 // For feeding the CycleDisplay window
 public class Cycle implements Serializable{
     public enum CycleType {
-        CLIMB, SWITCH, SCALE, EXCHANGE, DROPPED;
+        CLIMB, SWITCH, SCALE, EXCHANGE, DROPPED,
+        BLUE_SWITCH_POSSESSION, RED_SWITCH_POSSESSION, SCALE_POSSESSION,
+        BLUE_SWITCH_NEUTRAL, RED_SWITCH_NEUTRAL, SCALE_NEUTRAL,
+        BLUE_SWITCH_OTHER, RED_SWITCH_OTHER, SCALE_OTHER;
     }
 
     public CycleType cycleType;

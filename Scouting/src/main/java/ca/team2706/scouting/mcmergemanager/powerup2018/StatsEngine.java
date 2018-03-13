@@ -104,7 +104,7 @@ public class StatsEngine implements Serializable {
                 alliance = BLUE;
 
             // Booleans to keep track of who has what. True is blue, false is red.
-            FieldWatcherObject.AllianceColour blueSwitch, redSwitch, scale;
+            FieldWatcherObject.AllianceColour blueSwitch = NEUTRAL, redSwitch = NEUTRAL, scale = NEUTRAL;
             Cycle blueSwitchCycle = new Cycle();
             Cycle redSwitchCycle = new Cycle();
             Cycle scaleCycle = new Cycle();
@@ -113,14 +113,56 @@ public class StatsEngine implements Serializable {
                 if(event instanceof BlueSwitchEvent) {
                     BlueSwitchEvent e = (BlueSwitchEvent) event;
 
-                    // Add the cycle
-                    
+                    // Make sure they didn't tap twice
+                    if(e.getAllianceColour() != e.getAllianceColour()) {
+
+                        // Finish last cycle
+                        blueSwitchCycle.endTime = e.timestamp;
+                        switch (blueSwitch) {
+                            case RED:
+                                if(alliance == RED) {
+                                    
+                                } else {
+
+                                }
+                                break;
+                            case BLUE:
+                                break;
+                            case NEUTRAL:
+                                break;
+                        }
+
+                    }
                 } else if(event instanceof BoostEvent) {
-//                    if()
+                    BoostEvent b = (BoostEvent) event;
+
+                    // Which team got it
+                    if(alliance == b.getAllianceColour()) {
+                        teamStatsReport.boost++;
+                        teamStatsReport.boostTimes.add(b.timestamp);
+                    } else {
+                        teamStatsReport.oppBoost++;
+                    }
                 } else if(event instanceof ForceEvent) {
+                    ForceEvent f = (ForceEvent) event;
 
+                    // Which team got it
+                    if(alliance == f.getAllianceColour()) {
+                        teamStatsReport.force++;
+                        teamStatsReport.forceTimes.add(f.timestamp);
+                    } else {
+                        teamStatsReport.oppForce++;
+                    }
                 } else if(event instanceof LevitateEvent) {
+                    LevitateEvent l = (LevitateEvent) event;
 
+                    // Which team got it
+                    if(alliance == l.getAllianceColour()) {
+                        teamStatsReport.levitate++;
+                        teamStatsReport.levitateTimes.add(l.timestamp);
+                    } else {
+                        teamStatsReport.oppLevitate++;
+                    }
                 } else if(event instanceof RedSwitchEvent) {
 
                 } else if(event instanceof ScaleEvent) {

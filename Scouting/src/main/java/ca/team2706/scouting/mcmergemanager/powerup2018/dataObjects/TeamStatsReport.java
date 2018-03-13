@@ -68,8 +68,12 @@ public class TeamStatsReport implements Serializable {
     public CommentList comments;
 
     public double avgAllianceSwitchTimePerMatch, avgOpposingSwitchTimePerMatch, avgScaleTimePerMatch;
+    public ArrayList<Double> boostTimes = new ArrayList<>();
+    public ArrayList<Double> levitateTimes = new ArrayList<>();
+    public ArrayList<Double> forceTimes = new ArrayList<>();
     public int force, levitate, boost;
     public int oppForce, oppLevitate, oppBoost;
+
 
 
     /**
