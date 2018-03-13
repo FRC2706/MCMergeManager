@@ -67,10 +67,15 @@ public class TeamStatsReport implements Serializable {
     public ArrayList<CyclesInAMatch> cycleMatches = new ArrayList<>();
     public CommentList comments;
 
-    public double avgAllianceSwitchTimePerMatch, avgOpposingSwitchTimePerMatch, avgScaleTimePerMatch;
+    // Field Watcher stats
+    public double avgAllianceSwitchPossessionPerMatch, avgOpposingSwitchPossessionPerMatch, avgScalePossessionPerMatch;
+    public double avgAllianceSwitchNotPossessionPerMatch, avgOpposingSwitchNotPossessionPerMatch, avgScaleNotPossessionPerMatch;
+    public double avgAllianceSwitchNeutralPerMatch, avgOpposingSwitchNeutralPerMatch, avgScaleNeutralPerMatch;
+
     public ArrayList<Double> boostTimes = new ArrayList<>();
     public ArrayList<Double> levitateTimes = new ArrayList<>();
     public ArrayList<Double> forceTimes = new ArrayList<>();
+
     public int force, levitate, boost;
     public int oppForce, oppLevitate, oppBoost;
 

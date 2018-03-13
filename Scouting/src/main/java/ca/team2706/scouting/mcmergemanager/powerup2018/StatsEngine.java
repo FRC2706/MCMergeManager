@@ -104,34 +104,58 @@ public class StatsEngine implements Serializable {
                 alliance = BLUE;
 
             // Booleans to keep track of who has what. True is blue, false is red.
+            // Booleans and cycles are used for both auto and teleop because the positions should carry over
             FieldWatcherObject.AllianceColour blueSwitch = NEUTRAL, redSwitch = NEUTRAL, scale = NEUTRAL;
             Cycle blueSwitchCycle = new Cycle();
             Cycle redSwitchCycle = new Cycle();
             Cycle scaleCycle = new Cycle();
 
+            TeamStatsReport.CyclesInAMatch cyclesInAMatch = new TeamStatsReport.CyclesInAMatch(match.getMatchNo());
             for(Event event : fieldWatcherData.autoScoutingObject.getEvents()) {
                 if(event instanceof BlueSwitchEvent) {
                     BlueSwitchEvent e = (BlueSwitchEvent) event;
 
                     // Make sure they didn't tap twice
-                    if(e.getAllianceColour() != e.getAllianceColour()) {
+                    if(e.getAllianceColour() != blueSwitch) {
 
                         // Finish last cycle
                         blueSwitchCycle.endTime = e.timestamp;
                         switch (blueSwitch) {
                             case RED:
                                 if(alliance == RED) {
-                                    
+                                    teamStatsReport.avgOpposingSwitchPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_POSSESSION));
                                 } else {
-
+                                   teamStatsReport.avgAllianceSwitchNotPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                                   cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NO_POSSESSION));
                                 }
                                 break;
                             case BLUE:
+                                if(alliance == BLUE) {
+                                    teamStatsReport.avgAllianceSwitchPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_POSSESSION));
+                                } else {
+                                    teamStatsReport.avgOpposingSwitchNotPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NO_POSSESSION));
+                                }
                                 break;
                             case NEUTRAL:
+                                // No matter what team, doesn't have possession
+                                if(alliance == BLUE) {
+                                    teamStatsReport.avgAllianceSwitchNeutralPerMatch += blueSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NEUTRAL));
+                                } else {
+                                    teamStatsReport.avgOpposingSwitchNeutralPerMatch += blueSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NEUTRAL));
+                                }
                                 break;
                         }
 
+                        // Reset start time for cycle
+                        blueSwitchCycle.startTime = e.timestamp;
+
+                        // Set which team has it
+                        blueSwitch = e.getAllianceColour();
                     }
                 } else if(event instanceof BoostEvent) {
                     BoostEvent b = (BoostEvent) event;
@@ -164,11 +188,353 @@ public class StatsEngine implements Serializable {
                         teamStatsReport.oppLevitate++;
                     }
                 } else if(event instanceof RedSwitchEvent) {
+                    RedSwitchEvent e = (RedSwitchEvent) event;
 
+                    // Make sure they didn't tap twice
+                    if(e.getAllianceColour() != redSwitch) {
+
+                        // Finish last cycle
+                        redSwitchCycle.endTime = e.timestamp;
+                        switch (redSwitch) {
+                            case RED:
+                                if (alliance == RED) {
+                                    teamStatsReport.avgAllianceSwitchPossessionPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_POSSESSION));
+                                } else {
+                                    teamStatsReport.avgOpposingSwitchNotPossessionPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NO_POSSESSION));
+                                }
+                                break;
+                            case BLUE:
+                                if (alliance == BLUE) {
+                                    teamStatsReport.avgOpposingSwitchPossessionPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_POSSESSION));
+                                } else {
+                                    teamStatsReport.avgAllianceSwitchNotPossessionPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NO_POSSESSION));
+                                }
+                                break;
+                            case NEUTRAL:
+                                if (alliance == RED) {
+                                    teamStatsReport.avgAllianceSwitchNeutralPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NEUTRAL));
+                                } else {
+                                    teamStatsReport.avgOpposingSwitchNeutralPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NEUTRAL));
+                                }
+                                break;
+                        }
+
+                        // Reset start time for cycle
+                        redSwitchCycle.startTime = e.timestamp;
+
+                        // Set which team has it
+                        redSwitch = e.getAllianceColour();
+                    }
                 } else if(event instanceof ScaleEvent) {
+                    ScaleEvent e = (ScaleEvent) event;
 
+                    // Make sure they didn't tap twice
+                    if(e.getAllianceColour() != scale) {
+
+                        // Finish last cycle
+                        scaleCycle.endTime = e.timestamp;
+                        switch (scale) {
+                            case RED:
+                                if (alliance == RED) {
+                                    teamStatsReport.avgScalePossessionPerMatch += scaleCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_POSSESSION));
+                                } else {
+                                    teamStatsReport.avgScaleNotPossessionPerMatch += scaleCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_NO_POSSESSION));
+                                }
+                                break;
+                            case BLUE:
+                                if (alliance == BLUE) {
+                                    teamStatsReport.avgScalePossessionPerMatch += scaleCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_POSSESSION));
+                                } else {
+                                    teamStatsReport.avgScaleNotPossessionPerMatch += scaleCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_NO_POSSESSION));
+                                }
+                                break;
+                            case NEUTRAL:
+                                teamStatsReport.avgScaleNeutralPerMatch += scaleCycle.getCycleTime();
+                                cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_NEUTRAL));
+                                break;
+                        }
+
+                        // Reset start time for cycle
+                        scaleCycle.startTime = e.timestamp;
+
+                        // Set which team has it
+                        scale = e.getAllianceColour();
+                    }
+                }
+
+
+            }
+
+            for(Event event : fieldWatcherData.fieldWatcherObject.getEvents()) {
+                if(event instanceof BlueSwitchEvent) {
+                    BlueSwitchEvent e = (BlueSwitchEvent) event;
+
+                    // Make sure they didn't tap twice
+                    if(e.getAllianceColour() != blueSwitch) {
+
+                        // Finish last cycle
+                        blueSwitchCycle.endTime = e.timestamp;
+                        switch (blueSwitch) {
+                            case RED:
+                                if(alliance == RED) {
+                                    teamStatsReport.avgOpposingSwitchPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_POSSESSION));
+                                } else {
+                                    teamStatsReport.avgAllianceSwitchNotPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NO_POSSESSION));
+                                }
+                                break;
+                            case BLUE:
+                                if(alliance == BLUE) {
+                                    teamStatsReport.avgAllianceSwitchPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_POSSESSION));
+                                } else {
+                                    teamStatsReport.avgOpposingSwitchNotPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NO_POSSESSION));
+                                }
+                                break;
+                            case NEUTRAL:
+                                // No matter what team, doesn't have possession
+                                if(alliance == BLUE) {
+                                    teamStatsReport.avgAllianceSwitchNeutralPerMatch += blueSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NEUTRAL));
+                                } else {
+                                    teamStatsReport.avgOpposingSwitchNeutralPerMatch += blueSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NEUTRAL));
+                                }
+                                break;
+                        }
+
+                        // Reset start time for cycle
+                        blueSwitchCycle.startTime = e.timestamp;
+
+                        // Set which team has it
+                        blueSwitch = e.getAllianceColour();
+                    }
+                } else if(event instanceof BoostEvent) {
+                    BoostEvent b = (BoostEvent) event;
+
+                    // Which team got it
+                    if(alliance == b.getAllianceColour()) {
+                        teamStatsReport.boost++;
+                        teamStatsReport.boostTimes.add(b.timestamp);
+                    } else {
+                        teamStatsReport.oppBoost++;
+                    }
+                } else if(event instanceof ForceEvent) {
+                    ForceEvent f = (ForceEvent) event;
+
+                    // Which team got it
+                    if(alliance == f.getAllianceColour()) {
+                        teamStatsReport.force++;
+                        teamStatsReport.forceTimes.add(f.timestamp);
+                    } else {
+                        teamStatsReport.oppForce++;
+                    }
+                } else if(event instanceof LevitateEvent) {
+                    LevitateEvent l = (LevitateEvent) event;
+
+                    // Which team got it
+                    if(alliance == l.getAllianceColour()) {
+                        teamStatsReport.levitate++;
+                        teamStatsReport.levitateTimes.add(l.timestamp);
+                    } else {
+                        teamStatsReport.oppLevitate++;
+                    }
+                } else if(event instanceof RedSwitchEvent) {
+                    RedSwitchEvent e = (RedSwitchEvent) event;
+
+                    // Make sure they didn't tap twice
+                    if(e.getAllianceColour() != redSwitch) {
+
+                        // Finish last cycle
+                        redSwitchCycle.endTime = e.timestamp;
+                        switch (redSwitch) {
+                            case RED:
+                                if (alliance == RED) {
+                                    teamStatsReport.avgAllianceSwitchPossessionPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_POSSESSION));
+                                } else {
+                                    teamStatsReport.avgOpposingSwitchNotPossessionPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NO_POSSESSION));
+                                }
+                                break;
+                            case BLUE:
+                                if (alliance == BLUE) {
+                                    teamStatsReport.avgOpposingSwitchPossessionPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_POSSESSION));
+                                } else {
+                                    teamStatsReport.avgAllianceSwitchNotPossessionPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NO_POSSESSION));
+                                }
+                                break;
+                            case NEUTRAL:
+                                if (alliance == RED) {
+                                    teamStatsReport.avgAllianceSwitchNeutralPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NEUTRAL));
+                                } else {
+                                    teamStatsReport.avgOpposingSwitchNeutralPerMatch += redSwitchCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NEUTRAL));
+                                }
+                                break;
+                        }
+
+                        // Reset start time for cycle
+                        redSwitchCycle.startTime = e.timestamp;
+
+                        // Set which team has it
+                        redSwitch = e.getAllianceColour();
+                    }
+                } else if(event instanceof ScaleEvent) {
+                    ScaleEvent e = (ScaleEvent) event;
+
+                    // Make sure they didn't tap twice
+                    if(e.getAllianceColour() != scale) {
+
+                        // Finish last cycle
+                        scaleCycle.endTime = e.timestamp;
+                        switch (scale) {
+                            case RED:
+                                if (alliance == RED) {
+                                    teamStatsReport.avgScalePossessionPerMatch += scaleCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_POSSESSION));
+                                } else {
+                                    teamStatsReport.avgScaleNotPossessionPerMatch += scaleCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_NO_POSSESSION));
+                                }
+                                break;
+                            case BLUE:
+                                if (alliance == BLUE) {
+                                    teamStatsReport.avgScalePossessionPerMatch += scaleCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_POSSESSION));
+                                } else {
+                                    teamStatsReport.avgScaleNotPossessionPerMatch += scaleCycle.getCycleTime();
+                                    cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_NO_POSSESSION));
+                                }
+                                break;
+                            case NEUTRAL:
+                                teamStatsReport.avgScaleNeutralPerMatch += scaleCycle.getCycleTime();
+                                cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_NEUTRAL));
+                                break;
+                        }
+
+                        // Reset start time for cycle
+                        scaleCycle.startTime = e.timestamp;
+
+                        // Set which team has it
+                        scale = e.getAllianceColour();
+                    }
                 }
             }
+
+            // Finish the cycles for the match
+            switch(blueSwitch) {
+                case NEUTRAL:
+                    if(alliance == BLUE) {
+                        teamStatsReport.avgAllianceSwitchNeutralPerMatch += blueSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NEUTRAL));
+                    } else {
+                        teamStatsReport.avgOpposingSwitchNeutralPerMatch += blueSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NEUTRAL));
+                    }
+                    break;
+                case BLUE:
+                    if(alliance == BLUE) {
+                        teamStatsReport.avgAllianceSwitchPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_POSSESSION));
+                    } else {
+                        teamStatsReport.avgOpposingSwitchNotPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NO_POSSESSION));
+                    }
+                    break;
+                case RED:
+                    if(alliance == BLUE) {
+                        teamStatsReport.avgAllianceSwitchNotPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NO_POSSESSION));
+                    } else {
+                        teamStatsReport.avgOpposingSwitchPossessionPerMatch += blueSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_POSSESSION));
+                    }
+                    break;
+            }
+            switch(redSwitch) {
+                case NEUTRAL:
+                    if(alliance == RED) {
+                        teamStatsReport.avgAllianceSwitchNeutralPerMatch += redSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NEUTRAL));
+                    } else {
+                        teamStatsReport.avgOpposingSwitchNeutralPerMatch += redSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NEUTRAL));
+                    }
+                    break;
+                case BLUE:
+                    if(alliance == RED) {
+                        teamStatsReport.avgAllianceSwitchPossessionPerMatch += redSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_POSSESSION));
+                    } else {
+                        teamStatsReport.avgOpposingSwitchNotPossessionPerMatch += redSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_NO_POSSESSION));
+                    }
+                    break;
+                case RED:
+                    if(alliance == RED) {
+                        teamStatsReport.avgAllianceSwitchNotPossessionPerMatch += redSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.ALLIANCE_SWITCH_NO_POSSESSION));
+                    } else {
+                        teamStatsReport.avgOpposingSwitchPossessionPerMatch += redSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(redSwitchCycle.clone(Cycle.CycleType.OPPOSING_SWITCH_POSSESSION));
+                    }
+                    break;
+            }
+            switch(scale) {
+                case NEUTRAL:
+                    teamStatsReport.avgScaleNeutralPerMatch += scaleCycle.getCycleTime();
+                    cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_NEUTRAL));
+                    break;
+                case BLUE:
+                    if(alliance == BLUE) {
+                        teamStatsReport.avgScalePossessionPerMatch += scaleCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_POSSESSION));
+                    } else {
+                        teamStatsReport.avgScaleNotPossessionPerMatch += scaleCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_NO_POSSESSION));
+                    }
+                    break;
+                case RED:
+                    if(alliance == BLUE) {
+                        teamStatsReport.avgScaleNotPossessionPerMatch += scaleCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(scaleCycle.clone(Cycle.CycleType.SCALE_NO_POSSESSION));
+                    } else {
+                        teamStatsReport.avgScalePossessionPerMatch += blueSwitchCycle.getCycleTime();
+                        cyclesInAMatch.cycles.add(blueSwitchCycle.clone(Cycle.CycleType.SCALE_POSSESSION));
+                    }
+                    break;
+            }
+        }
+
+        // Get average times per match
+        if(teamStatsReport.numMatchesPlayed != 0) {
+            teamStatsReport.avgAllianceSwitchPossessionPerMatch /= teamStatsReport.numMatchesPlayed;
+            teamStatsReport.avgOpposingSwitchPossessionPerMatch /= teamStatsReport.numMatchesPlayed;
+            teamStatsReport.avgScalePossessionPerMatch /= teamStatsReport.numMatchesPlayed;
+
+            teamStatsReport.avgAllianceSwitchNotPossessionPerMatch /= teamStatsReport.numMatchesPlayed;
+            teamStatsReport.avgOpposingSwitchNotPossessionPerMatch /= teamStatsReport.numMatchesPlayed;
+            teamStatsReport.avgScaleNotPossessionPerMatch /= teamStatsReport.numMatchesPlayed;
+
+            teamStatsReport.avgAllianceSwitchNeutralPerMatch /= teamStatsReport.numMatchesPlayed;
+            teamStatsReport.avgOpposingSwitchNeutralPerMatch /= teamStatsReport.numMatchesPlayed;
+            teamStatsReport.avgScaleNeutralPerMatch /= teamStatsReport.numMatchesPlayed;
         }
     }
 

@@ -447,7 +447,7 @@ public class FileUtils {
         MatchData.Match match = null;
 
         try {
-            File file = new File(sLocalCommentFilePath + "/FieldWatcherData/match" + matchNumber + ".json");
+            File file = new File(sLocalEventFilePath + "/FieldWatcherData/match" + matchNumber + ".json");
             BufferedReader bw = new BufferedReader(new FileReader(file));
 
             match = new MatchData.Match(new JSONObject(bw.readLine()));
