@@ -104,18 +104,18 @@ public class TeamStatsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.teleLeftItTV)).setText(Integer.toString(m_teamStatsReport.totalLeftIt));
         ((TextView) findViewById(R.id.teleFumbleTV)).setText(Integer.toString(m_teamStatsReport.totalFumbles));
 
-        ((TextView) findViewById(R.id.avgSwitchPlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.switchAvgCycleTime));
-        ((TextView) findViewById(R.id.avgScalePlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.scaleAvgCycleTime));
-        ((TextView) findViewById(R.id.avgExchangePlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.exchangeAvgCycleTime));
+        ((TextView) findViewById(R.id.avgSwitchPlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.switchAvgCycleTime) + "s");
+        ((TextView) findViewById(R.id.avgScalePlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.scaleAvgCycleTime) + "s");
+        ((TextView) findViewById(R.id.avgExchangePlaceTimeTV)).setText(String.format("%.2f", m_teamStatsReport.exchangeAvgCycleTime) + "s");
 
         ((TextView) findViewById(R.id.favouritePickupTV)).setText(m_teamStatsReport.favouritePickup.toString());
         ((TextView) findViewById(R.id.favouritePlacementTV)).setText(m_teamStatsReport.favouritePlacement.toString());
 
 
         // Climbing stuff
-        ((TextView) findViewById(R.id.avgClimbTimeTV)).setText(String.format("%.2f", m_teamStatsReport.avgClimbTime));
-        ((TextView) findViewById(R.id.minClimbTimeTV)).setText(String.format("%.2f", m_teamStatsReport.minClimbTime));
-        ((TextView) findViewById(R.id.maxClimbTimeTV)).setText(String.format("%.2f", m_teamStatsReport.maxClimbTime));
+        ((TextView) findViewById(R.id.avgClimbTimeTV)).setText(String.format("%.2f", m_teamStatsReport.avgClimbTime) + "s");
+        ((TextView) findViewById(R.id.minClimbTimeTV)).setText(String.format("%.2f", m_teamStatsReport.minClimbTime) + "s");
+        ((TextView) findViewById(R.id.maxClimbTimeTV)).setText(String.format("%.2f", m_teamStatsReport.maxClimbTime) + "s");
 
         ((TextView) findViewById(R.id.noClimbTV)).setText(Integer.toString(m_teamStatsReport.noClimb));
         ((TextView) findViewById(R.id.failClimbTV)).setText(Integer.toString(m_teamStatsReport.failClimb));
@@ -124,12 +124,19 @@ public class TeamStatsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.assistedOthersClimbTV)).setText(Integer.toString(m_teamStatsReport.assistedOthersClimb));
 
         // Post game
-        ((TextView) findViewById(R.id.avgTimeDefendingTV)).setText(String.format("%.2f", m_teamStatsReport.avgTimeDefending));
-        ((TextView) findViewById(R.id.maxTimeDefendingTV)).setText(String.format("%.2f", m_teamStatsReport.maxTimeDefending));
+        ((TextView) findViewById(R.id.avgTimeDefendingTV)).setText(String.format("%.2f", m_teamStatsReport.avgTimeDefending) + "s");
+        ((TextView) findViewById(R.id.maxTimeDefendingTV)).setText(String.format("%.2f", m_teamStatsReport.maxTimeDefending) + "s");
 
-        ((TextView) findViewById(R.id.avgDeadnessTV)).setText(String.format("%.2f", m_teamStatsReport.avgDeadness));
-        ((TextView) findViewById(R.id.maxDeadnessTV)).setText(String.format("%.2f", m_teamStatsReport.highestDeadness));
+        ((TextView) findViewById(R.id.avgDeadnessTV)).setText(String.format("%.2f", m_teamStatsReport.avgDeadness) + "s");
+        ((TextView) findViewById(R.id.maxDeadnessTV)).setText(String.format("%.2f", m_teamStatsReport.highestDeadness) + "s");
 
+        // Field Watcher Stuff
+        ((TextView) findViewById(R.id.avgAllianceSwitchPossTV)).setText(String.format("%.2f", m_teamStatsReport.avgAllianceSwitchPossessionPerMatch) + "s");
+        ((TextView) findViewById(R.id.avgOpposingSwitchPossTV)).setText(String.format("%.2f", m_teamStatsReport.avgOpposingSwitchPossessionPerMatch) + "s");
+        ((TextView) findViewById(R.id.avgScalePossTV)).setText(String.format("%.2f", m_teamStatsReport.avgScalePossessionPerMatch) + "s");
 
+        ((TextView) findViewById(R.id.forceUsesTV)).setText(Integer.toString(m_teamStatsReport.force));
+        ((TextView) findViewById(R.id.boostUsesTV)).setText(Integer.toString(m_teamStatsReport.boost));
+        ((TextView) findViewById(R.id.levitateUsesTV)).setText(Integer.toString(m_teamStatsReport.levitate));
     }
 }

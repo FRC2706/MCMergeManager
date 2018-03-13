@@ -784,6 +784,133 @@
 
         </GridLayout>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <!-- Field Watcher Stats-->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.07">
+
+            <TextView
+                android:text="Field Watcher:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fieldWatcherTitle"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Alliance switch poss:"
+                android:id="@+id/avgAllianceSwitchPossLBL"
+                android:layout_row="4"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0.0 s"
+                android:id="@+id/avgAllianceSwitchPossTV"
+                android:layout_row="4"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Opposing switch poss:"
+                android:id="@+id/avgOpposingSwitchPossLBL"
+                android:layout_row="5"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0.0 s"
+                android:id="@+id/avgOpposingSwitchPossTV"
+                android:layout_row="5"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Scale poss:"
+                android:id="@+id/avgScalePossLBL"
+                android:layout_row="6"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0.0 s"
+                android:id="@+id/avgScalePossTV"
+                android:layout_row="6"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Force uses:"
+                android:id="@+id/forceUsesLBL"
+                android:layout_row="7"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/forceUsesTV"
+                android:layout_row="7"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Boost uses:"
+                android:id="@+id/boostUsesLBL"
+                android:layout_row="8"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/boostUsesTV"
+                android:layout_row="8"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Levitate uses:"
+                android:id="@+id/levitateUsesLBL"
+                android:layout_row="9"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/levitateUsesTV"
+                android:layout_row="9"
+                android:layout_column="1" />
+
+        </GridLayout>
+
     </LinearLayout>
 
 </ScrollView>
