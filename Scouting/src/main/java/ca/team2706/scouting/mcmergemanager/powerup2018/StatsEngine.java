@@ -14,6 +14,7 @@ import java.util.Map;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
+import ca.team2706.scouting.mcmergemanager.gui.MatchScheduleActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLineCrossEvent;
@@ -25,17 +26,26 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEve
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Cycle;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.BlueSwitchEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.BoostEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.FieldWatcherObject;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ForceEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.LevitateEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.RedSwitchEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ScaleEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PostGameObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport;
 
 import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.ALLIANCE_SWITCH;
 import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent.PlacementType.SCALE;
+import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.FieldWatcherObject.AllianceColour.BLUE;
+import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.FieldWatcherObject.AllianceColour.NEUTRAL;
+import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.FieldWatcherObject.AllianceColour.RED;
 
 public class StatsEngine implements Serializable {
 
     public static final String OPR_FILENAME = "OPRs.json";
-
 
     private MatchData matchData;
     private MatchSchedule matchSchedule;
@@ -73,8 +83,51 @@ public class StatsEngine implements Serializable {
         fillInOverallStats(teamStatsReport, teamNumber);
         fillInAutoStats(teamStatsReport);
         fillInTeleopStats(teamStatsReport);
+        if(matchSchedule != null)
+            fillInFieldWatcherStats(teamStatsReport, teamNumber);
 
         return teamStatsReport;
+    }
+
+
+    public void fillInFieldWatcherStats(TeamStatsReport teamStatsReport, int teamNumber) {
+        for(MatchSchedule.Match match : teamStatsReport.teamMatcheSchedule.getMatches()) {
+            MatchData.Match fieldWatcherData = FileUtils.getFieldWatcherMatch(match.getMatchNo());
+
+            // Check if there is data for that match
+            if(fieldWatcherData == null)
+                continue;
+
+            // Find what alliance team is on
+            FieldWatcherObject.AllianceColour alliance = RED;   // true is blue, false is red
+            if(match.getBlue1() == teamNumber || match.getBlue2() == teamNumber || match.getBlue3() == teamNumber)
+                alliance = BLUE;
+
+            // Booleans to keep track of who has what. True is blue, false is red.
+            FieldWatcherObject.AllianceColour blueSwitch, redSwitch, scale;
+            Cycle blueSwitchCycle = new Cycle();
+            Cycle redSwitchCycle = new Cycle();
+            Cycle scaleCycle = new Cycle();
+
+            for(Event event : fieldWatcherData.autoScoutingObject.getEvents()) {
+                if(event instanceof BlueSwitchEvent) {
+                    BlueSwitchEvent e = (BlueSwitchEvent) event;
+
+                    // Add the cycle
+                    
+                } else if(event instanceof BoostEvent) {
+//                    if()
+                } else if(event instanceof ForceEvent) {
+
+                } else if(event instanceof LevitateEvent) {
+
+                } else if(event instanceof RedSwitchEvent) {
+
+                } else if(event instanceof ScaleEvent) {
+
+                }
+            }
+        }
     }
 
     // Fill in the stats that don't need to analyse the match

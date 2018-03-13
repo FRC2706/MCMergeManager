@@ -141,27 +141,27 @@ public class MatchData implements Serializable {
                             teleopScoutingObject.add(event);
                             break;
                         case SCALE:
-                            event = new ScaleEvent(obj.getInt(START_TIME), ScaleEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                            event = new ScaleEvent(obj.getInt(START_TIME), FieldWatcherObject.AllianceColour.valueOf(obj.getString(EXTRA)));
                             fieldWatcherObject.add(event);
                             break;
                         case RED_SWITCH:
-                            event = new RedSwitchEvent(obj.getInt(START_TIME), RedSwitchEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                            event = new RedSwitchEvent(obj.getInt(START_TIME), FieldWatcherObject.AllianceColour.valueOf(obj.getString(EXTRA)));
                             fieldWatcherObject.add(event);
                             break;
                         case BLUE_SWITCH:
-                            event = new BlueSwitchEvent(obj.getInt(START_TIME), BlueSwitchEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                            event = new BlueSwitchEvent(obj.getInt(START_TIME), FieldWatcherObject.AllianceColour.valueOf(obj.getString(EXTRA)));
                             fieldWatcherObject.add(event);
                             break;
                         case LEVITATE:
-                            event = new LevitateEvent(obj.getInt(START_TIME), LevitateEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                            event = new LevitateEvent(obj.getInt(START_TIME), FieldWatcherObject.AllianceColour.valueOf(obj.getString(EXTRA)));
                             fieldWatcherObject.add(event);
                             break;
                         case FORCE:
-                            event = new ForceEvent(obj.getInt(START_TIME), ForceEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                            event = new ForceEvent(obj.getInt(START_TIME), FieldWatcherObject.AllianceColour.valueOf(obj.getString(EXTRA)));
                             fieldWatcherObject.add(event);
                             break;
                         case BOOST:
-                            event = new BoostEvent(obj.getInt(START_TIME), BoostEvent.AllianceColour.valueOf(obj.getString(EXTRA)));
+                            event = new BoostEvent(obj.getInt(START_TIME), FieldWatcherObject.AllianceColour.valueOf(obj.getString(EXTRA)));
                             fieldWatcherObject.add(event);
                             break;
                         default:
@@ -264,37 +264,37 @@ public class MatchData implements Serializable {
                         BoostEvent e = (BoostEvent) event;
                         obj.put(GOAL, e.ID);
                         obj.put(START_TIME, e.timestamp);
-                        obj.put(EXTRA, e.allianceColour.toString());
+                        obj.put(EXTRA, e.getAllianceColour().toString());
                     }
                     if (event instanceof ForceEvent) {
                         ForceEvent e = (ForceEvent) event;
                         obj.put(GOAL, e.ID);
                         obj.put(START_TIME, e.timestamp);
-                        obj.put(EXTRA, e.allianceColour.toString());
+                        obj.put(EXTRA, e.getAllianceColour().toString());
                     }
                     if (event instanceof LevitateEvent) {
                         LevitateEvent e = (LevitateEvent) event;
                         obj.put(GOAL, e.ID);
                         obj.put(START_TIME, e.timestamp);
-                        obj.put(EXTRA, e.allianceColour.toString());
+                        obj.put(EXTRA, e.getAllianceColour().toString());
                     }
                     if (event instanceof ScaleEvent) {
                         ScaleEvent e = (ScaleEvent) event;
                         obj.put(GOAL, e.ID);
                         obj.put(START_TIME, e.timestamp);
-                        obj.put(EXTRA, e.allianceColour.toString());
+                        obj.put(EXTRA, e.getAllianceColour().toString());
                     }
                     if (event instanceof BlueSwitchEvent) {
                         BlueSwitchEvent e = (BlueSwitchEvent) event;
                         obj.put(GOAL, e.ID);
                         obj.put(START_TIME, e.timestamp);
-                        obj.put(EXTRA, e.allianceColour.toString());
+                        obj.put(EXTRA, e.getAllianceColour().toString());
                     }
                     if (event instanceof RedSwitchEvent) {
                         RedSwitchEvent e = (RedSwitchEvent) event;
                         obj.put(GOAL, e.ID);
                         obj.put(START_TIME, e.timestamp);
-                        obj.put(EXTRA, e.allianceColour.toString());
+                        obj.put(EXTRA, e.getAllianceColour().toString());
                     }
                     jsonArray.put(obj);
 
@@ -394,37 +394,37 @@ public class MatchData implements Serializable {
                     BoostEvent e = (BoostEvent) event;
                     obj.put(GOAL, e.ID);
                     obj.put(START_TIME, e.timestamp);
-                    obj.put(EXTRA, e.allianceColour.toString());
+                    obj.put(EXTRA, e.getAllianceColour().toString());
                 }
                 if (event instanceof ForceEvent) {
                     ForceEvent e = (ForceEvent) event;
                     obj.put(GOAL, e.ID);
                     obj.put(START_TIME, e.timestamp);
-                    obj.put(EXTRA, e.allianceColour.toString());
+                    obj.put(EXTRA, e.getAllianceColour().toString());
                 }
                 if (event instanceof LevitateEvent) {
                     LevitateEvent e = (LevitateEvent) event;
                     obj.put(GOAL, e.ID);
                     obj.put(START_TIME, e.timestamp);
-                    obj.put(EXTRA, e.allianceColour.toString());
+                    obj.put(EXTRA, e.getAllianceColour().toString());
                 }
                 if (event instanceof ScaleEvent) {
                     ScaleEvent e = (ScaleEvent) event;
                     obj.put(GOAL, e.ID);
                     obj.put(START_TIME, e.timestamp);
-                    obj.put(EXTRA, e.allianceColour.toString());
+                    obj.put(EXTRA, e.getAllianceColour().toString());
                 }
                 if (event instanceof BlueSwitchEvent) {
                     BlueSwitchEvent e = (BlueSwitchEvent) event;
                     obj.put(GOAL, e.ID);
                     obj.put(START_TIME, e.timestamp);
-                    obj.put(EXTRA, e.allianceColour.toString());
+                    obj.put(EXTRA, e.getAllianceColour().toString());
                 }
                 if (event instanceof RedSwitchEvent) {
                     RedSwitchEvent e = (RedSwitchEvent) event;
                     obj.put(GOAL, e.ID);
                     obj.put(START_TIME, e.timestamp);
-                    obj.put(EXTRA, e.allianceColour.toString());
+                    obj.put(EXTRA, e.getAllianceColour().toString());
                 }
                 jsonArray.put(obj);
 

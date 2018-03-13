@@ -9,6 +9,10 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 
 public class FieldWatcherObject implements Serializable {
 
+    public enum AllianceColour{
+        BLUE, RED, NEUTRAL
+    }
+
     private ArrayList<Event> events = new ArrayList<>();
 
 

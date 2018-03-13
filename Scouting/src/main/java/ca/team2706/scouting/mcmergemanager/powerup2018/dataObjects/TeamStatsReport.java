@@ -67,6 +67,11 @@ public class TeamStatsReport implements Serializable {
     public ArrayList<CyclesInAMatch> cycleMatches = new ArrayList<>();
     public CommentList comments;
 
+    public double avgAllianceSwitchTimePerMatch, avgOpposingSwitchTimePerMatch, avgScaleTimePerMatch;
+    public int force, levitate, boost;
+    public int oppForce, oppLevitate, oppBoost;
+
+
     /**
      * For feeding the CycleDisplay window..
      */

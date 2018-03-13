@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -42,6 +43,7 @@ import ca.team2706.scouting.mcmergemanager.gui.MainActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.FieldWatcher;
 
 /**
  * This is a helper class to hold common code for accessing shared scouting data files.
@@ -439,6 +441,27 @@ public class FileUtils {
             teamNums.add(files[i].getName());
         }
         return teamNums;
+    }
+
+    public static MatchData.Match getFieldWatcherMatch(int matchNumber) {
+        MatchData.Match match = null;
+
+        try {
+            File file = new File(sLocalCommentFilePath + "/FieldWatcherData/match" + matchNumber + ".json");
+            BufferedReader bw = new BufferedReader(new FileReader(file));
+
+            match = new MatchData.Match(new JSONObject(bw.readLine()));
+
+            bw.close();
+        } catch(FileNotFoundException e) {
+            Log.d("No match found", e.toString());
+        } catch(IOException e) {
+            e.printStackTrace();
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
+
+        return match;
     }
 
     public static MatchData loadMatchData(int teamNum) {

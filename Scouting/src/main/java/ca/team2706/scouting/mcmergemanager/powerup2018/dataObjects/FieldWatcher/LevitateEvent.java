@@ -7,20 +7,27 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
  */
 
 public class LevitateEvent extends Event{
-    public enum AllianceColour{
-        BLUE, RED
-    }
 
     public static String ID = "field_watcher_levitate";
 
-    public AllianceColour allianceColour;
+    private FieldWatcherObject.AllianceColour allianceColour;
 
-    public LevitateEvent(double timestamp, AllianceColour allianceColour) {
+    public LevitateEvent(double timestamp, FieldWatcherObject.AllianceColour allianceColour) {
         super(timestamp);
         this.allianceColour = allianceColour;
     }
 
     public LevitateEvent(){
 
+    }
+
+    public FieldWatcherObject.AllianceColour getAllianceColour() {
+        return allianceColour;
+    }
+    public void setAllianceColour(FieldWatcherObject.AllianceColour c) {
+        if(c == FieldWatcherObject.AllianceColour.NEUTRAL)
+            throw new IllegalStateException();
+
+        allianceColour = c;
     }
 }
