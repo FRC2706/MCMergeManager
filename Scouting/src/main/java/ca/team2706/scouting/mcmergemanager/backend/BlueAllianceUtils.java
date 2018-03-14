@@ -346,7 +346,7 @@ public class BlueAllianceUtils {
 
         // Get the match info from tba
         Request request = new Request.Builder()
-                .url(BASE_URL + "match/" + matchKey)
+                .url(BASE_URL + "match/" + matchKey + "/simple")
                 .header("X-TBA-Auth-Key", AUTH_KEY)
                 .build();
 
@@ -354,9 +354,9 @@ public class BlueAllianceUtils {
             Response response = WebServerUtils.client.newCall(request).execute();
 
             // Find the team
-            String blueOneTeamNumber = (new JSONObject(response.body().string())).getJSONObject("blue").getJSONArray("team_keys").getString(0);
-
-            return blueOneTeamNumber.substring(3);
+            String responseString = response.body().string();
+            System.out.println(responseString);
+            return (new JSONObject(responseString)).getJSONObject("alliances").getJSONObject("blue").getJSONArray("team_keys").getString(0).substring(3);
         } catch (IOException e) {
             Log.d("OKHTTP err0r ", e.toString());
         } catch (JSONException e) {

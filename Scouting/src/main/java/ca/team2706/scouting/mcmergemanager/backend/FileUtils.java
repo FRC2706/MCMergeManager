@@ -42,6 +42,7 @@ import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
 import ca.team2706.scouting.mcmergemanager.gui.MainActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.BlueSwitchEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.FieldWatcher;
 
@@ -361,11 +362,27 @@ public class FileUtils {
         jsonRed3.put("team", match.getString("red3"));
         jsonRed3.put("match_number", match.getString("match_number"));
         jsonRed3.put("events", new JSONArray());
+        JSONObject fieldWatcher = new JSONObject();
+        fieldWatcher.put("team", -1);
+        fieldWatcher.put("match_number", match.getString("match_number"));
+        fieldWatcher.put("events", new JSONArray());
 
         JSONArray arr = (JSONArray) match.get("events");
         for (int i = 0; i < arr.length(); i++) {
             JSONObject event = (JSONObject) arr.get(i);
 
+            // For fieldwatcher stuff
+            if(event.getString("goal").equals(MatchData.BLUE_SWITCH) || event.getString("goal").equals(MatchData.BOOST) ||
+                    event.getString("goal").equals(MatchData.FORCE) || event.getString("goal").equals(MatchData.LEVITATE) ||
+                    event.getString("goal").equals(MatchData.RED_SWITCH) || event.getString("goal").equals(MatchData.SCALE)) {
+                fieldWatcher.getJSONArray("events").put(makeEvent(event.getString("start_time"),
+                        event.getString("goal"),
+                        event.getString("extra"),
+                        event.getString("end_time")
+                ));
+            }
+
+            // For team events put int team objects
             if (event.getString("team_key").substring(3).equals(jsonBlue1.getString("team"))) {
                 jsonBlue1.getJSONArray("events").put(makeEvent(
                         event.getString("start_time"),
@@ -411,6 +428,7 @@ public class FileUtils {
             }
         }
 
+        new MatchData.Match(fieldWatcher).toJson();
         new MatchData.Match(jsonBlue1).toJson();
         new MatchData.Match(jsonBlue2).toJson();
         new MatchData.Match(jsonBlue3).toJson();
