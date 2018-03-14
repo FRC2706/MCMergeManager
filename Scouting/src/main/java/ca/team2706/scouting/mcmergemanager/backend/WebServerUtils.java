@@ -393,5 +393,7 @@ public class WebServerUtils {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        System.out.println("Done syncing matches");
     }
 }
