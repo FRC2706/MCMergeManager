@@ -10,17 +10,23 @@ public class BoostEvent extends Event {
 
     public static final String ID = "field_watcher_boost";
 
-    public enum AllianceColour{
-        BLUE, RED
-    }
+    private FieldWatcherObject.AllianceColour allianceColour;
 
-    public AllianceColour allianceColour;
-
-    public BoostEvent(double timestamp, AllianceColour allianceColour) {
+    public BoostEvent(double timestamp, FieldWatcherObject.AllianceColour allianceColour) {
         super(timestamp);
         this.allianceColour = allianceColour;
     }
     public BoostEvent(){
 
+    }
+
+    public FieldWatcherObject.AllianceColour getAllianceColour() {
+        return allianceColour;
+    }
+    public void setAllianceColour(FieldWatcherObject.AllianceColour c) {
+        if(c == FieldWatcherObject.AllianceColour.NEUTRAL)
+            throw new IllegalStateException();
+
+        allianceColour = c;
     }
 }

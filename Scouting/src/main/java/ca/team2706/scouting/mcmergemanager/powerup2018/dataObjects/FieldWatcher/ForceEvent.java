@@ -10,18 +10,26 @@ public class ForceEvent extends Event {
 
     public static String ID = "field_watcher_force";
 
-    public enum AllianceColour{
-        BLUE, RED
-    }
 
-    public AllianceColour allianceColour;
 
-    public ForceEvent(double timestamp, AllianceColour allianceColour) {
+    private FieldWatcherObject.AllianceColour allianceColour;
+
+    public ForceEvent(double timestamp, FieldWatcherObject.AllianceColour allianceColour) {
         super(timestamp);
         this.allianceColour = allianceColour;
     }
 
     public ForceEvent() {
 
-    };
+    }
+
+    public FieldWatcherObject.AllianceColour getAllianceColour() {
+        return allianceColour;
+    }
+    public void setAllianceColour(FieldWatcherObject.AllianceColour c) {
+        if(c == FieldWatcherObject.AllianceColour.NEUTRAL)
+            throw new IllegalStateException();
+
+        allianceColour = c;
+    }
 }

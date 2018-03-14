@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,17 +13,13 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
-import android.text.Selection;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,8 +28,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.apache.commons.net.ftp.FTPFile;
 
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,18 +42,10 @@ import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
 import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
-import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
-import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
+import ca.team2706.scouting.mcmergemanager.backend.WebServerUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
-import ca.team2706.scouting.mcmergemanager.backend.interfaces.FTPRequester;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PreGameObject;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeleopScoutingObject;
-import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 import ca.team2706.scouting.mcmergemanager.powerup2018.gui.PreGameFieldWatcher;
 import ca.team2706.scouting.mcmergemanager.powerup2018.gui.TeleopFieldWatcher;
@@ -74,7 +61,7 @@ public class MainActivity extends AppCompatActivity
 
 
     Intent globalIntent;
-    static MainActivity me;
+    public static MainActivity me;
 
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
@@ -106,14 +93,12 @@ public class MainActivity extends AppCompatActivity
         FileUtils.checkFileReadWritePermissions(this);
 
         getEventKeys();
-
     }
 
     public void generateThreatList(View view){
         Intent intent = new Intent(this, ThreatListGenerator.class);
         startActivity(intent);
     }
-
 
     // Check to see if the event keys has been downloaded yet, if not yet downloaded for this year then download
     private void getEventKeys() {
@@ -126,6 +111,13 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                WebServerUtils.uploadUnsyncedMatches();
+            }
+        }).start();
+
         // tell the user where they are syncing their gearDeliveryData to
         updateDataSyncLabel();
 
@@ -137,16 +129,9 @@ public class MainActivity extends AppCompatActivity
         // Make sure all files are there, and visible to the USB Media Scanner.
         FileUtils.checkLocalFileStructure(this);
 
-        // In case the schedule is empty, make sure we pass along the list of teams registered at event
-        // that we fetched at the beginning.
-       // sMatchData = FileUtils.loadMatchDataFile();
-        if (sMatchData == null) sMatchData = new MatchData();
+        if(sMatchData == null) { sMatchData = new MatchData(); }
 
         sRepairTimeObjects = FileUtils.getRepairTimeObjects();
-
-        // syncs unposted matches and downloads matchdata for current competition
-        if (false)
-            FileUtils.syncFiles(this);
     }
 
     /**
@@ -420,11 +405,25 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    public void onClick(View v) {
-        FileUtils.checkLocalFileStructure(this);
-        FileUtils.syncFiles(this);
+    public void onClickSyncMatchData(View v) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Post all data to server
+                WebServerUtils.uploadUnsyncedMatches();
+
+                // Get data from server
+                WebServerUtils.syncMatchData();
+
+                // Reload the match data
+                System.out.println(FileUtils.readUnpostedMatches().toString());
+            }
+        }).start();
     }
 
+    public void onClickGetOprs(View view) {
+        FileUtils.saveOprsToFile(this);
+    }
 
     public void toPreFieldWatcher(View view){
         Intent intent = new Intent(this, PreGameFieldWatcher.class);

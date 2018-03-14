@@ -41,9 +41,6 @@ public class PreGameFieldWatcher extends AppCompatActivity {
     public void toAutoFieldWatcher(View view){
         Intent intent = new Intent(this, autoFieldwatcher.class);
 
-
-
-
         String matchNum = matchNumField.getText().toString();
 
         int matchNumInt;

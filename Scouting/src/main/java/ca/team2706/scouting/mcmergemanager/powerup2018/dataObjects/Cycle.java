@@ -1,11 +1,14 @@
-package ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects;
+package ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects;
 
 import java.io.Serializable;
 
 // For feeding the CycleDisplay window
 public class Cycle implements Serializable{
     public enum CycleType {
-        GEAR, HIGH_GOAL, LOW_GOAL, CLIMB, DEFENSE;
+        CLIMB, SWITCH, SCALE, EXCHANGE, DROPPED,
+        ALLIANCE_SWITCH_POSSESSION, ALLIANCE_SWITCH_NO_POSSESSION, ALLIANCE_SWITCH_NEUTRAL,
+        OPPOSING_SWITCH_POSSESSION, OPPOSING_SWITCH_NO_POSSESSION, OPPOSING_SWITCH_NEUTRAL,
+        SCALE_POSSESSION, SCALE_NO_POSSESSION, SCALE_NEUTRAL
     }
 
     public CycleType cycleType;
@@ -41,5 +44,8 @@ public class Cycle implements Serializable{
         return c;
     }
 
+    public double getCycleTime() {
+        return Math.abs(startTime - endTime);
+    }
 
 }

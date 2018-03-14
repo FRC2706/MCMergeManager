@@ -14,11 +14,9 @@ public class CubePlacementEvent extends Event {
 
     public PlacementType placementType;
 
-
     public CubePlacementEvent(double timestamp, PlacementType placementType){
         super(timestamp);
         this.placementType = placementType;
-
     }
 
 }

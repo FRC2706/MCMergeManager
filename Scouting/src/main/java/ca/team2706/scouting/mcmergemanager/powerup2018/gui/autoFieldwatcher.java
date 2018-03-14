@@ -22,7 +22,7 @@ public class autoFieldwatcher extends AppCompatActivity {
     int remainTime = 135;
 
     FieldWatcherObject fieldWatcherObject = new FieldWatcherObject();
-    Event event;
+    Event event = new BlueSwitchEvent(135 - remainTime, FieldWatcherObject.AllianceColour.RED);
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +33,7 @@ public class autoFieldwatcher extends AppCompatActivity {
         blueSwitchBlueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event = new BlueSwitchEvent(135 - remainTime, BlueSwitchEvent.AllianceColour.BLUE);
+                event = new BlueSwitchEvent(135 - remainTime, FieldWatcherObject.AllianceColour.BLUE);
                 fieldWatcherObject.add(event);
             }
         });
@@ -44,7 +44,7 @@ public class autoFieldwatcher extends AppCompatActivity {
         blueSwitchNeutralButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event = new BlueSwitchEvent(135 - remainTime, BlueSwitchEvent.AllianceColour.NEUTRAL);
+                event = new BlueSwitchEvent(135 - remainTime, FieldWatcherObject.AllianceColour.NEUTRAL);
                 fieldWatcherObject.add(event);
             }
         });
@@ -54,7 +54,7 @@ public class autoFieldwatcher extends AppCompatActivity {
             blueSwitchRedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event = new BlueSwitchEvent(135 - remainTime, BlueSwitchEvent.AllianceColour.RED);
+                event = new BlueSwitchEvent(135 - remainTime, FieldWatcherObject.AllianceColour.RED);
                 fieldWatcherObject.add(event);
             }
         });
@@ -64,7 +64,7 @@ public class autoFieldwatcher extends AppCompatActivity {
             redSwitchBlueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event = new RedSwitchEvent(135 - remainTime, RedSwitchEvent.AllianceColour.BLUE);
+                event = new RedSwitchEvent(135 - remainTime, FieldWatcherObject.AllianceColour.BLUE);
                 fieldWatcherObject.add(event);
             }
         });
@@ -74,7 +74,7 @@ public class autoFieldwatcher extends AppCompatActivity {
             redSwitchNeutralButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event = new RedSwitchEvent(135 - remainTime, RedSwitchEvent.AllianceColour.NEUTRAL);
+                event = new RedSwitchEvent(135 - remainTime, FieldWatcherObject.AllianceColour.NEUTRAL);
                 fieldWatcherObject.add(event);
             }
         });
@@ -84,7 +84,7 @@ public class autoFieldwatcher extends AppCompatActivity {
             redSwitchRedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event = new RedSwitchEvent(135 - remainTime, RedSwitchEvent.AllianceColour.RED);
+                event = new RedSwitchEvent(135 - remainTime, FieldWatcherObject.AllianceColour.RED);
                 fieldWatcherObject.add(event);
             }
         });
@@ -94,7 +94,7 @@ public class autoFieldwatcher extends AppCompatActivity {
             scaleBlueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event = new ScaleEvent(135 - remainTime, ScaleEvent.AllianceColour.BLUE);
+                event = new ScaleEvent(135 - remainTime, FieldWatcherObject.AllianceColour.BLUE);
                 fieldWatcherObject.add(event);
             }
         });
@@ -104,7 +104,7 @@ public class autoFieldwatcher extends AppCompatActivity {
             scaleNeutralButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event = new ScaleEvent(135 - remainTime, ScaleEvent.AllianceColour.NEUTRAL);
+                event = new ScaleEvent(135 - remainTime, FieldWatcherObject.AllianceColour.NEUTRAL);
                 fieldWatcherObject.add(event);
             }
         });
@@ -114,7 +114,7 @@ public class autoFieldwatcher extends AppCompatActivity {
             scaleRedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event = new ScaleEvent(135 - remainTime, ScaleEvent.AllianceColour.RED);
+                event = new ScaleEvent(135 - remainTime, FieldWatcherObject.AllianceColour.RED);
                 fieldWatcherObject.add(event);
             }
         });

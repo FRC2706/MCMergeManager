@@ -210,7 +210,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         try {
             for (int i = 0; i < arr.length(); i++) {
-                keys[i] = arr.getJSONObject(i).getString("name");
+                keys[i] = arr.getJSONObject(i).getString("key");
             }
         } catch(JSONException e) {
             Log.d("Error parsing json", e.toString());
@@ -234,12 +234,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             // populate the list of event codes from TheBlueAlliance
             ListPreference eventsLP = (ListPreference) findPreference(getResources().getString(R.string.PROPERTY_event));
-            eventsLP.setEntries(getKeys(eventKeys));
-            eventsLP.setEntryValues(getEvents(eventKeys));
-//            eventsLP.setEntries(getResources().getString(R.string.TBA_EVENT_NAMES).split(":") );
-//            eventsLP.setEntryValues(getResources().getString(R.string.TBA_EVENT_CODES).split(":"));
 
-
+            // If the eventkeys is null then they need to connect to wifi
+            if(eventKeys == null) {
+                eventsLP.setEntries(new CharSequence[]{"Get wifi"});
+                eventsLP.setEntryValues(new CharSequence[]{"Get wifi"});
+            } else {
+                eventsLP.setEntries(getEvents(eventKeys));
+                eventsLP.setEntryValues(getKeys(eventKeys));
+            }
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are

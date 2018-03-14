@@ -9,7 +9,6 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
 public class AutoCubePlacementEvent extends Event {
     public static final String ID = "auto_cube_placement";
 
-
     public enum PlacementType {
         ALLIANCE_SWITCH, SCALE, EXCHANGE, DROPPED
     }
@@ -23,8 +22,6 @@ public class AutoCubePlacementEvent extends Event {
     public AutoCubePlacementEvent(double timestamp, PlacementType placementType){
         super(timestamp);
         this.placementType = placementType;
-
     }
-
 
 }

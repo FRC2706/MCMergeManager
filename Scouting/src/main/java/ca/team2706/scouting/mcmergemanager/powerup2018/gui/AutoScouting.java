@@ -175,7 +175,6 @@ public class AutoScouting extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (switchCheckbox.isChecked()) {
-
                             AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.ALLIANCE_SWITCH);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             switchCheckbox.setChecked(true);
@@ -192,9 +191,7 @@ public class AutoScouting extends AppCompatActivity {
                 scaleCheckbox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v){
-
                         if (scaleCheckbox.isChecked()) {
-
                             AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.SCALE);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             scaleCheckbox.setChecked(true);
@@ -212,7 +209,6 @@ public class AutoScouting extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (exchangeCheckbox.isChecked()) {
-
                             AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.EXCHANGE);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             exchangeCheckbox.setChecked(true);
@@ -229,7 +225,6 @@ public class AutoScouting extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (droppedCheckbox.isChecked()) {
-
                             AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.DROPPED);
                             autoScoutingObject2018.add(autoCubePlacementEvent);
                             droppedCheckbox.setChecked(true);
@@ -241,7 +236,6 @@ public class AutoScouting extends AppCompatActivity {
             }
         });
     }
-
 
     public void toTeleop(View view) {
         Intent intent = new Intent(this, TeleopScouting.class);

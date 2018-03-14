@@ -21,7 +21,6 @@ public class CubePickupEvent extends Event {
     public CubePickupEvent(double timestamp, PickupType PickupType){
         super(timestamp);
         this.pickupType = PickupType;
-
     }
 
 }
