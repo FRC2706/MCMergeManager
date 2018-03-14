@@ -12,6 +12,12 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubeDroppedEv
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.CubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.BlueSwitchEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.BoostEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ForceEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.LevitateEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.RedSwitchEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ScaleEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PostGameObject;
 
@@ -67,6 +73,21 @@ public class PostThread extends Thread {
             goal = MatchData.POST_GAME_ID;
             extra = Double.toString(((PostGameObject) event).time_dead);
             endTime = Double.toString(((PostGameObject) event).time_defending);
+        } else if (event instanceof BlueSwitchEvent) {
+            goal = MatchData.BLUE_SWITCH;
+            extra = ((BlueSwitchEvent) event).getAllianceColour().toString();
+        }else if (event instanceof RedSwitchEvent) {
+            goal = MatchData.RED_SWITCH;
+            extra = ((RedSwitchEvent) event).getAllianceColour().toString();
+        }else if (event instanceof ScaleEvent) {
+            goal = MatchData.SCALE;
+            extra = ((ScaleEvent) event).getAllianceColour().toString();
+        }else if (event instanceof BoostEvent) {
+            goal = MatchData.BOOST;
+        }else if (event instanceof ForceEvent) {
+            goal = MatchData.FORCE;
+        }else if (event instanceof LevitateEvent) {
+            goal = MatchData.LEVITATE;
         }
 
         if(WebServerUtils.postMatchEvent(matchKey, teamNumber, goal, success, startTime, endTime, extra)) {

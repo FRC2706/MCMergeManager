@@ -15,6 +15,7 @@ import android.widget.TextView;
 import org.json.JSONException;
 
 import ca.team2706.scouting.mcmergemanager.R;
+import ca.team2706.scouting.mcmergemanager.backend.WebServerUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.gui.PreGameActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Event;
@@ -275,6 +276,7 @@ public class TeleopFieldWatcher extends AppCompatActivity{
 
         try {
             match.toJson();
+            WebServerUtils.uploadMatch(match);
         }catch(JSONException e) {
             Log.d("JSON error", e.getMessage());
         }

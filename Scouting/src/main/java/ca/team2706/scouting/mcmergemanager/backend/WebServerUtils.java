@@ -162,7 +162,7 @@ public class WebServerUtils {
             @Override
             public void run() {
                 // Get the match key
-                String matchKey = getMatchKey(match.preGameObject.matchNumber, match.preGameObject.teamNumber);
+                String matchKey = getMatchKey(match.preGameObject.matchNumber);
 
                 // If the match key doesnt get anything that just set the match to be reuploaded later, and go to next match
                 if (matchKey == null) {
@@ -182,6 +182,10 @@ public class WebServerUtils {
 
                 for (Event event : match.teleopScoutingObject.getEvents()) {
                     threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+                }
+
+                for(Event event : match.fieldWatcherObject.getEvents()) {
+                    threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.matchNumber), event));
                 }
 
                 // Run all the threads
@@ -242,7 +246,7 @@ public class WebServerUtils {
             ArrayList<Event> unpostedEvents = new ArrayList<>();
 
             // Get the match key which is required for posting
-            String matchKey = getMatchKey(match.preGameObject.matchNumber, match.preGameObject.teamNumber);
+            String matchKey = getMatchKey(match.preGameObject.matchNumber);
 
             // If the match key doesnt get anything that just set the match to be reuploaded later, and go to next match
             if (matchKey == null) {
@@ -261,6 +265,10 @@ public class WebServerUtils {
 
             for (Event event : match.teleopScoutingObject.getEvents()) {
                 threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+            }
+
+            for(Event event : match.fieldWatcherObject.getEvents()) {
+                threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.matchNumber), event));
             }
 
             // Run all the threads
@@ -307,30 +315,30 @@ public class WebServerUtils {
         FileUtils.checkLocalFileStructure(MainActivity.me);
     }
 
-    public static String getMatchKey(int matchNumber, int teamNumber) {
+    public static String getMatchKey(int matchNumber) {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
         String TBA_Event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
+//
+//        try {
+//            String s = BlueAllianceUtils.getObject("team/frc" + teamNumber + "/event/" + TBA_Event + "/matches/simple");
+//            if (s.length() == 0)
+//                return null;
+//            JSONArray arr = new JSONArray(s);
+//
+//            // Find the match number
+//            for (int i = 0; i < arr.length(); i++) {
+//                if (arr.getJSONObject(i).getString("match_number").equals(Integer.toString(matchNumber))) {
+//                    return arr.getJSONObject(i).getString("key");
+//                }
+//            }
+//
+//            // If didn't find the match key then person entered wrong match number
+//            return "WrongMatchNumber";
+//        } catch (JSONException e) {
+//            Log.d("Err match key", e.toString());
+//        }
 
-        try {
-            String s = BlueAllianceUtils.getObject("team/frc" + teamNumber + "/event/" + TBA_Event + "/matches/simple");
-            if (s.length() == 0)
-                return null;
-            JSONArray arr = new JSONArray(s);
-
-            // Find the match number
-            for (int i = 0; i < arr.length(); i++) {
-                if (arr.getJSONObject(i).getString("match_number").equals(Integer.toString(matchNumber))) {
-                    return arr.getJSONObject(i).getString("key");
-                }
-            }
-
-            // If didn't find the match key then person entered wrong match number
-            return "WrongMatchNumber";
-        } catch (JSONException e) {
-            Log.d("Err match key", e.toString());
-        }
-
-        return null;
+        return TBA_Event + "_qm" + matchNumber;
     }
 
     public static void syncMatchData() {
