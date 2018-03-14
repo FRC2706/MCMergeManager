@@ -29,7 +29,7 @@ import okhttp3.Response;
 
 /**
  * Created by daniel on 15/11/17.
- *
+ * <p>
  * Used to get data from the blue alliance servers, uses v3 of the api.
  * All methods are static so you do not need to create an object.
  */
@@ -256,7 +256,7 @@ public class BlueAllianceUtils {
 
             // Add the json file string to be sent back to settings page
             sb.append(response.body().string());
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.d("OKHTTP err0r ", e.toString());
         }
 
@@ -278,9 +278,9 @@ public class BlueAllianceUtils {
             String s = response.body().string();
             System.out.println(s);
             return new JSONArray(s);
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -301,9 +301,9 @@ public class BlueAllianceUtils {
             Response response = WebServerUtils.client.newCall(request).execute();
 
             return new JSONObject(response.body().string());
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.d("Okhttp3 err", e.toString());
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             Log.d("JSON error", e.toString());
         }
 
@@ -329,10 +329,40 @@ public class BlueAllianceUtils {
 
             // Add the json file string to be sent back to settings page
             return response.body().string();
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.d("OKHTTP err0r ", e.toString());
         }
 
         return "";
+    }
+
+    public static String getBlueOneTeamForMatch(String matchKey) {
+        // check if we have internet connectivity
+        ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork == null) { // not connected to the internet
+            return "";
+        }
+
+        // Get the match info from tba
+        Request request = new Request.Builder()
+                .url(BASE_URL + "match/" + matchKey)
+                .header("X-TBA-Auth-Key", AUTH_KEY)
+                .build();
+
+        try {
+            Response response = WebServerUtils.client.newCall(request).execute();
+
+            // Find the team
+            String blueOneTeamNumber = (new JSONObject(response.body().string())).getJSONObject("blue").getJSONArray("team_keys").getString(0);
+
+            return blueOneTeamNumber.substring(3);
+        } catch (IOException e) {
+            Log.d("OKHTTP err0r ", e.toString());
+        } catch (JSONException e) {
+            Log.d("JSON err", e.toString());
+        }
+
+        return null;
     }
 }

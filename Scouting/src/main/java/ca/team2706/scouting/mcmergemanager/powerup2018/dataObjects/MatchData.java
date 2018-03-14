@@ -436,6 +436,11 @@ public class MatchData implements Serializable {
     }
 
     private static JSONArray jsonArraySelectionSort(JSONArray jsonArray) throws JSONException {
+        // Make sure all the events have a start time, if none set to 140
+        for(int i = 0; i < jsonArray.length(); i++) {
+            if(jsonArray.getJSONObject(i).getInt(START_TIME))
+        }
+
         for (int i = 0; i < jsonArray.length() - 1; i++) {
             int index = i;
             for (int j = i + 1; j < jsonArray.length(); j++)

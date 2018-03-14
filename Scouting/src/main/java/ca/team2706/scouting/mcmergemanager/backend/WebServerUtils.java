@@ -176,16 +176,26 @@ public class WebServerUtils {
                 // If the match key is null then something didn't work, therefore don't continue in current loop
                 ArrayList<PostThread> threads = new ArrayList<PostThread>();
 
-                for (Event event : match.autoScoutingObject.getEvents()) {
-                    threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
-                }
+                // If -1 then it is a field watcher match
+                if(match.preGameObject.teamNumber != -1) {
+                    for (Event event : match.autoScoutingObject.getEvents()) {
+                        threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+                    }
 
-                for (Event event : match.teleopScoutingObject.getEvents()) {
-                    threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
-                }
+                    for (Event event : match.teleopScoutingObject.getEvents()) {
+                        threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+                    }
+                } else {
+                    // Use the blue1 team to upload the match. Will be filtered out once downloaded
+                    String tempTeamNumber = BlueAllianceUtils.getBlueOneTeamForMatch(matchKey);
 
-                for(Event event : match.fieldWatcherObject.getEvents()) {
-                    threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.matchNumber), event));
+                    for(Event event : match.autoScoutingObject.getEvents()) {
+                        threads.add(new PostThread(matchKey, tempTeamNumber, event));
+                    }
+
+                    for(Event event : match.fieldWatcherObject.getEvents()) {
+                        threads.add(new PostThread(matchKey, tempTeamNumber, event));
+                    }
                 }
 
                 // Run all the threads
@@ -238,7 +248,7 @@ public class WebServerUtils {
                 e.printStackTrace();
             }
             if (match == null) {
-                unpostedMatches.put(match.toJsonObject());
+//                unpostedMatches.put(match.toJsonObject());
                 continue;
             }
 
@@ -259,16 +269,26 @@ public class WebServerUtils {
 
             ArrayList<PostThread> threads = new ArrayList<PostThread>();
 
-            for (Event event : match.autoScoutingObject.getEvents()) {
-                threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
-            }
+            // If -1 then it is a field watcher match
+            if(match.preGameObject.teamNumber != -1) {
+                for (Event event : match.autoScoutingObject.getEvents()) {
+                    threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+                }
 
-            for (Event event : match.teleopScoutingObject.getEvents()) {
-                threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
-            }
+                for (Event event : match.teleopScoutingObject.getEvents()) {
+                    threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+                }
+            } else {
+                // Use the blue1 team to upload the match. Will be filtered out once downloaded
+                String tempTeamNumber = BlueAllianceUtils.getBlueOneTeamForMatch(matchKey);
 
-            for(Event event : match.fieldWatcherObject.getEvents()) {
-                threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.matchNumber), event));
+                for(Event event : match.autoScoutingObject.getEvents()) {
+                    threads.add(new PostThread(matchKey, tempTeamNumber, event));
+                }
+
+                for(Event event : match.fieldWatcherObject.getEvents()) {
+                    threads.add(new PostThread(matchKey, tempTeamNumber, event));
+                }
             }
 
             // Run all the threads
