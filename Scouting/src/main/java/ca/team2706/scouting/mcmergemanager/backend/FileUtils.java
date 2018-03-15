@@ -76,7 +76,7 @@ public class FileUtils {
 //        sLocalToplevelFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + App.getContext().getString(R.string.FILE_TOPLEVEL_DIR);
         sLocalEventFilePath = sLocalToplevelFilePath + "/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
         sLocalTeamPhotosFilePath = sLocalToplevelFilePath + "/" + "Team Photos";
-        sLocalCommentFilePath = sLocalToplevelFilePath + "/" + "TeamComments";
+        sLocalCommentFilePath = sLocalToplevelFilePath + "/" + "UnpostedTeamComments";
 
         sRemoteTeamPhotosFilePath = "/" + App.getContext().getString(R.string.FILE_TOPLEVEL_DIR) + "/" + "Team Photos";
     }
@@ -748,82 +748,39 @@ public class FileUtils {
 
     }
 
-    /**
-     * Saves the JSON to a file
-     *
-     * @param commentList
-     * <p>
-     * /*
-     * gets a competition data from the swagger server
-     * if compID is 0 will take from current event, if other number will get that competition
-     */
-//    public static void getMatchesFromServer(final Context context) {
-//        RequestQueue queue = Volley.newRequestQueue(context);
-//        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-//        final String url = "http://ftp.team2706.ca:3000/competitions/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>") + "/matches.json";
-//
-//        System.out.println(url);
-//
-//        // prepare the Request
-//        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-//                new Response.Listener<JSONArray>() {
-//                    @Override
-//                    public void onResponse(JSONArray response) {
-//                        // display response
-//                        saveJsonFile(response);
-//                        System.out.println(response.toString() + "\nWriting should have gone well");
-//
-//                        loadMatchDataFile();
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.d("Error.Response", error.toString());
-//                        error.printStackTrace();
-//                    }
-//                }
-//        );
-//
-//        // add it to the RequestQueue
-//        queue.add(getRequest);
-//    }
-
-
     /*
     @param CommentList Class
     Saves the JSON to a file
->>>>>>> 6b076f5c6fddbfff9a4a621a8d554b6a2ce08396
      */
     private static final String COMMENT_FILE_PATH = "comments.json";
 
     public static void saveTeamComments(CommentList commentList) {
 
         JSONObject jsonObject = getTeamComments(commentList.getTeamNumber());
+        Boolean isCommentsPosted;
 
-        if (jsonObject == null) {
-
-            try {
-                jsonObject = commentList.getJson();
-
-            } catch (JSONException e) {
-                Log.d("JSON Error", e.getMessage());
-                Log.d("JSON might be null", "");
-
-            }
-        } else {
-            try {
-                CommentList cl = new CommentList(jsonObject);
-                for (int i = 0; i < cl.getComments().size(); i++) {
-                    commentList.addComment(cl.getComments().get(i));
+        for (int i = 0; i < commentList.getComments().size(); i++) {
+            isCommentsPosted = WebServerUtils.postCommentToServer(commentList.getTeamNumber(), commentList.getComments().get(i));
+            if (!isCommentsPosted) {
+                if (jsonObject == null) {
+                    try {
+                        jsonObject = commentList.getJson();
+                    } catch (JSONException e) {
+                        Log.d("JSON Error", e.getMessage());
+                        Log.d("JSON might be null", "");
+                    }
+                } else {
+                    try {
+                        CommentList cl = new CommentList(jsonObject);
+                        for (int j = 0; j < cl.getComments().size(); j++) {
+                            commentList.addComment(cl.getComments().get(j));
+                        }
+                        jsonObject = commentList.getJson();
+                    } catch (Exception e) {
+                        Log.d("ERROR", e.getMessage());
+                    }
                 }
-                jsonObject = commentList.getJson();
-
-            } catch (Exception e) {
-                Log.d("ERROR", e.getMessage());
             }
-
-
         }
 
         String outFileName = sLocalCommentFilePath + "/" + commentList.getTeamNumber() + COMMENT_FILE;

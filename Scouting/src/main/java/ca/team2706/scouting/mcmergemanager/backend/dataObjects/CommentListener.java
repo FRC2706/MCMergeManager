@@ -8,6 +8,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.logging.Handler;
+
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 
@@ -17,11 +19,14 @@ import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 
 public class CommentListener {
 
+
+
     private CommentListener(){
         // This is a static class that should never be instantiated
     }
 
     public static void saveComment(int keyCode, KeyEvent event, EditText comment, int teamNum, EditText teamNumber, View view, Context context) {
+
         if (teamNum == -1) {
             try {
                 teamNum = Integer.parseInt(teamNumber.getText().toString());
