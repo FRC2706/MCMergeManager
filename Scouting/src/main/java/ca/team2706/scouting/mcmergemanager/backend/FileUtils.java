@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -76,7 +77,7 @@ public class FileUtils {
 //        sLocalToplevelFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + App.getContext().getString(R.string.FILE_TOPLEVEL_DIR);
         sLocalEventFilePath = sLocalToplevelFilePath + "/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
         sLocalTeamPhotosFilePath = sLocalToplevelFilePath + "/" + "Team Photos";
-        sLocalCommentFilePath = sLocalToplevelFilePath + "/" + "UnpostedTeamComments";
+        sLocalCommentFilePath = sLocalToplevelFilePath + "/" + "TeamComments";
 
         sRemoteTeamPhotosFilePath = "/" + App.getContext().getString(R.string.FILE_TOPLEVEL_DIR) + "/" + "Team Photos";
     }
@@ -98,6 +99,49 @@ public class FileUtils {
         } catch (IOException e) {
             Log.d("Err saving file", e.toString());
         }
+    }
+
+    public static final String UNPOSTED_COMMENT_FILENAME = "unpostedComments.json";
+
+    public static void saveUnpostedComment(JSONObject json) {
+        File file = new File(sLocalEventFilePath + "/" + UNPOSTED_COMMENT_FILENAME);
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+
+            bw.append(json.toString() + "\n");
+
+            bw.close();
+        } catch(IOException e) {
+            Log.d("Err save unpost comment", e.toString());
+        }
+
+        // Force the midea scanner to scan this file so it shows up from a PC over USB.
+        App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+    }
+
+    public static JSONArray readUnpostedComments() {
+        File file = new File(sLocalEventFilePath + "/" + UNPOSTED_COMMENT_FILENAME);
+
+        JSONArray arr = new JSONArray();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            String line;
+            while((line = br.readLine()) != null) {
+                arr.put(new JSONObject(line));
+            }
+
+            br.close();
+        } catch(FileNotFoundException e) {
+            Log.d("File not found", e.toString());
+        } catch(IOException e) {
+            Log.d("IO err,", e.toString());
+        } catch(JSONException e) {
+            Log.d("JSON err", e.toString());
+        }
+
+        return arr;
     }
 
     public enum FileType {
@@ -433,13 +477,21 @@ public class FileUtils {
             }
         }
 
-        new MatchData.Match(fieldWatcher).toJson();
-        new MatchData.Match(jsonBlue1).toJson();
-        new MatchData.Match(jsonBlue2).toJson();
-        new MatchData.Match(jsonBlue3).toJson();
-        new MatchData.Match(jsonRed1).toJson();
-        new MatchData.Match(jsonRed2).toJson();
-        new MatchData.Match(jsonRed3).toJson();
+        // If their is no events for the team then don't create a match file for them
+        if(fieldWatcher.getJSONArray("events").length() != 0)
+            new MatchData.Match(fieldWatcher).toJson();
+        if(jsonBlue1.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonBlue1).toJson();
+        if(jsonBlue2.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonBlue2).toJson();
+        if(jsonBlue3.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonBlue3).toJson();
+        if(jsonRed1.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonRed1).toJson();
+        if(jsonRed2.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonRed2).toJson();
+        if(jsonRed3.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonRed3).toJson();
     }
 
     public static JSONObject makeEvent(String startTime, String goal, String extra, String endTime) throws JSONException {
@@ -754,58 +806,57 @@ public class FileUtils {
      */
     private static final String COMMENT_FILE_PATH = "comments.json";
 
-    public static void saveTeamComments(CommentList commentList) {
 
-        JSONObject jsonObject = getTeamComments(commentList.getTeamNumber());
-        Boolean isCommentsPosted;
+    public static void saveTeamCommentsAtEndOfFile(CommentList commentList) {
+        File file = new File(sLocalCommentFilePath + "/" + commentList.getTeamNumber() + COMMENT_FILE);
 
-        for (int i = 0; i < commentList.getComments().size(); i++) {
-            isCommentsPosted = WebServerUtils.postCommentToServer(commentList.getTeamNumber(), commentList.getComments().get(i));
-            if (!isCommentsPosted) {
-                if (jsonObject == null) {
-                    try {
-                        jsonObject = commentList.getJson();
-                    } catch (JSONException e) {
-                        Log.d("JSON Error", e.getMessage());
-                        Log.d("JSON might be null", "");
-                    }
-                } else {
-                    try {
-                        CommentList cl = new CommentList(jsonObject);
-                        for (int j = 0; j < cl.getComments().size(); j++) {
-                            commentList.addComment(cl.getComments().get(j));
-                        }
-                        jsonObject = commentList.getJson();
-                    } catch (Exception e) {
-                        Log.d("ERROR", e.getMessage());
-                    }
-                }
+        try {
+            // Get the old file contents
+            CommentList oldComments = new CommentList(getTeamComments(commentList.getTeamNumber()));
+
+            // Add the new comments to it
+            for(int i = 0; i < commentList.getComments().size(); i++) {
+                oldComments.addComment(commentList.getComments().get(i));
             }
+
+            file.delete();
+
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+
+            bw.write(oldComments.getJson().toString());
+
+            bw.close();
+        } catch(JSONException e) {
+            Log.d("JSON err", e.toString());
+        } catch(IOException e) {
+            Log.d("OI err", e.toString());
         }
+    }
 
-        String outFileName = sLocalCommentFilePath + "/" + commentList.getTeamNumber() + COMMENT_FILE;
-
-        File file = new File(outFileName);
+    // Saves comments to visible folder. If append is false it overwrites the file
+    public static void saveTeamCommentsFromServer(CommentList commentList, int teamNumber) {
+        File file = new File(sLocalCommentFilePath + "/" + teamNumber + COMMENT_FILE);
 
         try {
             file.delete();
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
 
-            bw.append(jsonObject.toString());
+            bw.append(commentList.getJson().toString());
 
             bw.flush();
             bw.close();
+
+            // Force the midea scanner to scan this file so it shows up from a PC over USB.
+            App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         } catch (IOException e) {
             Log.d("File writing error ", e.toString());
         } catch (NullPointerException e) {
             // This should never be triggered, but is here for testing purposes
             Log.d("Json is null.", e.toString());
-
+        } catch(JSONException e) {
+            Log.d("JSON err", e.toString());
         }
-
-        scanDirectoryTree(sLocalCommentFilePath);
-
     }
 
     /**

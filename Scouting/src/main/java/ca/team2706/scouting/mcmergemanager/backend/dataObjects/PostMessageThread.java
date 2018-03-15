@@ -25,7 +25,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.PostGameObjec
  * Created by Daniel Wall on 2018-02-26.
  */
 
-public class PostThread extends Thread {
+public class PostMessageThread extends Thread {
 
     private boolean posted;
 
@@ -34,7 +34,7 @@ public class PostThread extends Thread {
     private Event event;
 
 
-    public PostThread(String matchKey, String teamNumber, Event event) {
+    public PostMessageThread(String matchKey, String teamNumber, Event event) {
         this.matchKey = matchKey;
         this.teamNumber = teamNumber;
         this.event = event;

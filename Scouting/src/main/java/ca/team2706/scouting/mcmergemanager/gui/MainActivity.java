@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity
 
     public int teamColour = Color.rgb(102, 51, 153);
 
+    public static Thread syncThread;
 
     Intent globalIntent;
     public static MainActivity me;
@@ -424,9 +425,12 @@ public class MainActivity extends AppCompatActivity
 
 
     public void onClickSyncMatchData(View v) {
-        new Thread(new Runnable() {
+        syncThread = new Thread(new Runnable() {
             @Override
             public void run() {
+                // Post the un-posted comments
+                WebServerUtils.syncUnpostedComments();
+
                 // Post all data to server
                 WebServerUtils.uploadUnsyncedMatches();
 
@@ -437,12 +441,11 @@ public class MainActivity extends AppCompatActivity
                 WebServerUtils.syncComments();
 
                 // Reload the match data
-                System.out.println(FileUtils.readUnpostedMatches().toString());
-
-                // Post the un-posted comments
-
+                FileUtils.readUnpostedMatches();
             }
-        }).start();
+        });
+
+        syncThread.start();
     }
 
     public void onClickGetOprs(View view) {
