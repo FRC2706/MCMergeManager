@@ -87,8 +87,6 @@ public class MatchData implements Serializable {
                     }
                 }
 
-                // TODO start_time is getting set to null?? why?? ask geoge
-
                 // teleop
                 JSONArray arrEve = (JSONArray) jsonObject.get("events");
                 for(int i = 0; i < arrEve.length(); i++) {

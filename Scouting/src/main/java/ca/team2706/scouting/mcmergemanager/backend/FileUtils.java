@@ -368,6 +368,11 @@ public class FileUtils {
         fieldWatcher.put("events", new JSONArray());
 
         JSONArray arr = (JSONArray) match.get("events");
+
+        // If there are no events, then the match has not been scouted, and therefore should not be saved to phone
+        if(arr.length() == 0)
+            return;
+
         for (int i = 0; i < arr.length(); i++) {
             JSONObject event = (JSONObject) arr.get(i);
 
@@ -1034,7 +1039,7 @@ public class FileUtils {
     }
 
     // Update to 2018
-    public static final String EVENT_KEYS_FILENAME = "EventKeys2017.json";
+    public static final String EVENT_KEYS_FILENAME = "EventKeys2018.json";
 
     // Saves a list of all the events for a certain year,
     // User then chooses what event that they are at

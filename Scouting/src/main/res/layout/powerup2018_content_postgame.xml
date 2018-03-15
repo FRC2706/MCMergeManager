@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/climbTypeFail"
         android:layout_alignStart="@+id/climbTypeAssisted"
-        android:text="Bar: successful"
+        android:text="Independent Climb"
         android:textSize="18sp" />
 
     <CheckBox
@@ -72,6 +72,13 @@
         android:layout_below="@+id/climbTypeFail"
         android:text="Was Assisted"
         android:textSize="18sp" />
+
+    <CheckBox
+        android:id="@+id/climbTypeOnBase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="On base"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/climbTime_textView"

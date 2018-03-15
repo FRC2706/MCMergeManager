@@ -59,7 +59,7 @@ public class TeamStatsReport implements Serializable {
     // Post game stuff
     public double avgDeadness, highestDeadness, numMatchesNoDeadness;
     public double avgClimbTime, minClimbTime = Double.MAX_VALUE, maxClimbTime = 0;
-    public int noClimb, failClimb, independentClimb, assistedClimb, assistedOthersClimb;
+    public int noClimb, failClimb, independentClimb, assistedClimb, assistedOthersClimb, onBase;
     public double avgTimeDefending, maxTimeDefending;
 
     public MatchSchedule teamMatcheSchedule;

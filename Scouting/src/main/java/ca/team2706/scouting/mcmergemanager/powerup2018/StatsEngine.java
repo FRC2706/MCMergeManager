@@ -747,6 +747,9 @@ public class StatsEngine implements Serializable {
                         case SUCCESS_ASSISTED_OTHERS:
                             teamStatsReport.assistedOthersClimb++;
                             break;
+                        case ON_BASE:
+                            teamStatsReport.onBase++;
+                            break;
                     }
 
                     // Time for climbing

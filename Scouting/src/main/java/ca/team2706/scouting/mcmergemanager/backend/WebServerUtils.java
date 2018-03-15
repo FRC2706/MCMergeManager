@@ -67,7 +67,7 @@ public class WebServerUtils {
                         "&extra=" + extra)
                 .build();
 
-        System.out.println(request.url());
+//        System.out.println(request.url());    <-- Used for testing
 
         try {
             Response response = client.newCall(request).execute();

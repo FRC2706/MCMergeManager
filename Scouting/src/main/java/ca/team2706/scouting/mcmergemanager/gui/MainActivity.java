@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity
     // Check to see if the event keys has been downloaded yet, if not yet downloaded for this year then download
     private void getEventKeys() {
         if (!FileUtils.fileExists(this, FileUtils.EVENT_KEYS_FILENAME)) {
-            FileUtils.getEventListAndSave(2017, this);
+            FileUtils.getEventListAndSave(2018, this);
         }
     }
 

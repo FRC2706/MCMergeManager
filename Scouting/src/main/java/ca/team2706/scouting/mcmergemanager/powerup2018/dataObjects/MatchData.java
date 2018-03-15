@@ -92,6 +92,9 @@ public class MatchData implements Serializable {
                 JSONObject obj = new JSONObject(jsonArray.get(i).toString());
 
                 try {
+                    if(obj.has("goal"))
+                        System.out.println(jsonObject.toString());
+
                     switch (obj.getString("goal")) {
                         case AUTO_CUBE_PICKUP_ID:
                             event = new AutoCubePickupEvent(obj.getInt(START_TIME), AutoCubePickupEvent.PickupType.valueOf(obj.getString(EXTRA)));
