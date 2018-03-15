@@ -237,7 +237,7 @@ public class FileUtils {
                 if (subFile.isDirectory()) {
                     // Recurse!
                     scanDirectoryTree(subFile.getAbsolutePath());
-                } else if(subFile.getName().substring(subFile.getName().length() - 5).equals(".json")) {
+                } else if (subFile.getName().substring(subFile.getName().length() - 5).equals(".json")) {
                     continue;
                 } else {
                     try {
@@ -370,14 +370,14 @@ public class FileUtils {
         JSONArray arr = (JSONArray) match.get("events");
 
         // If there are no events, then the match has not been scouted, and therefore should not be saved to phone
-        if(arr.length() == 0)
+        if (arr.length() == 0)
             return;
 
         for (int i = 0; i < arr.length(); i++) {
             JSONObject event = (JSONObject) arr.get(i);
 
             // For fieldwatcher stuff
-            if(event.getString("goal").equals(MatchData.BLUE_SWITCH) || event.getString("goal").equals(MatchData.BOOST) ||
+            if (event.getString("goal").equals(MatchData.BLUE_SWITCH) || event.getString("goal").equals(MatchData.BOOST) ||
                     event.getString("goal").equals(MatchData.FORCE) || event.getString("goal").equals(MatchData.LEVITATE) ||
                     event.getString("goal").equals(MatchData.RED_SWITCH) || event.getString("goal").equals(MatchData.SCALE)) {
                 fieldWatcher.getJSONArray("events").put(makeEvent(event.getString("start_time"),
@@ -476,11 +476,11 @@ public class FileUtils {
             match = new MatchData.Match(new JSONObject(bw.readLine()));
 
             bw.close();
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Log.d("No match found", e.toString());
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -945,8 +945,8 @@ public class FileUtils {
             bw.flush();
             bw.close();
 
-//            scanDirectoryTree(sLocalEventFilePath);
-
+            // Force the midea scanner to scan this file so it shows up from a PC over USB.
+            App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         } catch (IOException e) {
             Log.d("IOException", e.getMessage());
         } catch (JSONException e) {

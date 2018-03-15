@@ -37,7 +37,7 @@ public class WebServerUtils {
     // Post a comment to the server, returns true if successful
     public static boolean postCommentToServer(int team_number, String message) {
         Request request = new Request.Builder()
-                .url(SERVER_URL + "comments/create?team=" + team_number + "&body=" + message)
+                .url(SERVER_URL + "comments/create.json?team=" + team_number + "&body=" + message)
                 .build();
 
         try {
@@ -233,6 +233,9 @@ public class WebServerUtils {
     }
 
     public static void uploadUnsyncedMatches() {
+        if(!BlueAllianceUtils.isConnected(MainActivity.me))
+            return;
+
         // Used for saving matches that failed to post
         JSONArray unpostedMatches = new JSONArray();
 
@@ -395,5 +398,10 @@ public class WebServerUtils {
         }
 
         System.out.println("Done syncing matches");
+    }
+
+    public static void syncComments() {
+        if(BlueAllianceUtils.isConnected(MainActivity.me))
+            return;
     }
 }

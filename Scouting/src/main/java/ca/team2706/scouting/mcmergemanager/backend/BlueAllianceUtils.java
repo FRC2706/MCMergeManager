@@ -43,6 +43,21 @@ public class BlueAllianceUtils {
 
     private static boolean sPermissionsChecked = false;
 
+    public static boolean isConnected(Activity activity) {
+        if(activity == null)
+            return false;
+
+        // Check if they have enabled the permissions
+        if(sPermissionsChecked == false)
+            checkInternetPermissions(activity);
+
+        ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+
     public static boolean checkInternetPermissions(Activity activity) {
         if (activity == null)
             return false;
@@ -268,7 +283,7 @@ public class BlueAllianceUtils {
         String TBA_Event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
 
         Request request = new Request.Builder()
-                .url(BASE_URL + "event/" + "2017onto1" + "/teams/keys")
+                .url(BASE_URL + "event/" + TBA_Event + "/teams/keys")
                 .header("X-TBA-Auth-Key", AUTH_KEY)
                 .build();
 
@@ -276,7 +291,6 @@ public class BlueAllianceUtils {
             Response response = WebServerUtils.client.newCall(request).execute();
 
             String s = response.body().string();
-            System.out.println(s);
             return new JSONArray(s);
         } catch (IOException e) {
             e.printStackTrace();

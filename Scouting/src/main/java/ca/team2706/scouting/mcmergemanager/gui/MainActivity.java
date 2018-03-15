@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ThemedSpinnerAdapter;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -39,6 +40,7 @@ import java.util.TimerTask;
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.App;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
+import ca.team2706.scouting.mcmergemanager.backend.CreateCsvFile;
 import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
@@ -93,6 +95,22 @@ public class MainActivity extends AppCompatActivity
         FileUtils.checkFileReadWritePermissions(this);
 
         getEventKeys();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                WebServerUtils.postCommentToServer(2706, "asdjfhasghahraefgrh");
+            }
+        }).start();
+    }
+
+    public void createCsvFile(View view) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                CreateCsvFile.saveCsvFile("csv.csv");
+            }
+        }).start();
     }
 
     public void generateThreatList(View view){
@@ -100,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    // Check to see if the event keys has been downloaded yet, if not yet downloaded for this year then download
+    // Check to see if the event keys has been downloaded yet, if not yet downloaded for this year then save
     private void getEventKeys() {
         if (!FileUtils.fileExists(this, FileUtils.EVENT_KEYS_FILENAME)) {
             FileUtils.getEventListAndSave(2018, this);
@@ -414,6 +432,9 @@ public class MainActivity extends AppCompatActivity
 
                 // Get data from server
                 WebServerUtils.syncMatchData();
+
+                // Sync the comments
+                WebServerUtils.syncComments();
 
                 // Reload the match data
                 System.out.println(FileUtils.readUnpostedMatches().toString());

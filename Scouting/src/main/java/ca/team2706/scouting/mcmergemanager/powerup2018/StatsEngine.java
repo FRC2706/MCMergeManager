@@ -60,6 +60,10 @@ public class StatsEngine implements Serializable {
         this(matchData, matchSchedule, null);
     }
 
+    public StatsEngine(MatchSchedule matchSchedule) {
+        this.matchSchedule = matchSchedule;
+    }
+
     /**
      * Contructor
      *
