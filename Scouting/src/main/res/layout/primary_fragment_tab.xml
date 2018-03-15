@@ -11,7 +11,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="460dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -127,23 +127,24 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/button6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onRepairTimeRecordClicked"
-                android:text="Record Repair Time" />
-
-            <Button
                 android:id="@+id/button_threatlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="generateThreatList"
                 android:text="Generate Picklist" />
+
             <include
                 android:id="@+id/comments"
                 layout="@layout/comment_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickSyncMatchData"
+                android:text="Sync Match Data" />
 
             <!--<Button-->
             <!--android:id="@+id/button7"-->
@@ -161,15 +162,6 @@
             android:id="@+id/fragment_container1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onClickSyncMatchData"
-                android:text="Sync Match Data" />
-
-
 
 
         </FrameLayout>
