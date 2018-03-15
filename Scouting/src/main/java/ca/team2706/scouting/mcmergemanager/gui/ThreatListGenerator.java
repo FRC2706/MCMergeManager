@@ -22,6 +22,7 @@ import java.util.List;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
+import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.ScaleEvent;
 
@@ -29,7 +30,7 @@ import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.
  * Created by Merge on 2018-01-24.
  */
 
-public class ThreatListGenerator extends AppCompatActivity {
+public class ThreatListGenerator extends AppCompatActivity  {
 
     EditText switch_weight;
     EditText scale_weight;
@@ -46,6 +47,27 @@ public class ThreatListGenerator extends AppCompatActivity {
 
     int DefenseWeight = 25, ScaleWeight = 25, SwitchWeight = 25, ExchangeWeight = 25, maxValue = 25;
 
+//    public void parseTBATeamsList() {
+//        String jsonTeamsList = BlueAllianceUtils.fetchTeamsRegisteredAtEvent(this);
+//        String jsonTeamsList = BlueAllianceUtils.fetchTeamsRegisteredAtEventString();
+//
+//        if(jsonTeamsList == null)
+//            return;
+//
+//        JSONArray jsonArray;
+//        try {
+//            jsonArray = new JSONArray(jsonTeamsList);
+//
+//            // Loop over each team
+//            for(int i = 0; i < jsonArray.length(); i++) {
+//                teamListInt.add(Integer.valueOf(jsonArray.get(i).toString().substring(3)));
+//            }
+//
+//            Collections.sort(teamListInt);
+//        } catch(JSONException e) {
+//            Log.d("Error parsing json: ", e.toString());
+//        }
+//    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,9 +111,6 @@ public class ThreatListGenerator extends AppCompatActivity {
 
         return total;
     }
-
-
-
 }
 
 

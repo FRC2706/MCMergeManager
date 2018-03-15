@@ -2,27 +2,23 @@ package ca.team2706.scouting.mcmergemanager.gui;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 
 import java.util.List;
 
 import ca.team2706.scouting.mcmergemanager.R;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeamStatsReport;
+import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport;
 
 /**
  * Created by cnnr2 on 2015-10-31.
@@ -139,10 +135,10 @@ public class TeamInfoTab extends Fragment {
         m_teamInfoFragment = new TeamInfoFragment();
         Bundle args = new Bundle();
         args.putInt("teamNumber", teamNumber);
-        // StatsEngine statsEngine = new StatsEngine(MainActivity.sMatchData, MainActivity.sMatchSchedule, MainActivity.sRepairTimeObjects);
+        StatsEngine statsEngine = new StatsEngine(MainActivity.sMatchData, MainActivity.sMatchSchedule, MainActivity.sRepairTimeObjects);
 
-       // TeamStatsReport teamStatsReport = statsEngine.getTeamStatsReport(teamNumber);  // just so I can look at it in bebug
-       // args.putSerializable(getString(R.string.EXTRA_TEAM_STATS_REPORT), teamStatsReport);
+        TeamStatsReport teamStatsReport = statsEngine.getTeamStatsReport(teamNumber);  // just so I can look at it in bebug
+        args.putSerializable(getString(R.string.EXTRA_TEAM_STATS_REPORT), teamStatsReport);
         m_teamInfoFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout

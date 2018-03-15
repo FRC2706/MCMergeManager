@@ -10,18 +10,21 @@ public class RedSwitchEvent extends Event {
 
     public static final String ID = "field_watcher_red_switch_event";
 
-    public enum AllianceColour{
-        BLUE, RED, NEUTRAL
-    }
+    private FieldWatcherObject.AllianceColour allianceColour;
 
-    public AllianceColour allianceColour;
-
-    public RedSwitchEvent(double timestamp, AllianceColour allianceColour) {
+    public RedSwitchEvent(double timestamp, FieldWatcherObject.AllianceColour allianceColour) {
         super(timestamp);
         this.allianceColour = allianceColour;
     }
 
     public RedSwitchEvent() {
         //Empty constructor
+    }
+
+    public FieldWatcherObject.AllianceColour getAllianceColour() {
+        return allianceColour;
+    }
+    public void setAllianceColour(FieldWatcherObject.AllianceColour c) {
+        allianceColour = c;
     }
 }

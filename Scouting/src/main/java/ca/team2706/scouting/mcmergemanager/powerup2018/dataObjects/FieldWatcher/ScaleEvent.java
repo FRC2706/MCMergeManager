@@ -10,17 +10,21 @@ public class ScaleEvent extends Event {
 
     public static String ID = "field_watcher_scale";
 
-    public enum AllianceColour{
-        BLUE, RED, NEUTRAL
-    }
 
-    public AllianceColour allianceColour;
+    private FieldWatcherObject.AllianceColour allianceColour;
 
-    public ScaleEvent(double timestamp, AllianceColour allianceColour) {
+    public ScaleEvent(double timestamp, FieldWatcherObject.AllianceColour allianceColour) {
         super(timestamp);
         this.allianceColour = allianceColour;
     }
     public ScaleEvent(){
 
+    }
+
+    public FieldWatcherObject.AllianceColour getAllianceColour() {
+        return allianceColour;
+    }
+    public void setAllianceColour(FieldWatcherObject.AllianceColour c) {
+        allianceColour = c;
     }
 }

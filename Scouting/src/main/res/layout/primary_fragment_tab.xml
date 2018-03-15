@@ -127,13 +127,6 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onClick"
-                android:text="Sync Match Data" />
-
-            <Button
                 android:id="@+id/button_threatlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -145,6 +138,13 @@
                 layout="@layout/comment_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickSyncMatchData"
+                android:text="Sync Match Data" />
 
             <!--<Button-->
             <!--android:id="@+id/button7"-->
@@ -162,10 +162,6 @@
             android:id="@+id/fragment_container1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-
-
-
 
 
         </FrameLayout>

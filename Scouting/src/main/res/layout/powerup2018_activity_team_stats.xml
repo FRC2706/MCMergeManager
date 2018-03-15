@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeamStatsActivity">
+    tools:context="ca.team2706.scouting.mcmergemanager.powerup2018.gui.TeamStatsActivity">
 
 
 
-    <include layout="@layout/steamworks2017_content_team_stats" />
+    <include layout="@layout/powerup2018_content_team_stats" />
 
 </android.support.design.widget.CoordinatorLayout>
