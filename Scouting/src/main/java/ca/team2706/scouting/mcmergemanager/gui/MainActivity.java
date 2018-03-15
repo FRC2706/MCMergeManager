@@ -417,6 +417,9 @@ public class MainActivity extends AppCompatActivity
 
                 // Reload the match data
                 System.out.println(FileUtils.readUnpostedMatches().toString());
+
+                // Post the un-posted comments
+
             }
         }).start();
     }

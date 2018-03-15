@@ -37,7 +37,7 @@ public class WebServerUtils {
     // Post a comment to the server, returns true if successful
     public static boolean postCommentToServer(int team_number, String message) {
         Request request = new Request.Builder()
-                .url(SERVER_URL + "comments/create?team=" + team_number + "&body=" + message)
+                .url(SERVER_URL + "comments/create.json?team=" + team_number + "&body=" + message)
                 .build();
 
         try {
