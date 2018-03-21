@@ -90,12 +90,12 @@ public class PreMatchReportFragment extends Fragment {
         }
 
 
-        TeamStatsReport blue1TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue1());
-        TeamStatsReport blue2TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue2());
-        TeamStatsReport blue3TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue3());
-        TeamStatsReport red1TSR = m_statsEngine.getTeamStatsReport(m_match.getRed1());
-        TeamStatsReport red2TSR = m_statsEngine.getTeamStatsReport(m_match.getRed2());
-        TeamStatsReport red3TSR = m_statsEngine.getTeamStatsReport(m_match.getRed3());
+        TeamStatsReport blue1TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue1(), true);
+        TeamStatsReport blue2TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue2(), true);
+        TeamStatsReport blue3TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue3(), true);
+        TeamStatsReport red1TSR = m_statsEngine.getTeamStatsReport(m_match.getRed1(), true);
+        TeamStatsReport red2TSR = m_statsEngine.getTeamStatsReport(m_match.getRed2(), true);
+        TeamStatsReport red3TSR = m_statsEngine.getTeamStatsReport(m_match.getRed3(), true);
 
 
         // TODO: TODO:

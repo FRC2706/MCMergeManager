@@ -137,7 +137,7 @@ public class TeamInfoTab extends Fragment {
         args.putInt("teamNumber", teamNumber);
         StatsEngine statsEngine = new StatsEngine(MainActivity.sMatchData, MainActivity.sMatchSchedule, MainActivity.sRepairTimeObjects);
 
-        TeamStatsReport teamStatsReport = statsEngine.getTeamStatsReport(teamNumber);  // just so I can look at it in bebug
+        TeamStatsReport teamStatsReport = statsEngine.getTeamStatsReport(teamNumber, true);  // just so I can look at it in bebug
         args.putSerializable(getString(R.string.EXTRA_TEAM_STATS_REPORT), teamStatsReport);
         m_teamInfoFragment.setArguments(args);
 

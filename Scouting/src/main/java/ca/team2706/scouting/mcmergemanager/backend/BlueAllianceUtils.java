@@ -307,7 +307,7 @@ public class BlueAllianceUtils {
         String TBA_Event = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>");
 
         Request request = new Request.Builder()
-                .url(BASE_URL + "event/" + "2017onto1" + "/oprs")
+                .url(BASE_URL + "event/" + TBA_Event + "/oprs")
                 .header("X-TBA-Auth-Key", AUTH_KEY)
                 .build();
 

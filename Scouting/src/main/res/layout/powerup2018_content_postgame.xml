@@ -34,7 +34,7 @@
             android:layout_below="@+id/climb_type_title_textView"
             android:layout_marginTop="11dp"
             android:layout_toStartOf="@+id/defense_textView"
-            android:text="No climber mechanism"
+            android:text="No climb"
             android:textSize="18sp" />
 
         <CheckBox
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/climbTypeFail"
             android:layout_alignStart="@+id/climbTypeAssisted"
-            android:text="Bar: successful"
+            android:text="Climb success"
             android:textSize="18sp" />
 
         <CheckBox

@@ -130,6 +130,9 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
+        // Sync all the match data
+        syncMatchData();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -150,7 +153,7 @@ public class MainActivity extends AppCompatActivity
 
         if(sMatchData == null) { sMatchData = new MatchData(); }
 
-        sRepairTimeObjects = FileUtils.getRepairTimeObjects();
+//        sRepairTimeObjects = FileUtils.getRepairTimeObjects();
     }
 
     /**
@@ -424,7 +427,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    public void onClickSyncMatchData(View v) {
+    public void syncMatchData() {
         syncThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -446,6 +449,10 @@ public class MainActivity extends AppCompatActivity
         });
 
         syncThread.start();
+    }
+
+    public void onClickSyncMatchData(View v) {
+        syncMatchData();
     }
 
     public void onClickGetOprs(View view) {

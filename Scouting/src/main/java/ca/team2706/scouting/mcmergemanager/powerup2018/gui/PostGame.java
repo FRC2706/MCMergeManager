@@ -216,7 +216,7 @@ public class PostGame extends AppCompatActivity {
         final EditText comment = (EditText) findViewById(R.id.comment);
 
 
-        teamNumber.setOnKeyListener(new View.OnKeyListener(){
+        teamNumber.setOnKeyListener(new View.OnKeyListener() {
 
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
 
@@ -232,7 +232,7 @@ public class PostGame extends AppCompatActivity {
         PreGameObject preGameObject = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
         final Integer teamNum = preGameObject.teamNumber;
 
-        comment.setOnKeyListener(new View.OnKeyListener(){
+        comment.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
                 CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, view, getContext());
                 teamNumber.setText(teamNum.toString());
@@ -304,17 +304,19 @@ public class PostGame extends AppCompatActivity {
 //                climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
 //            }
 
-        if (noClimbCheckbox.isChecked())
+        if (noClimbCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
-        if (climbFailCheckbox.isChecked())
+        } else if (climbFailCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.FAIL;
-        if (climbBarCheckbox.isChecked())
+        } else if (climbBarCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_INDEPENDENT;
-        if (climbAssistCheckbox.isChecked())
+        } else if (climbAssistCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
-        if (climbOnBase.isChecked())
+        } else if (climbOnBase.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.ON_BASE;
-
+        } else {
+            climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
+        }
 
         // Compile all the data into one match
         TeleopScoutingObject t = (TeleopScoutingObject) getIntent().getSerializableExtra("TeleopScoutingData");
@@ -328,12 +330,12 @@ public class PostGame extends AppCompatActivity {
         MatchData.Match match = new MatchData.Match(pre, a, t);
 
         // Upload the match and save to phone
-        WebServerUtils.uploadMatch(match);
         try {
             match.toJson();
         } catch (JSONException e) {
             Toast.makeText(this, "JSON Failed to save", Toast.LENGTH_SHORT).show();
         }
+        WebServerUtils.uploadMatch(match);
 
         Intent intent = new Intent(this, PreGameActivity.class);
 

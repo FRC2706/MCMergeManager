@@ -93,7 +93,7 @@ public class MatchData implements Serializable {
 
                 try {
                     if(obj.has("goal"))
-                        System.out.println(jsonObject.toString());
+//                        System.out.println(jsonObject.toString());
 
                     switch (obj.getString("goal")) {
                         case AUTO_CUBE_PICKUP_ID:

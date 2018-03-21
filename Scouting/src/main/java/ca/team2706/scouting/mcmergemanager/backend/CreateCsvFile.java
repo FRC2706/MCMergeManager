@@ -52,13 +52,10 @@ public class CreateCsvFile {
         writeCell(sb, "DPR");
         writeCell(sb, "CCWM");
         writeCell(sb, "SCHEDULE TOUGHNESS OPR");
-        writeCell(sb, "SCHEDULE TOUGHNESS WLT");
         writeCell(sb, "WINS");
         writeCell(sb, "LOSSES");
         writeCell(sb, "TIES");
-        writeCell(sb, "AUTO PIKCUP PORTAL");
         writeCell(sb, "AUTO PICKUP GROUND");
-        writeCell(sb, "AUTO PICKUP EXCHANGE");
         writeCell(sb, "AUTO TOTAL PLACED CUBES");
         writeCell(sb, "AUTO CROSSED LINE");
         writeCell(sb, "AUTO MALFUNCTION");
@@ -77,7 +74,7 @@ public class CreateCsvFile {
         writeCell(sb, "TELEOP DROPPED CYCLE TIME");
         writeCell(sb, "AVG DEADNESS");
         writeCell(sb, "HIGHEST DEADNESS");
-        writeCell(sb, "NUM MATCHES DEAD");
+        writeCell(sb, "DEAD MATCHES");
         writeCell(sb, "AVG CLIMB TIME");
         writeCell(sb, "NO CLIMB");
         writeCell(sb, "FAIL CLIMB");
@@ -92,23 +89,17 @@ public class CreateCsvFile {
         // Print all the stuff
         for(int i = 0; i < teamArray.length(); i++) {
             try {
-                TeamStatsReport teamStatsReport = statsEngine.getTeamStatsReport(Integer.parseInt(((String) teamArray.get(i)).substring(3)));
-
-
-
+                TeamStatsReport teamStatsReport = statsEngine.getTeamStatsReport(Integer.parseInt(((String) teamArray.get(i)).substring(3)), false);
 
                 writeCell(sb, teamStatsReport.teamNumber);
                 writeCell(sb, teamStatsReport.OPR);
                 writeCell(sb, teamStatsReport.DPR);
                 writeCell(sb, teamStatsReport.CCWM);
                 writeCell(sb, teamStatsReport.scheduleToughnessByOPR);
-                writeCell(sb, teamStatsReport.scheduleToughnessByWLT);
                 writeCell(sb, teamStatsReport.wins);
                 writeCell(sb, teamStatsReport.losses);
                 writeCell(sb, teamStatsReport.ties);
-                writeCell(sb, teamStatsReport.autoPickupPortal);
                 writeCell(sb, teamStatsReport.autoPickupGround);
-                writeCell(sb, teamStatsReport.autoPickupExchange);
                 writeCell(sb, teamStatsReport.autoTotalPlacedCubes);
                 writeCell(sb, teamStatsReport.autoCrossedLine);
                 writeCell(sb, teamStatsReport.autoMalfunction);
@@ -127,7 +118,7 @@ public class CreateCsvFile {
                 writeCell(sb, teamStatsReport.droppedAvgCycleTime);
                 writeCell(sb, teamStatsReport.avgDeadness);
                 writeCell(sb, teamStatsReport.highestDeadness);
-                writeCell(sb, teamStatsReport.numMatchesPlayed - teamStatsReport.numMatchesNoDeadness);
+                writeCell(sb, (teamStatsReport.numMatchesPlayed - teamStatsReport.numMatchesNoDeadness));
                 writeCell(sb, teamStatsReport.avgClimbTime);
                 writeCell(sb, teamStatsReport.noClimb);
                 writeCell(sb, teamStatsReport.failClimb);

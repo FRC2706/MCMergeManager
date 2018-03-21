@@ -75,8 +75,7 @@ public class TeamStatsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.crossedBaseLineTV)).setText(m_teamStatsReport.autoCrossedLine
                 + " / " + m_teamStatsReport.numMatchesPlayed);
 
-        ((TextView) findViewById(R.id.autoTotalPlacedCubesTV)).setText((m_teamStatsReport.totalPlaceExchange
-                + m_teamStatsReport.totalPlaceScale + m_teamStatsReport.totalPlaceSwitch) + " / " + m_teamStatsReport.autoTotalPlacedCubes);
+        ((TextView) findViewById(R.id.autoCubesTV)).setText(Integer.toString(m_teamStatsReport.autoTotalPlacedCubes));
 
         ((TextView) findViewById(R.id.autoPickupGroundTV)).setText(Integer.toString(m_teamStatsReport.autoPickupGround));
 
@@ -95,6 +94,7 @@ public class TeamStatsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.telePickupGroundTV)).setText(String.format("%.2f", m_teamStatsReport.pickupGroundAvgMatch));
         ((TextView) findViewById(R.id.telePickupPortalTV)).setText(String.format("%.2f", m_teamStatsReport.pickupPortalAvgMatch));
         ((TextView) findViewById(R.id.telePickupExchangeTV)).setText(String.format("%.2f", m_teamStatsReport.pickupExchangeAvgMatch));
+        ((TextView) findViewById(R.id.telePickupPyramidTV)).setText(String.format("%.2f", m_teamStatsReport.pickupPyramidAvgMatch));
 
         ((TextView) findViewById(R.id.telePlacedExchangeTV)).setText(String.format("%.2f", m_teamStatsReport.placeExchangeAvgMatch));
         ((TextView) findViewById(R.id.telePlacedSwitchTV)).setText(String.format("%.2f", m_teamStatsReport.placeSwitchAvgMatch));

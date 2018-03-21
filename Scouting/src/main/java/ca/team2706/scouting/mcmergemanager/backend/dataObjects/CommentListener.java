@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
@@ -52,8 +53,13 @@ public class CommentListener {
                     @Override
                     public void run() {
                         try {
-                            if (!WebServerUtils.postCommentToServer(postTeamNumber, comment.getText().toString()))
-                                FileUtils.saveUnpostedComment(commentList.getJson());
+                            if (!WebServerUtils.postCommentToServer(postTeamNumber, comment.getText().toString())) {
+                                JSONObject obj = new JSONObject();
+                                obj.put("number", commentList.getTeamNumber());
+                                obj.put("comment", commentList.getComments().get(0));
+
+                                FileUtils.saveUnpostedComment(obj);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

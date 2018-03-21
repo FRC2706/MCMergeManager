@@ -411,7 +411,7 @@ public class WebServerUtils {
 
             try {
                 threads.add(new PostCommentThread(commentList.getJSONObject(i).getInt("number"),
-                        commentList.getJSONObject(i).getJSONArray("comments").getJSONObject(0).getString("body")));
+                        commentList.getJSONObject(i).getString("comment")));
             } catch (JSONException e) {
                 Log.d("JSON err", e.toString());
 
@@ -455,7 +455,7 @@ public class WebServerUtils {
     }
 
     public static void syncComments() {
-        if (!BlueAllianceUtils.isConnected(MainActivity.me))
+        if (!BlueAllianceUtils.isConnected(MainActivity.me) || MainActivity.sMatchSchedule == null)
             return;
 
         // Get teams at event
@@ -465,7 +465,8 @@ public class WebServerUtils {
                 JSONObject teamData = getTeamFromServer(Integer.parseInt(teamNumber));
 
                 // Get comments
-                FileUtils.saveTeamCommentsFromServer(new CommentList(teamData.getJSONArray("comments")), Integer.parseInt(teamNumber));
+                if(teamData != null)
+                    FileUtils.saveTeamCommentsFromServer(new CommentList(teamData.getJSONArray("comments")), Integer.parseInt(teamNumber));
             } catch (JSONException e) {
                 Log.d("Err saving comments", e.toString());
             }

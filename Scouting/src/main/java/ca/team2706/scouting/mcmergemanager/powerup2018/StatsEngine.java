@@ -14,7 +14,6 @@ import java.util.Map;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
-import ca.team2706.scouting.mcmergemanager.gui.MatchScheduleActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePlacementEvent;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoLineCrossEvent;
@@ -75,7 +74,7 @@ public class StatsEngine implements Serializable {
         this.repairTimeObjects = repairTimeObjects;
     }
 
-    public TeamStatsReport getTeamStatsReport(int teamNumber) {
+    public TeamStatsReport getTeamStatsReport(int teamNumber, boolean fieldWatcherStats) {
         TeamStatsReport teamStatsReport = new TeamStatsReport();
         teamStatsReport.teamMatchData = FileUtils.loadMatchData(teamNumber);
 
@@ -87,7 +86,7 @@ public class StatsEngine implements Serializable {
         fillInOverallStats(teamStatsReport, teamNumber);
         fillInAutoStats(teamStatsReport);
         fillInTeleopStats(teamStatsReport);
-        if(matchSchedule != null)
+        if(matchSchedule != null && fieldWatcherStats)
             fillInFieldWatcherStats(teamStatsReport, teamNumber);
 
         return teamStatsReport;
@@ -612,7 +611,7 @@ public class StatsEngine implements Serializable {
                         case EXCHANGE:
                             teamStatsReport.autoPlaceExchange++;
                             break;
-                        case ALLIANCE_SWITCH:
+                        case SWITCH:
                             teamStatsReport.autoPlaceAllianceSwitch++;
                             break;
                     }
@@ -685,6 +684,9 @@ public class StatsEngine implements Serializable {
                             break;
                         case PORTAL:
                             teamStatsReport.totalPickupPortal++;
+                            break;
+                        case PYRAMID:
+                            teamStatsReport.totalPickupPyramid++;
                             break;
                     }
                 } else if (event instanceof CubePlacementEvent) {
@@ -807,6 +809,7 @@ public class StatsEngine implements Serializable {
             teamStatsReport.pickupGroundAvgMatch = (double) teamStatsReport.totalPickupGround / teamStatsReport.numMatchesPlayed;
             teamStatsReport.pickupPortalAvgMatch = (double) teamStatsReport.totalPickupPortal / teamStatsReport.numMatchesPlayed;
             teamStatsReport.pickupExchangeAvgMatch = (double) teamStatsReport.totalPickupExchange / teamStatsReport.numMatchesPlayed;
+            teamStatsReport.pickupPyramidAvgMatch = (double) teamStatsReport.totalPickupPyramid / teamStatsReport.numMatchesPlayed;
 
             teamStatsReport.placeSwitchAvgMatch = (double) teamStatsReport.totalPlaceSwitch / teamStatsReport.numMatchesPlayed;
             teamStatsReport.placeScaleAvgMatch = (double) teamStatsReport.totalPlaceScale / teamStatsReport.numMatchesPlayed;
