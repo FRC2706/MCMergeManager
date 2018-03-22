@@ -1,6 +1,7 @@
 package ca.team2706.scouting.mcmergemanager.gui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -8,21 +9,23 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.App;
-import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentListener;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.TeleopFieldWatcher;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
+
+
+import android.view.View.OnKeyListener;
 
 
 public class PrimaryTab extends Fragment {
@@ -37,12 +40,14 @@ public class PrimaryTab extends Fragment {
         v = inflater.inflate(R.layout.primary_fragment_tab, null);
         m_savedInstanceState = savedInstanceState;
 
+//        MatchData matchData = FileUtils.loadMatchData(118);
+
         TextView matchNoTV = (TextView) v.findViewById(R.id.matchNoET);
 
         matchNoTV.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                // load the Pre-match recport fragment
+                // load the Pre-match report fragment
 
                 // If we're being restored from a previous state,
                 // then we don't need to do anything and should return or else
@@ -53,7 +58,7 @@ public class PrimaryTab extends Fragment {
 
                 int matchNo = 0;
                 try {
-                    matchNo = Integer.parseInt( v.getText().toString() );
+                    matchNo = Integer.parseInt(v.getText().toString());
                 } catch (NumberFormatException e) {
                     // they didn't type in a valid number. Too bad for them, we're not going any further!
                     return false;
@@ -69,12 +74,12 @@ public class PrimaryTab extends Fragment {
                     // bundle up the gearDeliveryData it needs
                     Bundle args = new Bundle();
                     MatchSchedule.Match match;
-                    match = MainActivity.sMatchSchedule.getMatchNo(matchNo-1);
+                    match = MainActivity.sMatchSchedule.getMatchNo(matchNo - 1);
                     args.putString(PreMatchReportFragment.ARG_MATCH, match.toString());  // if match == null, this will throw an exception and be caught
                     if (MainActivity.sMatchSchedule == null) return false;
 
-                    StatsEngine statsEngine = new StatsEngine(MainActivity.sMatchData, MainActivity.sMatchSchedule);
-                    args.putSerializable(PreMatchReportFragment.ARG_STATS, statsEngine);
+                    //StatsEngine statsEngine = new StatsEngine(MainActivity.sMatchData, MainActivity.sMatchSchedule);
+                    //args.putSerializable(PreMatchReportFragment.ARG_STATS, statsEngine);
 
                     fragment.setArguments(args);
 
@@ -89,8 +94,42 @@ public class PrimaryTab extends Fragment {
             }
         });
 
+        showCommentBar();
+
         return v;
     }
+
+    public void showCommentBar(){
+        final EditText teamNumber = (EditText) v.findViewById(R.id.teamNumber);
+
+        final EditText comment = (EditText) v.findViewById(R.id.comment);
+
+        teamNumber.setOnKeyListener(new OnKeyListener()
+        {
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+
+                teamNum = CommentListener.getTeamNum(keyCode, keyevent, teamNumber, comment);
+                if (teamNum == -1) {
+                    return false;
+                }
+                return true;
+            }
+        });
+
+        comment.setOnKeyListener(new OnKeyListener()
+        {
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+                CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, v, getContext());
+                return true;
+            }
+        });
+
+
+    }
+
+
+    public static int teamNum = -1;
+
 
 
 
@@ -116,4 +155,7 @@ public class PrimaryTab extends Fragment {
             return;
         }
     }
+
+
+
 }

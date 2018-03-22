@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/primary_tab"
     android:layout_height="fill_parent">
 
     <LinearLayout
@@ -10,7 +11,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -63,13 +64,23 @@
                 android:enabled="true"
                 android:onClick="scout"
                 android:text="Scout Match"
+                android:textColor="#FFFFFF"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
 
+            <Button
+                android:id="@+id/fieldwatcher_button"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="#c3aee8"
+                android:onClick="toPreFieldWatcher"
+                android:text="Field Watcher"
+                android:textSize="18sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
+                android:layout_height="51dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -90,8 +101,8 @@
                     android:id="@+id/syncButon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="syncPhotos"
                     android:text="Sync Photos" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -116,19 +127,40 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/button_threatlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="onRepairTimeRecordClicked"
-                android:text="Record Repair Time" />
+                android:onClick="generateThreatList"
+                android:text="Generate Picklist" />
+
+            <include
+                android:id="@+id/comments"
+                layout="@layout/comment_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/button2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="onWriteCommentButtonClick"
-                android:text="Write Comment"
-                android:visibility="visible" />
+                android:onClick="onClickSyncMatchData"
+                android:text="Sync Match Data" />
+
+            <Button
+                android:id="@+id/CreateCsvFileButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="createCsvFile"
+                android:text="Create CSV file" />
+
+            <!--<Button-->
+            <!--android:id="@+id/button7"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:onClick="onWriteCommentButtonClick"-->
+            <!--android:text="Write Comment"-->
+            <!--android:visibility="visible" />-->
+
 
         </LinearLayout>
 
@@ -136,14 +168,8 @@
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fragment_container1"
             android:layout_width="match_parent"
-            android:layout_height="144dp">
+            android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onClick"
-                android:text="Sync Match Data" />
 
         </FrameLayout>
     </LinearLayout>

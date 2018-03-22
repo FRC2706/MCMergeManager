@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/pit_scouting_pickup_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Where do they pickup cubes?"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="18dp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_pickup_portal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Portal"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_pickup_ground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ground"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_pickup_pyramid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pyramid"
+        android:textSize="20sp" />
+
+</LinearLayout>

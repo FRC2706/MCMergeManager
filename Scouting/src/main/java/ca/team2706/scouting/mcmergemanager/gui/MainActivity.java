@@ -27,9 +27,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ThemedSpinnerAdapter;
 import android.widget.Toast;
 
-import org.apache.commons.net.ftp.FTPFile;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,28 +40,31 @@ import java.util.TimerTask;
 import ca.team2706.scouting.mcmergemanager.R;
 import ca.team2706.scouting.mcmergemanager.backend.App;
 import ca.team2706.scouting.mcmergemanager.backend.BlueAllianceUtils;
+import ca.team2706.scouting.mcmergemanager.backend.CreateCsvFile;
 import ca.team2706.scouting.mcmergemanager.backend.FTPClient;
 import ca.team2706.scouting.mcmergemanager.backend.FileUtils;
 import ca.team2706.scouting.mcmergemanager.backend.TakePicture;
-import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
+import ca.team2706.scouting.mcmergemanager.backend.WebServerUtils;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.DataRequester;
-import ca.team2706.scouting.mcmergemanager.backend.interfaces.FTPRequester;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.PreGameFieldWatcher;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.TeleopFieldWatcher;
+import ca.team2706.scouting.mcmergemanager.powerup2018.gui.autoFieldwatcher;
 
 @TargetApi(21)
 public class MainActivity extends AppCompatActivity
-        implements DataRequester, PreMatchReportFragment.OnFragmentInteractionListener,
-        FTPRequester {
+        implements DataRequester, PreMatchReportFragment.OnFragmentInteractionListener {
 
     public Context context;
 
     public int teamColour = Color.rgb(102, 51, 153);
 
+    public static Thread syncThread;
 
     Intent globalIntent;
-    static MainActivity me;
+    public static MainActivity me;
 
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
@@ -92,18 +96,49 @@ public class MainActivity extends AppCompatActivity
         FileUtils.checkFileReadWritePermissions(this);
 
         getEventKeys();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                WebServerUtils.postCommentToServer(2706, "asdjfhasghahraefgrh");
+            }
+        }).start();
     }
 
-    // Check to see if the event keys has been downloaded yet, if not yet downloaded for this year then download
+    public void createCsvFile(View view) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                CreateCsvFile.saveCsvFile("csv.csv");
+            }
+        }).start();
+    }
+
+    public void generateThreatList(View view){
+        Intent intent = new Intent(this, ThreatListGenerator.class);
+        startActivity(intent);
+    }
+
+    // Check to see if the event keys has been downloaded yet, if not yet downloaded for this year then save
     private void getEventKeys() {
         if (!FileUtils.fileExists(this, FileUtils.EVENT_KEYS_FILENAME)) {
-            FileUtils.getEventListAndSave(2017, this);
+            FileUtils.getEventListAndSave(2018, this);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Sync all the match data
+        syncMatchData();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                WebServerUtils.uploadUnsyncedMatches();
+            }
+        }).start();
 
         // tell the user where they are syncing their gearDeliveryData to
         updateDataSyncLabel();
@@ -116,16 +151,9 @@ public class MainActivity extends AppCompatActivity
         // Make sure all files are there, and visible to the USB Media Scanner.
         FileUtils.checkLocalFileStructure(this);
 
-        // In case the schedule is empty, make sure we pass along the list of teams registered at event
-        // that we fetched at the beginning.
-        sMatchData = FileUtils.loadMatchDataFile();
-        if (sMatchData == null) sMatchData = new MatchData();
+        if(sMatchData == null) { sMatchData = new MatchData(); }
 
-        sRepairTimeObjects = FileUtils.getRepairTimeObjects();
-
-        // syncs unposted matches and downloads matchdata for current competition
-        if (false)
-            FileUtils.syncFiles(this);
+//        sRepairTimeObjects = FileUtils.getRepairTimeObjects();
     }
 
     /**
@@ -221,34 +249,8 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    int teamNumber;
-    String comment;
+
     public CommentTextEditor commentTextEditor;
-
-    public void onWriteCommentButtonClick(View v) {
-
-        // Get the comment
-        commentTextEditor = new CommentTextEditor("Write your comment.", "Comment", this);
-        commentTextEditor.displayAlertDialog();
-
-        // Get the team number (After for lazy layout reasons)
-        enterATeamNumberPopup = new GetTeamNumberDialog("Team Number", "Team Number", 1, this);
-        enterATeamNumberPopup.displayAlertDialog();
-
-
-        // Assign the team number and get the comment
-        teamNumber = enterATeamNumberPopup.getTeamNumber();
-        comment = commentTextEditor.getComment();
-
-        CommentList commentList = new CommentList(1114);
-
-        commentList.addComment("testing comment");
-
-        FileUtils.saveTeamComments(commentList);
-
-        
-    }
-
 
     public void onRepairTimeRecordClicked(View view) {
         Intent intent = new Intent(this, RepairTimeCollection.class);
@@ -395,9 +397,6 @@ public class MainActivity extends AppCompatActivity
         //Here in case we need it later
     }
 
-    public void dirCallback(FTPFile[] listing) {
-        //Here in case we need it later
-    }
 
     public void updateSyncBar(String Caption, int Progress, Activity activity, boolean isRunning) {
         final String caption = Caption;
@@ -426,27 +425,46 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void syncPhotos(View v) {
-        try {
 
-            String ftpHostname = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPHostname), null);
-            String ftpUsername = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPUsername), null);
-            String ftpPassword = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPPassword), null);
-            if (ftpUsername == null || ftpHostname == null || ftpPassword == null) return;
-            sFtpClient = new FTPClient(ftpHostname, ftpUsername, ftpPassword, FileUtils.sLocalTeamPhotosFilePath, FileUtils.sRemoteTeamPhotosFilePath);
-            sFtpClient.connect();
-            sFtpClient.syncAllFiles(this, this);
-        } catch (Exception e) {
-            // empty
-            Log.e("MCMergeManager: ", "", e);
-        }
 
+    public void syncMatchData() {
+        syncThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Post the un-posted comments
+                WebServerUtils.syncUnpostedComments();
+
+                // Post all data to server
+                WebServerUtils.uploadUnsyncedMatches();
+
+                // Get data from server
+                WebServerUtils.syncMatchData();
+
+                // Sync the comments
+                WebServerUtils.syncComments();
+
+                // Reload the match data
+                FileUtils.readUnpostedMatches();
+            }
+        });
+
+        syncThread.start();
     }
 
-    public void onClick(View v) {
-        FileUtils.checkLocalFileStructure(this);
-        FileUtils.syncFiles(this);
+    public void onClickSyncMatchData(View v) {
+        syncMatchData();
     }
+
+    public void onClickGetOprs(View view) {
+        FileUtils.saveOprsToFile(this);
+    }
+
+    public void toPreFieldWatcher(View view){
+        Intent intent = new Intent(this, PreGameFieldWatcher.class);
+        startActivity(intent);
+    }
+
+
 
 
 }

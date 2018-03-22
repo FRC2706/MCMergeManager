@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_x="2dp"
+        android:layout_y="0dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Picklist based on current match data"
+        android:enabled="false"/>
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editText2"
+        android:layout_x="1dp"
+        android:layout_y="47dp"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="textPersonName"
+        android:text="Please enter the desired weight." />
+
+    <Button
+        android:id="@+id/generate_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/defense_weight"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="91dp"
+        android:text="Generate Picklist" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText3"
+        android:layout_marginTop="37dp"
+        android:layout_toEndOf="@+id/generate_list"
+        android:text="Scale" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/defense_weight"
+        android:layout_alignEnd="@+id/textView9"
+        android:text="Echange" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/scale_weight"
+        android:layout_alignStart="@+id/switch_weight"
+        android:text="Switch" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/defense_weight"
+        android:layout_alignStart="@+id/defense_weight"
+        android:text="Defense" />
+
+    <EditText
+        android:id="@+id/switch_weight"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView15"
+        android:layout_marginStart="81dp"
+        android:ems="10"
+        android:inputType="number"
+        android:text="25" />
+
+    <EditText
+        android:id="@+id/exhange_weight"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/scale_weight"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:inputType="number"
+        android:text="25" />
+
+    <EditText
+        android:id="@+id/scale_weight"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textView9"
+        android:layout_marginEnd="80dp"
+        android:ems="10"
+        android:inputType="number"
+        android:text="25" />
+
+    <EditText
+        android:id="@+id/defense_weight"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/exhange_weight"
+        android:layout_alignBottom="@+id/exhange_weight"
+        android:layout_alignStart="@+id/switch_weight"
+        android:ems="10"
+        android:inputType="number"
+        android:text="25" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView15"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif"
+        android:text="Weights"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:typeface="normal" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView20"
+        android:layout_below="@+id/defense_weight"
+        android:layout_marginTop="23dp"
+        android:text="Total : "
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/max_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView22"
+        android:layout_alignBottom="@+id/textView22"
+        android:layout_toEndOf="@+id/textView22"
+        android:text="100"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

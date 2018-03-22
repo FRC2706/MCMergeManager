@@ -104,7 +104,7 @@ public class MatchSchedule implements Serializable {
 
         List<String> teamListStr = new ArrayList<>();
         for(Integer i: teamListInt)
-        teamListStr.add(i.toString());
+            teamListStr.add(i.toString());
 
         return teamListStr;
     }
@@ -339,6 +339,7 @@ public class MatchSchedule implements Serializable {
 
             return arr;
         }
+
 
         // setters - this is how other classes will update gearDeliveryData, or make a Match if they only know a few fields
         void setMatchNo(int matchNo) { this.matchNo = matchNo; }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/pit_scouting_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Pit Scouting"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/takePictureBtn"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pit_scouting_title"
+        android:layout_marginTop="27dp"
+        android:layout_toStartOf="@+id/pit_scouting_team_numb"
+        android:onClick="takePicture"
+        android:text="Take Picture"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/pit_scouting_team_numb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/takePictureBtn"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="13dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Enter Team Number" />
+
+    <Button
+        android:id="@+id/pit_scouting_auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/takePictureBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="53dp"
+        android:text="What can they do in autonomous?"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/pit_scouting_pickup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pit_scouting_auto"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:text="Where do they pickup cubes?"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/pit_scouting_delivery_bton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pit_scouting_pickup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="Where can they deliver cubes?"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/pit_scouting_climb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pit_scouting_delivery_bton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="How do they climb?"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/pit_scouting_suggestions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/takePictureBtn"
+        android:layout_below="@+id/pit_scouting_climb"
+        android:layout_marginTop="42dp"
+        android:text="*Don't forget to take pictures of the robot and sponsor board"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

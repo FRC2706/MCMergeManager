@@ -17,16 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,11 +24,12 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,8 +40,12 @@ import ca.team2706.scouting.mcmergemanager.backend.dataObjects.NoteObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.RepairTimeObject;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.TeamDataObject;
 import ca.team2706.scouting.mcmergemanager.backend.interfaces.PhotoRequester;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.FuelPickupEvent;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.gui.MainActivity;
+import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoCubePickupEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldWatcher.BlueSwitchEvent;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.MatchData;
+import ca.team2706.scouting.mcmergemanager.steamworks2017.gui.FieldWatcher;
 
 /**
  * This is a helper class to hold common code for accessing shared scouting data files.
@@ -85,6 +80,68 @@ public class FileUtils {
         sLocalCommentFilePath = sLocalToplevelFilePath + "/" + "TeamComments";
 
         sRemoteTeamPhotosFilePath = "/" + App.getContext().getString(R.string.FILE_TOPLEVEL_DIR) + "/" + "Team Photos";
+    }
+
+    public static void deleteUnsyncedMatches() {
+        File file = new File(sLocalEventFilePath + "/unpostedMatches.json");
+        file.delete();
+    }
+
+    public static void saveWrongMatchNumberMatch(JSONObject match) {
+        File file = new File(sLocalEventFilePath + "/wrongMatchNumber.json");
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+
+            bw.append(match.toString() + "\n");
+
+            bw.close();
+        } catch (IOException e) {
+            Log.d("Err saving file", e.toString());
+        }
+    }
+
+    public static final String UNPOSTED_COMMENT_FILENAME = "unpostedComments.json";
+
+    public static void saveUnpostedComment(JSONObject json) {
+        File file = new File(sLocalEventFilePath + "/" + UNPOSTED_COMMENT_FILENAME);
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+
+            bw.append(json.toString() + "\n");
+
+            bw.close();
+        } catch(IOException e) {
+            Log.d("Err save unpost comment", e.toString());
+        }
+
+        // Force the midea scanner to scan this file so it shows up from a PC over USB.
+        App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+    }
+
+    public static JSONArray readUnpostedComments() {
+        File file = new File(sLocalEventFilePath + "/" + UNPOSTED_COMMENT_FILENAME);
+
+        JSONArray arr = new JSONArray();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            String line;
+            while((line = br.readLine()) != null) {
+                arr.put(new JSONObject(line));
+            }
+
+            br.close();
+        } catch(FileNotFoundException e) {
+            Log.d("File not found", e.toString());
+        } catch(IOException e) {
+            Log.d("IO err,", e.toString());
+        } catch(JSONException e) {
+            Log.d("JSON err", e.toString());
+        }
+
+        return arr;
     }
 
     public enum FileType {
@@ -167,6 +224,33 @@ public class FileUtils {
         }.start();
     }
 
+    public static JSONObject getTeamComments(int teamNumber) {
+        String json = null;
+        JSONObject jsonObject = null;
+
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalCommentFilePath + "/" + teamNumber + COMMENT_FILE_PATH));
+
+            while ((json = bufferedReader.readLine()) != null) {
+                stringBuilder.append(json);
+            }
+
+            jsonObject = new JSONObject(stringBuilder.toString());
+
+
+        } catch (IOException e) {
+            Log.d("IO Error", e.getMessage());
+            return null;
+        } catch (JSONException e) {
+            Log.d("JSON Error", e.getMessage());
+            return null;
+
+        }
+        return jsonObject;
+
+    }
+
 
     /**
      * A flag to make sure only one directory tree scan runs at a time.
@@ -197,6 +281,8 @@ public class FileUtils {
                 if (subFile.isDirectory()) {
                     // Recurse!
                     scanDirectoryTree(subFile.getAbsolutePath());
+                } else if (subFile.getName().substring(subFile.getName().length() - 5).equals(".json")) {
+                    continue;
                 } else {
                     try {
                         // TODO: 18/03/17 downsize images if too large
@@ -276,50 +362,6 @@ public class FileUtils {
      * Or, in printf / format strings:
      * "%d,%d,%b,%b,{%d;...},{{%d:%d:%.2f:%d};...},{%d;...},{{%d:%d:%.2f:%d};...},%,2f,{{%d;%,2f}:...},{{%.2f;%d}:...},%s,%b,%d"
      */
-    public static void appendToMatchDataFile(MatchData.Match match, FileType fileType) {
-
-        //TODO: #76, make sure this actually works
-
-        String outFileName;
-        File outfile;
-        if (fileType == FileType.SYNCHED) {
-            outFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileName);
-
-            Log.d(App.getContext().getResources().getString(R.string.app_name), "Saving match data to file: " + outFileName);
-
-            outfile = new File(outFileName);
-            try {
-                // converts match to json, and then uses json.toString method to save in file
-                // create the file path, if it doesn't exist already.
-                (new File(outfile.getParent())).mkdirs();
-
-                BufferedWriter bw = new BufferedWriter(new FileWriter(outfile, true));
-                bw.append(match.toJson().toString() + "\n");
-                bw.flush();
-                bw.close();
-
-                // Force the midea scanner to scan this file so it shows up from a PC over USB.
-                App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(outfile)));
-            } catch (IOException e) {
-                Log.d("synced file", e.toString());
-            }
-        } else if (fileType == FileType.UNSYNCHED) {
-            outFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileNameUNSYNCHED);
-
-            Log.d(App.getContext().getResources().getString(R.string.app_name), "Saving match data to file: " + outFileName);
-
-            outfile = new File(outFileName);
-            try {
-                BufferedWriter bw = new BufferedWriter(new FileWriter(outfile, true));
-                bw.append(match.toJson().toString() + "\n");
-                bw.flush();
-                bw.close();
-            } catch (IOException e) {
-                Log.d("unsynced file", e.toString());
-            }
-        }
-
-    }
 
 
     /**
@@ -336,82 +378,215 @@ public class FileUtils {
     /**
      * Load the entire file of match data into Objects.
      */
-    public static MatchData loadMatchDataFile() {
-        return loadMatchDataFile(FileType.SYNCHED);
+//    public static MatchData loadMatchDataFile() {
+//        return loadMatchDataFile(FileType.SYNCHED);
+//    }
+    public static void saveServerData(JSONObject match) throws JSONException {
+        JSONObject jsonBlue1 = new JSONObject();
+        jsonBlue1.put("team", match.getString("blue1"));
+        jsonBlue1.put("match_number", match.getString("match_number"));
+        jsonBlue1.put("events", new JSONArray());
+        JSONObject jsonBlue2 = new JSONObject();
+        jsonBlue2.put("team", match.getString("blue2"));
+        jsonBlue2.put("match_number", match.getString("match_number"));
+        jsonBlue2.put("events", new JSONArray());
+        JSONObject jsonBlue3 = new JSONObject();
+        jsonBlue3.put("team", match.getString("blue3"));
+        jsonBlue3.put("match_number", match.getString("match_number"));
+        jsonBlue3.put("events", new JSONArray());
+        JSONObject jsonRed1 = new JSONObject();
+        jsonRed1.put("team", match.getString("red1"));
+        jsonRed1.put("match_number", match.getString("match_number"));
+        jsonRed1.put("events", new JSONArray());
+        JSONObject jsonRed2 = new JSONObject();
+        jsonRed2.put("team", match.getString("red2"));
+        jsonRed2.put("match_number", match.getString("match_number"));
+        jsonRed2.put("events", new JSONArray());
+        JSONObject jsonRed3 = new JSONObject();
+        jsonRed3.put("team", match.getString("red3"));
+        jsonRed3.put("match_number", match.getString("match_number"));
+        jsonRed3.put("events", new JSONArray());
+        JSONObject fieldWatcher = new JSONObject();
+        fieldWatcher.put("team", -1);
+        fieldWatcher.put("match_number", match.getString("match_number"));
+        fieldWatcher.put("events", new JSONArray());
+
+        JSONArray arr = (JSONArray) match.get("events");
+
+        // If there are no events, then the match has not been scouted, and therefore should not be saved to phone
+        if (arr.length() == 0)
+            return;
+
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject event = (JSONObject) arr.get(i);
+
+            // For fieldwatcher stuff
+            if (event.getString("goal").equals(MatchData.BLUE_SWITCH) || event.getString("goal").equals(MatchData.BOOST) ||
+                    event.getString("goal").equals(MatchData.FORCE) || event.getString("goal").equals(MatchData.LEVITATE) ||
+                    event.getString("goal").equals(MatchData.RED_SWITCH) || event.getString("goal").equals(MatchData.SCALE)) {
+                fieldWatcher.getJSONArray("events").put(makeEvent(event.getString("start_time"),
+                        event.getString("goal"),
+                        event.getString("extra"),
+                        event.getString("end_time")
+                ));
+            }
+
+            // For team events put int team objects
+            if (event.getString("team_key").substring(3).equals(jsonBlue1.getString("team"))) {
+                jsonBlue1.getJSONArray("events").put(makeEvent(
+                        event.getString("start_time"),
+                        event.getString("goal"),
+                        event.getString("extra"),
+                        event.getString("end_time")
+                ));
+            } else if (event.getString("team_key").substring(3).equals(jsonBlue2.getString("team"))) {
+                jsonBlue2.getJSONArray("events").put(makeEvent(
+                        event.getString("start_time"),
+                        event.getString("goal"),
+                        event.getString("extra"),
+                        event.getString("end_time")
+                ));
+            } else if (event.getString("team_key").substring(3).equals(jsonBlue3.getString("team"))) {
+                jsonBlue3.getJSONArray("events").put(makeEvent(
+                        event.getString("start_time"),
+                        event.getString("goal"),
+                        event.getString("extra"),
+                        event.getString("end_time")
+                ));
+            } else if (event.getString("team_key").substring(3).equals(jsonRed1.getString("team"))) {
+                jsonRed1.getJSONArray("events").put(makeEvent(
+                        event.getString("start_time"),
+                        event.getString("goal"),
+                        event.getString("extra"),
+                        event.getString("end_time")
+                ));
+            } else if (event.getString("team_key").substring(3).equals(jsonRed2.getString("team"))) {
+                jsonRed2.getJSONArray("events").put(makeEvent(
+                        event.getString("start_time"),
+                        event.getString("goal"),
+                        event.getString("extra"),
+                        event.getString("end_time")
+                ));
+            } else if (event.getString("team_key").substring(3).equals(jsonRed3.getString("team"))) {
+                jsonRed3.getJSONArray("events").put(makeEvent(
+                        event.getString("start_time"),
+                        event.getString("goal"),
+                        event.getString("extra"),
+                        event.getString("end_time")
+                ));
+            }
+        }
+
+        // If their is no events for the team then don't create a match file for them
+        if(fieldWatcher.getJSONArray("events").length() != 0)
+            new MatchData.Match(fieldWatcher).toJson();
+        if(jsonBlue1.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonBlue1).toJson();
+        if(jsonBlue2.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonBlue2).toJson();
+        if(jsonBlue3.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonBlue3).toJson();
+        if(jsonRed1.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonRed1).toJson();
+        if(jsonRed2.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonRed2).toJson();
+        if(jsonRed3.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonRed3).toJson();
     }
 
+    public static JSONObject makeEvent(String startTime, String goal, String extra, String endTime) throws JSONException {
+        JSONObject json = new JSONObject();
 
-    public static MatchData loadMatchDataFile(FileType fileType) {
+        json.put("start_time", startTime);
+        json.put("goal", goal);
+        json.put("extra", extra);
+        json.put("end_time", endTime);
 
+        return json;
+    }
+
+    public static ArrayList<String> getTeams() {
+        ArrayList<String> teamNums = new ArrayList<>();
+
+        String inFileName = sLocalEventFilePath;
+        File dir = new File(inFileName);
+        File[] files = dir.listFiles();
+
+        for (int i = 0; i < files.length; ++i) {
+            teamNums.add(files[i].getName());
+        }
+        return teamNums;
+    }
+
+    public static MatchData.Match getFieldWatcherMatch(int matchNumber) {
+        MatchData.Match match = null;
+
+        try {
+            File file = new File(sLocalEventFilePath + "/FieldWatcherData/match" + matchNumber + ".json");
+            BufferedReader bw = new BufferedReader(new FileReader(file));
+
+            match = new MatchData.Match(new JSONObject(bw.readLine()));
+
+            bw.close();
+        } catch (FileNotFoundException e) {
+            Log.d("No match found", e.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return match;
+    }
+
+    public static MatchData loadMatchData(int teamNum) {
         MatchData matchData = new MatchData();
         List<JSONObject> matchJson = new ArrayList<>();
 
-        String inFileName;
-        switch (fileType) {
-            case UNSYNCHED:
-                inFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileNameUNSYNCHED);
-                break;
-            case SYNCHED:
-            default:
-                inFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileName);
-        }
+        String inFileName = sLocalEventFilePath + "/" + teamNum;
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader(inFileName));
-            String line = br.readLine();
+            File dir = new File(inFileName);
+            File[] files = dir.listFiles();
 
-            while (line != null) {
-                // braces are for human readibility, but make parsing harder
-                matchJson.add(new JSONObject(line));
-                line = br.readLine();
+            // Check if there is no files
+            if (files == null)
+                return matchData;
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < files.length; ++i) {
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(files[i]));
+
+                // Each file should be one line, so just read the one line, TODO: get justin to make al matches in one file
+                matchJson.add(new JSONObject(bufferedReader.readLine()));
+                bufferedReader.close();
             }
-            br.close();
-        } catch (Exception e) {
-            Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: " + e.toString());
-            return null;
-        }
 
-        // parse all the matches into the MatchData object
-        boolean parseFailure = false;
-        for (JSONObject obj : matchJson) {
-
-            try {
-                MatchData.Match match = new MatchData.Match(obj);
-                matchData.addMatch(match);
-            } catch (Exception e) {
-                Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: ", e);
-                parseFailure = true;
-                continue;
+            // parse all the matches into the MatchData object
+            boolean parseFailure = false;
+            for (JSONObject obj : matchJson) {
+                try {
+                    MatchData.Match match = new MatchData.Match(obj);
+                    matchData.addMatch(match);
+                } catch (Exception e) {
+                    Log.e(App.getContext().getResources().getString(R.string.app_name), "loadMatchDataFile:: ", e);
+                    parseFailure = true;
+                    continue;
+                }
             }
+            if (parseFailure) {
+                Toast.makeText(App.getContext(), "Warning: match data may be corrupted or malformed.", Toast.LENGTH_SHORT).show();
+            }
+
+            return matchData;
+
+        } catch (IOException e) {
+            Log.d("matchdata load failure", e.toString());
+        } catch (JSONException e) {
+            Log.d("JSON error", e.toString());
         }
-        if (parseFailure) {
-            Toast.makeText(App.getContext(), "Warning: match data may be corrupted or malformed.", Toast.LENGTH_SHORT).show();
-        }
 
-        return matchData;
-    }
-
-    /**
-     * Add a Note for a particular team.
-     * <p/>
-     * The intention of Notes is for the drive team to be able to read them quickly.
-     * They should be short and fit on one line, so they will be truncated to 80 characters.
-     */
-    public static void addNote(int teamNumber, String note) {
-        // TODO #41
-    }
-
-    /**
-     * Retrieves all the notes for a particular team.
-     *
-     * @param teamNumber the team number you want notes for.
-     * @return All the notes for this team concatenated into a single string, with each note beginning with a bullet "-",
-     * and ending with a newline (except for the last one).
-     */
-    public static String getNotesForTeam(int teamNumber) {
-        // TODO #41
-
-        return "";
+        return null;
     }
 
 
@@ -625,97 +800,63 @@ public class FileUtils {
 
     }
 
-
     /*
-        gets a competition data from the swagger server
-        if compID is 0 will take from current event, if other number will get that competition
+    @param CommentList Class
+    Saves the JSON to a file
      */
-    public static void getMatchesFromServer(final Context context) {
-        RequestQueue queue = Volley.newRequestQueue(context);
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-        final String url = "http://ftp.team2706.ca:3000/competitions/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>") + "/matches.json";
+    private static final String COMMENT_FILE_PATH = "comments.json";
 
-        System.out.println(url);
 
-        // prepare the Request
-        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        // display response
-                        saveJsonFile(response);
-                        System.out.println(response.toString() + "\nWriting should have gone well");
+    public static void saveTeamCommentsAtEndOfFile(CommentList commentList) {
+        File file = new File(sLocalCommentFilePath + "/" + commentList.getTeamNumber() + COMMENT_FILE);
 
-                        loadMatchDataFile();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.toString());
-                        error.printStackTrace();
-                    }
-                }
-        );
+        try {
+            // Get the old file contents
+            CommentList oldComments = new CommentList(getTeamComments(commentList.getTeamNumber()));
 
-        // add it to the RequestQueue
-        queue.add(getRequest);
+            // Add the new comments to it
+            for(int i = 0; i < commentList.getComments().size(); i++) {
+                oldComments.addComment(commentList.getComments().get(i));
+            }
+
+            file.delete();
+
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+
+            bw.write(oldComments.getJson().toString());
+
+            bw.close();
+        } catch(JSONException e) {
+            Log.d("JSON err", e.toString());
+        } catch(IOException e) {
+            Log.d("OI err", e.toString());
+        }
     }
 
-    /**
-     * Saves the JSON to a file
-     * @param commentList
-     */
-    public static void saveTeamComments(CommentList commentList){
-
-        JSONObject jsonObject = loadTeamCommentsFromFile(commentList.getTeamNumber());
-
-        if(jsonObject == null) {
-
-            try {
-                jsonObject = commentList.getJson();
-
-            } catch (JSONException e) {
-                Log.d("JSON Error", e.getMessage());
-                Log.d("JSON might be null", "");
-
-            }
-        } else {
-            try {
-                CommentList cl = new CommentList(jsonObject);
-                for (int i = 0; i < cl.getComments().size(); i++) {
-                    commentList.addComment(cl.getComments().get(i));
-                }
-                jsonObject = commentList.getJson();
-
-            } catch (Exception e) {
-                Log.d("ERROR", e.getMessage());
-            }
-
-
-        }
-
-        String outFileName = sLocalCommentFilePath + "/"  + commentList.getTeamNumber() + COMMENT_FILE;
-
-        File file = new File(outFileName);
+    // Saves comments to visible folder. If append is false it overwrites the file
+    public static void saveTeamCommentsFromServer(CommentList commentList, int teamNumber) {
+        File file = new File(sLocalCommentFilePath + "/" + teamNumber + COMMENT_FILE);
 
         try {
             file.delete();
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
 
-            bw.append(jsonObject.toString());
+            bw.append(commentList.getJson().toString());
 
             bw.flush();
             bw.close();
+
+            // Force the midea scanner to scan this file so it shows up from a PC over USB.
+            App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         } catch (IOException e) {
             Log.d("File writing error ", e.toString());
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             // This should never be triggered, but is here for testing purposes
             Log.d("Json is null.", e.toString());
-
+        } catch(JSONException e) {
+            Log.d("JSON err", e.toString());
         }
-
     }
 
     /**
@@ -724,13 +865,13 @@ public class FileUtils {
      * @param teamNumber
      * @return Comments for the given team. May be null if the file failed to load.
      */
-    public static JSONObject loadTeamCommentsFromFile(int teamNumber){
+    public static JSONObject loadTeamCommentsFromFile(int teamNumber) {
         String json;
         JSONObject jsonObject;
 
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalCommentFilePath + "/"  + teamNumber + COMMENT_FILE));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(sLocalCommentFilePath + "/" + teamNumber + COMMENT_FILE));
 
             while ((json = bufferedReader.readLine()) != null) {
                 stringBuilder.append(json);
@@ -742,8 +883,7 @@ public class FileUtils {
         } catch (IOException e) {
             Log.d("IO Error", e.getMessage());
             return null;
-        }
-        catch (JSONException e){
+        } catch (JSONException e) {
             Log.d("JSON Error", e.getMessage());
             return null;
 
@@ -751,6 +891,97 @@ public class FileUtils {
         return jsonObject;
 
     }
+
+
+    // This returns the local match data for a given match and
+    public static JSONObject getJsonData(int teamNumber, int matchNumber) {
+        String json = null;
+        JSONObject jsonObject = null;
+
+        String fileName;
+        String filePath;
+        if (teamNumber == -1) {
+            filePath = sLocalEventFilePath + "/" + "FieldWatcherData" + "/" + "match" + matchNumber + ".json";
+
+        } else {
+            filePath = sLocalEventFilePath + "/" + matchNumber + "/" + "match" + matchNumber + ".json";
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+
+            while ((json = bufferedReader.readLine()) != null) {
+                stringBuilder.append(json);
+            }
+
+            jsonObject = new JSONObject(stringBuilder.toString());
+
+        } catch (IOException e) {
+            Log.d("IO Error", e.getMessage());
+            return null;
+        } catch (JSONException e) {
+            Log.d("JSON Error", e.getMessage());
+            return null;
+
+        }
+        return jsonObject;
+
+    }
+
+
+    public static void saveJsonData(JSONObject obj) {
+
+
+        try {
+            String filePath;
+            if (obj.getInt("team") == -1) {
+                filePath = sLocalEventFilePath + "/" + "FieldWatcherData" + "/" + "match" + obj.getInt("match_number") + ".json";
+
+            } else {
+                filePath = sLocalEventFilePath + "/" + obj.getInt("team") + "/" + "match" + obj.getInt("match_number") + ".json";
+            }
+            File file = new File(filePath);
+
+            (new File(file.getParent())).mkdirs();
+
+            file.delete();
+
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+
+            bw.write(obj.toString());
+            bw.flush();
+            bw.close();
+
+            // Force the midea scanner to scan this file so it shows up from a PC over USB.
+            App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+        } catch (IOException e) {
+            Log.d("IOException", e.getMessage());
+        } catch (JSONException e) {
+            Log.d("JSON error", e.toString());
+        }
+    }
+
+    public static JSONObject getJsonData() {
+        try {
+            scanDirectoryTree(sLocalEventFilePath);
+            String filePath = sLocalEventFilePath + "/matchData.json";
+
+            File file = new File(filePath);
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            return new JSONObject(br.readLine());
+        } catch (JSONException e) {
+            Log.d("JSON error", e.getMessage());
+        } catch (IOException e) {
+            Log.d("IOException", e.getMessage());
+
+        }
+
+        return null;
+    }
+
 
     private static void saveJsonFile(JSONArray jsonArray) {
         if (!clearTeamDataFile(FileType.SYNCHED)) {
@@ -760,12 +991,8 @@ public class FileUtils {
         String outFileName = sLocalEventFilePath + "/" + App.getContext().getResources().getString(R.string.matchScoutingDataFileName);
         File file = new File(outFileName);
 
-
-
-
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 bw.append(jsonArray.get(i).toString() + "\n");
             }
@@ -806,124 +1033,8 @@ public class FileUtils {
         return false;
     }
 
-    /*
-        Takes the selected event that you are at
-     */
-    public static void postMatchToServer(final Context context, final JSONObject jsonBody) {
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-
-        final String url = "http://ftp.team2706.ca:3000/competitions/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>") + "/matches.json";
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
-            // Prepares POST data...
-            jsonBody.put("competition_id", SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set"));
-            final String mRequestBody = jsonBody.toString();
-            System.out.println(jsonBody.toString());
-            // Volley request...
-            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.i("VOLLEY", response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("VOLLEY error from: " + url + " - ", error.toString());
-                    FileUtils.appendToMatchDataFile(new MatchData.Match(jsonBody), FileType.UNSYNCHED);
-                    error.printStackTrace();
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
-                                mRequestBody, "utf-8");
-                        return null;
-                    }
-                }
-            };
-            requestQueue.add(request);
-        } catch (Exception e) {
-            Log.d("Somethin interesting", e.toString());
-        }
-    }
-
-    public static void postMatchToServer(final Context context, int compID) {
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-        final String url = SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_FTPHostname), "<Not Set>") + "/competitions/" + compID + "/matches.json";
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        try {
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
-            // Prepares POST data...
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("competition_id", compID);
-            jsonBody.put("number", 1);
-            jsonBody.put("team_number", 1);
-            JSONArray arr = new JSONArray();
-            JSONObject obj = new JSONObject();
-            obj.put("objective_id", FuelPickupEvent.objectiveId);
-            arr.put(obj);
-            jsonBody.put("events", arr);
-            System.out.println(jsonBody.toString());
-            final String mRequestBody = jsonBody.toString();
-            // Volley request...
-            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.i("VOLLEY", response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("VOLLEY error from: " + url + " - ", error.toString());
-                    error.printStackTrace();
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
-                                mRequestBody, "utf-8");
-                        return null;
-                    }
-                }
-            };
-            requestQueue.add(request);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void syncFiles(Context context) {
-
-        MatchData matchData = loadMatchDataFile(FileType.UNSYNCHED);
-        clearTeamDataFile(FileType.UNSYNCHED);
-
-        // probably need to throw some sort of error catching magic
-        if (matchData.matches != null)
-            for (MatchData.Match match : matchData.matches) {
-                postMatchToServer(context, match.toJson());
-            }
-
-        // delete file on phone and redownload
-        getMatchesFromServer(context);
+        // TODO
     }
 
     // Checks to see if a file with a certain filename exists
@@ -936,7 +1047,7 @@ public class FileUtils {
     }
 
     // Update to 2018
-    public static final String EVENT_KEYS_FILENAME = "EventKeys2017.json";
+    public static final String EVENT_KEYS_FILENAME = "EventKeys2018.json";
 
     // Saves a list of all the events for a certain year,
     // User then chooses what event that they are at
@@ -949,7 +1060,12 @@ public class FileUtils {
                 JSONArray eventKeys;
                 try {
                     // TODO: Update the year to 2018
-                    eventKeys = new JSONArray(BlueAllianceUtils.getEventKeysFromYear(year));
+                    // Return if the string returns null, avoids a null pointer exception
+                    String eventKeyStrings = BlueAllianceUtils.getEventKeysFromYear(year);
+                    if (eventKeyStrings == null)
+                        return;
+
+                    eventKeys = new JSONArray(eventKeyStrings);
                 } catch (JSONException e) {
                     Log.d("JSON exception", e.toString());
                     return;
@@ -967,7 +1083,7 @@ public class FileUtils {
                         obj.put("name", eventKeys.getJSONObject(i).getString("name"));
 
                         // Only in Canada
-                        if(eventKeys.getJSONObject(i).getString("country").equals("Canada"))
+                        if (eventKeys.getJSONObject(i).getString("country").equals("Canada"))
                             arr.put(obj);
                     }
                 } catch (JSONException e) {
@@ -979,8 +1095,8 @@ public class FileUtils {
 
                 // Save the file to the internal storage
                 try {
-                    writeFile(context, arr.toString(), EVENT_KEYS_FILENAME);
-                } catch(IOException e) {
+                    writeFileHidden(arr.toString(), EVENT_KEYS_FILENAME, context);
+                } catch (IOException e) {
                     Log.d("Error writing file", e.toString());
                 }
 
@@ -990,14 +1106,14 @@ public class FileUtils {
     }
 
     public static JSONArray getArrayOfEvents(Context context) throws JSONException {
-        return new JSONArray(readFile(EVENT_KEYS_FILENAME, context));
+        return new JSONArray(readFileHidden(EVENT_KEYS_FILENAME, context));
     }
 
     // Returns the string content of a file
-    public static String readFile(String filename, Context context) {
+    public static String readFileHidden(String filename, Context context) {
         String fileContents;
 
-        if(fileExists(context, filename)) {
+        if (fileExists(context, filename)) {
             File file;
 
             try {
@@ -1010,20 +1126,20 @@ public class FileUtils {
                 br.close();
 
                 return fileContents;
-            } catch(IOException e) {
+            } catch (IOException e) {
                 Log.d("Error reading file", e.toString());
-                return null;
             }
         }
 
-        return null;
+        return "";
     }
 
     // Writes a string to a file, throws an IOException if something goes wrong
-    public static void writeFile(Context context, String s, String filename) throws IOException {
+    public static void writeFileHidden(String s, String filename, Context context) throws IOException {
         // Create the file and directories
         File file = new File(context.getFilesDir(), filename);
         file.createNewFile();
+        (new File(file.getParent())).mkdirs();
 
         // Create the file writer and write to file
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
@@ -1032,6 +1148,88 @@ public class FileUtils {
         // Close the file
         bw.flush();
         bw.close();
+    }
+
+    public static JSONArray readUnpostedMatches() {
+        File file = new File(sLocalEventFilePath + "/unpostedMatches.json");
+
+
+        JSONArray matches = new JSONArray();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                matches.put(new JSONObject(line));
+            }
+
+            br.close();
+        } catch (IOException e) {
+            Log.d("IO error", e.toString());
+        } catch (JSONException e) {
+            Log.d("Json err, ", e.toString());
+        }
+
+        return matches;
+    }
+
+    public static void saveUnpostedMatch(JSONObject json) {
+        File file = new File(sLocalEventFilePath + "/unpostedMatches.json");
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+
+            bw.append(json.toString() + "\n");
+
+            bw.close();
+        } catch (IOException e) {
+            Log.d("Err saving file", e.toString());
+        }
+    }
+
+    public static void saveUnpostedMatches(JSONArray arr) {
+        File file = new File(sLocalEventFilePath + "/unpostedMatches.json");
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+
+            for (int i = 0; i < arr.length(); i++) {
+                bw.append(arr.getJSONObject(i).toString() + "\n");
+            }
+
+            bw.close();
+        } catch (IOException e) {
+            Log.d("Err saving file", e.toString());
+        } catch (JSONException e) {
+            Log.d("JSON err", e.toString());
+        }
+    }
+
+    // Returns a json oject containg the opr, dpr and ccwm of a certain event for all teams
+    public static JSONObject getOprsFromFile() {
+        return getOprsFromFile(MainActivity.me);
+    }
+
+    public static JSONObject getOprsFromFile(Context context) {
+        try {
+            return new JSONObject(readFileHidden(StatsEngine.OPR_FILENAME, context));
+        } catch (JSONException e) {
+            Log.d("JSON err ", e.toString());
+        }
+        return new JSONObject();
+    }
+
+    public static void saveOprsToFile(final Context context) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    writeFileHidden(BlueAllianceUtils.getEventOprs().toString(), StatsEngine.OPR_FILENAME, context);
+                } catch (IOException e) {
+                    Log.d("err saving oprs", e.toString());
+                }
+            }
+        }).start();
     }
 
 }

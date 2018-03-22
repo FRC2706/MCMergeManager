@@ -87,8 +87,6 @@ public class MatchData implements Serializable {
                     }
                 }
 
-                // TODO start_time is getting set to null?? why?? ask geoge
-
                 // teleop
                 JSONArray arrEve = (JSONArray) jsonObject.get("events");
                 for(int i = 0; i < arrEve.length(); i++) {
@@ -205,7 +203,7 @@ public class MatchData implements Serializable {
                         }
                 }
 
-                postGameObject.notes = jsonObject.getString("general_notes");
+               // postGameObject.notes = jsonObject.getString("general_notes");
                 postGameObject.time_dead = jsonObject.getDouble("time_dead");
 
             } catch(JSONException e) {
@@ -363,7 +361,6 @@ public class MatchData implements Serializable {
                 arr.put(obj);
                 jsonObject.put("events", arr);
 
-                jsonObject.put("general_notes", postGameObject.notes);
                 jsonObject.put("time_dead", postGameObject.time_dead);
 
             } catch (JSONException e) {

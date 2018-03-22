@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="ca.team2706.scouting.mcmergemanager.steamworks2017.gui.TeamStatsActivity"
-    tools:showIn="@layout/steamworks2017_activity_team_stats"
+    tools:context="ca.team2706.scouting.mcmergemanager.powerup2018.gui.TeamStatsActivity"
+    tools:showIn="@layout/powerup2018_activity_team_stats"
     tools:ignore="HardcodedText">
 
     <LinearLayout
@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Crossed Base Line:"
-                android:id="@+id/crossedBaseLine"
+                android:id="@+id/crossedBaseLineLBL"
                 android:layout_row="1"
                 android:layout_column="0" />
 
@@ -130,9 +130,117 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Installed Gear:"
-                android:id="@+id/installedGear"
-                android:layout_row="3"
+                android:text="Pickup ground:"
+                android:id="@+id/autoPickupGroundLBL"
+                android:layout_row="5"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/autoPickupGroundTV"
+                android:layout_row="5"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Auto cubes:"
+                android:id="@+id/autoCubesLBL"
+                android:layout_row="6"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/autoCubesTV"
+                android:layout_row="6"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Placed alliance switch:"
+                android:id="@+id/autoPlacedAllianceSwitchLBL"
+                android:layout_row="7"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/autoPlacedAllianceSwitchTV"
+                android:layout_row="7"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Placed scale:"
+                android:id="@+id/autoPlacedScaleLBL"
+                android:layout_row="8"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/autoPlacedScaleTV"
+                android:layout_row="8"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Placed exchange:"
+                android:id="@+id/autoPlacedExchangeLBL"
+                android:layout_row="9"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/autoPlacedExchangeTV"
+                android:layout_row="9"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Dropped:"
+                android:id="@+id/autoDroppedLBL"
+                android:layout_row="10"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/autoDroppedTV"
+                android:layout_row="10"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Malfunctions:"
+                android:id="@+id/autoMalfunctionsLBL"
+                android:layout_row="11"
                 android:layout_column="0" />
 
             <TextView
@@ -140,45 +248,10 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0 / 0 (0)"
-                android:id="@+id/installedGearTV"
-                android:layout_row="3"
+                android:id="@+id/autoMalfunctionsTV"
+                android:layout_row="11"
                 android:layout_column="1" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="High Goals:"
-                android:id="@+id/autoHighGoalsLBL"
-                android:layout_row="4"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0"
-                android:id="@+id/autoHighGoalsTV"
-                android:layout_row="4"
-                android:layout_column="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Low Goals:"
-                android:id="@+id/autoLowGoalsLBL"
-                android:layout_row="5"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0"
-                android:id="@+id/autoLowGoalsTV"
-                android:layout_row="5"
-                android:layout_column="1" />
 
         </GridLayout>
 
@@ -195,15 +268,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Teleop Mode (avgs):"
-                android:id="@+id/teleopTitleTV" />
+                android:text="Teleop Mode:"
+                android:id="@+id/teleopModeTV" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Ground Pickups: "
-                android:id="@+id/groundPickups"
+                android:text="Ground pickups: "
+                android:id="@+id/telePickupGroundLBL"
                 android:layout_row="7"
                 android:layout_column="0" />
 
@@ -212,7 +285,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0"
-                android:id="@+id/teleopGroundPickupsTV"
+                android:id="@+id/telePickupGroundTV"
                 android:layout_row="7"
                 android:layout_column="1" />
 
@@ -220,8 +293,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Chute Pickups: "
-                android:id="@+id/chutePickups"
+                android:text="Total Placed Cubes:"
+                android:id="@+id/autoTotalPlacedCubesLBL"
                 android:layout_row="8"
                 android:layout_column="0" />
 
@@ -230,7 +303,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0"
-                android:id="@+id/chutePickupsTV"
+                android:id="@+id/autoTotalPlacedCubesTV"
                 android:layout_row="8"
                 android:layout_column="1" />
 
@@ -238,8 +311,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Hopper Pickups: "
-                android:id="@+id/hopperPickups"
+                android:text="Portal pickup: "
+                android:id="@+id/telePickupPortalLBL"
                 android:layout_row="9"
                 android:layout_column="0" />
 
@@ -248,7 +321,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0"
-                android:id="@+id/hopperPickupsTV"
+                android:id="@+id/telePickupPortalTV"
                 android:layout_row="9"
                 android:layout_column="1" />
 
@@ -256,9 +329,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Failed Pickups: "
-                android:id="@+id/failedPickups"
+                android:text="Pyramid pickup: "
+                android:id="@+id/telePyramidPortalLBL"
                 android:layout_row="10"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/telePickupPyramidTV"
+                android:layout_row="10"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Pickup exchange: "
+                android:id="@+id/telePickupExchangeLBL"
+                android:layout_row="11"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/telePickupExchangeTV"
+                android:layout_row="11"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Placed switch: "
+                android:id="@+id/telePlacedSwitchLBL"
+                android:layout_row="12"
                 android:layout_column="0" />
 
             <TextView
@@ -266,26 +375,26 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0 / 0 (0)"
-                android:id="@+id/teleopFailedPickupsTV"
-                android:layout_row="10"
+                android:id="@+id/telePlacedSwitchTV"
+                android:layout_row="12"
                 android:layout_column="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Avg Time\n    Playing D: "
-                android:id="@+id/avgTimeBeingDead"
-                android:layout_row="11"
+                android:text="Placed scale:"
+                android:id="@+id/telePlacedScaleLBL"
+                android:layout_row="13"
                 android:layout_column="0" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0.0 s"
-                android:id="@+id/teleopTimePlayingDTV"
-                android:layout_row="11"
+                android:text="0"
+                android:id="@+id/telePlacedScaleTV"
+                android:layout_row="13"
                 android:layout_column="1"
                 android:gravity="end" />
 
@@ -293,44 +402,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Avg Deadness:  "
-                android:id="@+id/avgDeadness"
-                android:layout_row="12"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0%"
-                android:id="@+id/avgDeadnessTV"
-                android:layout_row="12"
-                android:layout_column="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Highest:  "
-                android:id="@+id/textView38"
-                android:layout_row="13"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0%"
-                android:id="@+id/highestDeadnessTV"
-                android:layout_row="13"
-                android:layout_column="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Matches with no\n\tdeadness:  "
-                android:id="@+id/textView39"
+                android:text="Placed exchange:"
+                android:id="@+id/telePlacedExchangeLBL"
                 android:layout_row="14"
                 android:layout_column="0" />
 
@@ -338,8 +411,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0"
-                android:id="@+id/numDeadnessMatchesTV"
+                android:text="0%"
+                android:id="@+id/telePlacedExchangeTV"
                 android:layout_row="14"
                 android:layout_column="1" />
 
@@ -347,8 +420,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Successful Climbs: "
-                android:id="@+id/climbs"
+                android:text="Easy drop:"
+                android:id="@+id/teleEasyDropLBL"
+                android:layout_row="15"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0%"
+                android:id="@+id/teleEasyDropTV"
+                android:layout_row="15"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Left it:"
+                android:id="@+id/teleLeftItLBL"
                 android:layout_row="16"
                 android:layout_column="0" />
 
@@ -356,8 +447,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0 / 0 (0)"
-                android:id="@+id/climbsTV"
+                android:text="0%"
+                android:id="@+id/teleLeftItTV"
                 android:layout_row="16"
                 android:layout_column="1" />
 
@@ -365,8 +456,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="    Avg Time: "
-                android:id="@+id/climbTime"
+                android:text="Fumble:"
+                android:id="@+id/teleFumbleLBL"
                 android:layout_row="17"
                 android:layout_column="0" />
 
@@ -374,8 +465,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0 s"
-                android:id="@+id/climbTimeTV"
+                android:text="0%"
+                android:id="@+id/teleFumbleTV"
                 android:layout_row="17"
                 android:layout_column="1" />
 
@@ -383,8 +474,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="    Fastest: "
-                android:id="@+id/minClimbTime"
+                android:text="Avg switch time:"
+                android:id="@+id/avgSwitchPlaceTimeLBL"
                 android:layout_row="18"
                 android:layout_column="0" />
 
@@ -392,8 +483,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0 s"
-                android:id="@+id/minClimbTimeTV"
+                android:text="0.0 s"
+                android:id="@+id/avgSwitchPlaceTimeTV"
                 android:layout_row="18"
                 android:layout_column="1" />
 
@@ -401,8 +492,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="    Failed: "
-                android:id="@+id/failedClimbs"
+                android:text="Avg scale time: "
+                android:id="@+id/avgScalePlaceTimeLBL"
                 android:layout_row="19"
                 android:layout_column="0" />
 
@@ -410,33 +501,91 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0 / 0 (0)"
-                android:id="@+id/failedClimbsTV"
+                android:text="0.0 s"
+                android:id="@+id/avgScalePlaceTimeTV"
                 android:layout_row="19"
                 android:layout_column="1" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Avg exchange time: "
+                android:id="@+id/avgExchangePlaceTimeLBL"
+                android:layout_row="20"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0.0 s"
+                android:id="@+id/avgExchangePlaceTimeTV"
+                android:layout_row="20"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Favourite pickup: "
+                android:id="@+id/favouritePickupLBL"
+                android:layout_row="21"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="-"
+                android:id="@+id/favouritePickupTV"
+                android:layout_row="21"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Favourite placement:"
+                android:id="@+id/favouritePlacementLBL"
+                android:layout_row="22"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="-"
+                android:id="@+id/favouritePlacementTV"
+                android:layout_row="22"
+                android:layout_column="1" />
 
         </GridLayout>
 
-        <!-- Gears info -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+
+        <!-- CLIMB -->
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.07">
 
             <TextView
-                android:text="Gears (avgs)"
+                android:text="Climbing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/gearsTitle"
+                android:id="@+id/climbingTitle"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Gears\n    Installed:"
-                android:id="@+id/gearsInstalled"
+                android:text="Avg climb time:"
+                android:id="@+id/avgClimbTimeLBL"
                 android:layout_row="4"
                 android:layout_column="0" />
 
@@ -444,8 +593,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0"
-                android:id="@+id/teleopGearsInstalledTV"
+                android:text="0.0 s"
+                android:id="@+id/avgClimbTimeTV"
                 android:layout_row="4"
                 android:layout_column="1" />
 
@@ -453,8 +602,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Missed\n    Gears: "
-                android:id="@+id/missedGears"
+                android:text="Min climb time:"
+                android:id="@+id/minClimbTimeLBL"
+                android:layout_row="5"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0.0 s"
+                android:id="@+id/minClimbTimeTV"
+                android:layout_row="5"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Max climb time:"
+                android:id="@+id/maxClimbTimeLBL"
                 android:layout_row="6"
                 android:layout_column="0" />
 
@@ -462,8 +629,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Chute\n    Pickup: "
-                android:id="@+id/chuteGearPickup"
+                android:text="0.0 s"
+                android:id="@+id/maxClimbTimeTV"
+                android:layout_row="6"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="No climb:"
+                android:id="@+id/noClimbLBL"
                 android:layout_row="7"
                 android:layout_column="0" />
 
@@ -472,7 +648,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0"
-                android:id="@+id/teleopGearsChutePickupTV"
+                android:id="@+id/noClimbTV"
                 android:layout_row="7"
                 android:layout_column="1" />
 
@@ -480,8 +656,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Floor\n    Pickup: "
-                android:id="@+id/floorGearPickup"
+                android:text="Fail climb:"
+                android:id="@+id/failClimbLBL"
                 android:layout_row="8"
                 android:layout_column="0" />
 
@@ -490,7 +666,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0"
-                android:id="@+id/teleopGearsFloorPickupTV"
+                android:id="@+id/failClimbTV"
                 android:layout_row="8"
                 android:layout_column="1" />
 
@@ -498,49 +674,85 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0"
-                android:id="@+id/teleopMissedGearsTV"
-                android:layout_row="6"
-                android:layout_column="1" />
-        </GridLayout>
-
-        <!-- Low Goal -->
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:text="Low Goal (avgs)"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/lowTitle"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Low Goals:"
-                android:id="@+id/lowGoals"
-                android:layout_row="2"
+                android:text="Independent climb:"
+                android:id="@+id/independentClimbLBL"
+                android:layout_row="9"
                 android:layout_column="0" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0 (0)"
-                android:id="@+id/teleopLowGoalsTV"
-                android:layout_row="2"
+                android:text="0"
+                android:id="@+id/independentClimbTV"
+                android:layout_row="9"
                 android:layout_column="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Avg setup\n    time:"
-                android:id="@+id/lowGoalSetupTime"
-                android:layout_row="3"
+                android:text="Assisted climb:"
+                android:id="@+id/assistedClimbLBL"
+                android:layout_row="10"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/assistedClimbTV"
+                android:layout_row="10"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Assisted others:"
+                android:id="@+id/assistedOthersClimbLBL"
+                android:layout_row="11"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/assistedOthersClimbTV"
+                android:layout_row="11"
+                android:layout_column="1" />
+
+
+        </GridLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <!-- Post game, dead & defending -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.07">
+
+            <TextView
+                android:text="Post Game:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/postGameTitle"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Avg time defending:"
+                android:id="@+id/avgTimeDefendingLBL"
+                android:layout_row="4"
                 android:layout_column="0" />
 
             <TextView
@@ -548,86 +760,17 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0.0 s"
-                android:id="@+id/teleopLowSetupTimeTV"
-                android:layout_row="3"
-                android:layout_column="1"
-                android:gravity="end" />
+                android:id="@+id/avgTimeDefendingTV"
+                android:layout_row="4"
+                android:layout_column="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Missed\n    Shots: "
-                android:id="@+id/lowMissedShots"
+                android:text="Max time defending:"
+                android:id="@+id/maxTimeDefendingLBL"
                 android:layout_row="5"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0"
-                android:id="@+id/teleopLowMissedShotsTV"
-                android:layout_row="5"
-                android:layout_column="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Number\n    Balls: "
-                android:id="@+id/lowNumberBalls"
-                android:layout_row="6"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0 / 0 (0)"
-                android:id="@+id/teleopLowNumberBallsTV"
-                android:layout_row="6"
-                android:layout_column="1" />
-
-        </GridLayout>
-
-        <!-- High Goal -->
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <TextView
-                android:text="High Goal (avgs)"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/highTitle"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="High Goals:"
-                android:id="@+id/highGoals"
-                android:layout_row="1"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0 (0)"
-                android:id="@+id/teleopHighGoalsTV"
-                android:layout_row="1"
-                android:layout_column="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Avg setup\n    time:"
-                android:id="@+id/teleopHighSetupTimeLBL"
-                android:layout_row="2"
                 android:layout_column="0" />
 
             <TextView
@@ -635,26 +778,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0.0 s"
-                android:id="@+id/teleopHighSetupTimeTV"
-                android:layout_row="2"
-                android:layout_column="1"
-                android:gravity="end" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Missed\n    Shots: "
-                android:id="@+id/highMissedShots"
-                android:layout_row="5"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0"
-                android:id="@+id/teleopHighMissedShotsTV"
+                android:id="@+id/maxTimeDefendingTV"
                 android:layout_row="5"
                 android:layout_column="1" />
 
@@ -662,8 +786,99 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Number\n    Balls: "
-                android:id="@+id/highNumberBalls"
+                android:text="Avg deadness:"
+                android:id="@+id/avgDeadnessLBL"
+                android:layout_row="23"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0.0 s"
+                android:id="@+id/avgDeadnessTV"
+                android:layout_row="23"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Max deadness:"
+                android:id="@+id/maxDeadnessLBL"
+                android:layout_row="24"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0.0 s"
+                android:id="@+id/maxDeadnessTV"
+                android:layout_row="24"
+                android:layout_column="1" />
+
+        </GridLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <!-- Field Watcher Stats-->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.07">
+
+            <TextView
+                android:text="Field Watcher:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fieldWatcherTitle"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Alliance switch poss:"
+                android:id="@+id/avgAllianceSwitchPossLBL"
+                android:layout_row="4"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0.0 s"
+                android:id="@+id/avgAllianceSwitchPossTV"
+                android:layout_row="4"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Opposing switch poss:"
+                android:id="@+id/avgOpposingSwitchPossLBL"
+                android:layout_row="5"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0.0 s"
+                android:id="@+id/avgOpposingSwitchPossTV"
+                android:layout_row="5"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Scale poss:"
+                android:id="@+id/avgScalePossLBL"
                 android:layout_row="6"
                 android:layout_column="0" />
 
@@ -671,14 +886,67 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0 / 0 (0)"
-                android:id="@+id/teleopHighNumberBallsTV"
+                android:text="0.0 s"
+                android:id="@+id/avgScalePossTV"
                 android:layout_row="6"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Force uses:"
+                android:id="@+id/forceUsesLBL"
+                android:layout_row="7"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/forceUsesTV"
+                android:layout_row="7"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Boost uses:"
+                android:id="@+id/boostUsesLBL"
+                android:layout_row="8"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/boostUsesTV"
+                android:layout_row="8"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Levitate uses:"
+                android:id="@+id/levitateUsesLBL"
+                android:layout_row="9"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/levitateUsesTV"
+                android:layout_row="9"
                 android:layout_column="1" />
 
         </GridLayout>
 
     </LinearLayout>
-
 
 </ScrollView>

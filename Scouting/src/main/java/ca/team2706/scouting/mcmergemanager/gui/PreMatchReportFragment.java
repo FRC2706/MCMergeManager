@@ -9,12 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Map;
-
 import ca.team2706.scouting.mcmergemanager.R;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.StatsEngine;
+import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.MatchSchedule;
-import ca.team2706.scouting.mcmergemanager.steamworks2017.dataObjects.TeamStatsReport;
+import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.TeamStatsReport;
 
 public class PreMatchReportFragment extends Fragment {
     // the fragment initialization parameters
@@ -92,40 +90,41 @@ public class PreMatchReportFragment extends Fragment {
         }
 
 
-        TeamStatsReport blue1TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue1());
-        TeamStatsReport blue2TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue2());
-        TeamStatsReport blue3TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue3());
-        TeamStatsReport red1TSR = m_statsEngine.getTeamStatsReport(m_match.getRed1());
-        TeamStatsReport red2TSR = m_statsEngine.getTeamStatsReport(m_match.getRed2());
-        TeamStatsReport red3TSR = m_statsEngine.getTeamStatsReport(m_match.getRed3());
+        TeamStatsReport blue1TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue1(), true);
+        TeamStatsReport blue2TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue2(), true);
+        TeamStatsReport blue3TSR = m_statsEngine.getTeamStatsReport(m_match.getBlue3(), true);
+        TeamStatsReport red1TSR = m_statsEngine.getTeamStatsReport(m_match.getRed1(), true);
+        TeamStatsReport red2TSR = m_statsEngine.getTeamStatsReport(m_match.getRed2(), true);
+        TeamStatsReport red3TSR = m_statsEngine.getTeamStatsReport(m_match.getRed3(), true);
 
 
-        double bluegearsavg = blue1TSR.teleop_gearsDelivered_avgPerMatch +
-                blue2TSR.teleop_gearsDelivered_avgPerMatch + blue3TSR.teleop_gearsDelivered_avgPerMatch;
-        double redgearsavg = red1TSR.teleop_gearsDelivered_avgPerMatch +
-                red2TSR.teleop_gearsDelivered_avgPerMatch + red3TSR.teleop_gearsDelivered_avgPerMatch;
-        double bluefuelavg = blue1TSR.teleop_fuelScoredHigh_avgPerMatch + blue1TSR.teleop_fuelScoredLow_avgPerMatch +
-                blue2TSR.teleop_fuelScoredHigh_avgPerMatch + blue2TSR.teleop_fuelScoredLow_avgPerMatch +
-                blue3TSR.teleop_fuelScoredHigh_avgPerMatch + blue3TSR.teleop_fuelScoredLow_avgPerMatch;
-        double redfuelavg = red1TSR.teleop_fuelScoredHigh_avgPerMatch + red1TSR.teleop_fuelScoredLow_avgPerMatch +
-                red2TSR.teleop_fuelScoredHigh_avgPerMatch + red3TSR.teleop_fuelScoredLow_avgPerMatch +
-                red3TSR.teleop_fuelScoredHigh_avgPerMatch + red3TSR.teleop_fuelScoredLow_avgPerMatch;
-        double blueclimbsavg = blue1TSR.climbSuccesses + blue2TSR.climbSuccesses + blue3TSR.climbSuccesses;
-        double redclimbsavg = red1TSR.climbSuccesses + red2TSR.climbSuccesses + red3TSR.climbSuccesses;
-
-        bluegearsavg/= 3;
-        redgearsavg/= 3;
-        bluefuelavg/= 3;
-        redfuelavg/= 3;
-        blueclimbsavg/= 3;
-        redclimbsavg/= 3;
-
-        ((TextView) m_view.findViewById(R.id.gearsBlueTV)).setText(Math.round(bluegearsavg) + "");
-        ((TextView) m_view.findViewById(R.id.gearsRedTV)).setText(Math.round(redgearsavg) + "");
-        ((TextView) m_view.findViewById(R.id.fuelBlueTV)).setText(Math.round(bluefuelavg) + "");
-        ((TextView) m_view.findViewById(R.id.fuelRedTV)).setText(Math.round(redfuelavg) + "");
-        ((TextView) m_view.findViewById(R.id.climbsBlueTV)).setText(Math.round(blueclimbsavg) + "");
-        ((TextView) m_view.findViewById(R.id.climbsRedTV)).setText(Math.round(redclimbsavg) + "");
+        // TODO: TODO:
+//        double bluegearsavg = blue1TSR.teleop_gearsDelivered_avgPerMatch +
+//                blue2TSR.teleop_gearsDelivered_avgPerMatch + blue3TSR.teleop_gearsDelivered_avgPerMatch;
+//        double redgearsavg = red1TSR.teleop_gearsDelivered_avgPerMatch +
+//                red2TSR.teleop_gearsDelivered_avgPerMatch + red3TSR.teleop_gearsDelivered_avgPerMatch;
+//        double bluefuelavg = blue1TSR.teleop_fuelScoredHigh_avgPerMatch + blue1TSR.teleop_fuelScoredLow_avgPerMatch +
+//                blue2TSR.teleop_fuelScoredHigh_avgPerMatch + blue2TSR.teleop_fuelScoredLow_avgPerMatch +
+//                blue3TSR.teleop_fuelScoredHigh_avgPerMatch + blue3TSR.teleop_fuelScoredLow_avgPerMatch;
+//        double redfuelavg = red1TSR.teleop_fuelScoredHigh_avgPerMatch + red1TSR.teleop_fuelScoredLow_avgPerMatch +
+//                red2TSR.teleop_fuelScoredHigh_avgPerMatch + red3TSR.teleop_fuelScoredLow_avgPerMatch +
+//                red3TSR.teleop_fuelScoredHigh_avgPerMatch + red3TSR.teleop_fuelScoredLow_avgPerMatch;
+//        double blueclimbsavg = blue1TSR.climbSuccesses + blue2TSR.climbSuccesses + blue3TSR.climbSuccesses;
+//        double redclimbsavg = red1TSR.climbSuccesses + red2TSR.climbSuccesses + red3TSR.climbSuccesses;
+//
+//        bluegearsavg/= 3;
+//        redgearsavg/= 3;
+//        bluefuelavg/= 3;
+//        redfuelavg/= 3;
+//        blueclimbsavg/= 3;
+//        redclimbsavg/= 3;
+//
+//        ((TextView) m_view.findViewById(R.id.gearsBlueTV)).setText(Math.round(bluegearsavg) + "");
+//        ((TextView) m_view.findViewById(R.id.gearsRedTV)).setText(Math.round(redgearsavg) + "");
+//        ((TextView) m_view.findViewById(R.id.fuelBlueTV)).setText(Math.round(bluefuelavg) + "");
+//        ((TextView) m_view.findViewById(R.id.fuelRedTV)).setText(Math.round(redfuelavg) + "");
+//        ((TextView) m_view.findViewById(R.id.climbsBlueTV)).setText(Math.round(blueclimbsavg) + "");
+//        ((TextView) m_view.findViewById(R.id.climbsRedTV)).setText(Math.round(redclimbsavg) + "");
 
         return m_view;
     }
@@ -135,26 +134,27 @@ public class PreMatchReportFragment extends Fragment {
      */
     private void displayOprPredection() {
 
-        Map<Integer, Double> oprs = m_statsEngine.getOPRs();
-
-        float bluePredScore=0, redPredScore=0;
-
-        bluePredScore += oprs.get( m_match.getBlue1() );
-
-        bluePredScore += oprs.get( m_match.getBlue2() );
-
-        bluePredScore += oprs.get( m_match.getBlue3() );
-
-        redPredScore += oprs.get( m_match.getRed1() );
-
-        redPredScore += oprs.get( m_match.getRed2() );
-
-        redPredScore += oprs.get(m_match.getRed3());
-
-
-        ((TextView) m_view.findViewById(R.id.blueScoreTV)).setText( (int)bluePredScore +"");
-        ((TextView) m_view.findViewById(R.id.redScoreTV)).setText((int)redPredScore +"");
-        ((TextView) m_view.findViewById(R.id.predicted_finalTV)).setText("(predicted)");
+        // TODO:
+//        Map<Integer, Double> oprs = m_statsEngine.getOPRs();
+//
+//        float bluePredScore=0, redPredScore=0;
+//
+//        bluePredScore += oprs.get( m_match.getBlue1() );
+//
+//        bluePredScore += oprs.get( m_match.getBlue2() );
+//
+//        bluePredScore += oprs.get( m_match.getBlue3() );
+//
+//        redPredScore += oprs.get( m_match.getRed1() );
+//
+//        redPredScore += oprs.get( m_match.getRed2() );
+//
+//        redPredScore += oprs.get(m_match.getRed3());
+//
+//
+//        ((TextView) m_view.findViewById(R.id.blueScoreTV)).setText( (int)bluePredScore +"");
+//        ((TextView) m_view.findViewById(R.id.redScoreTV)).setText((int)redPredScore +"");
+//        ((TextView) m_view.findViewById(R.id.predicted_finalTV)).setText("(predicted)");
     }
 
 

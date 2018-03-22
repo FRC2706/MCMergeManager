@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/pit_scouting_delivery_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Where can they deliver cubes?"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_scale"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scale"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Switch"
+        android:textAlignment="viewStart"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/pit_scouting_Exchange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Exchange"
+        android:textSize="20sp" />
+
+</LinearLayout>
