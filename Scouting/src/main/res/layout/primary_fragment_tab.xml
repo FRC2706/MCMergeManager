@@ -146,6 +146,13 @@
                 android:onClick="onClickSyncMatchData"
                 android:text="Sync Match Data" />
 
+            <Button
+                android:id="@+id/CreateCsvFileButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="createCsvFile"
+                android:text="Create CSV file" />
+
             <!--<Button-->
             <!--android:id="@+id/button7"-->
             <!--android:layout_width="match_parent"-->

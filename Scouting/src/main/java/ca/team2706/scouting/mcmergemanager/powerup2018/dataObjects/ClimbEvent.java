@@ -10,7 +10,7 @@ public class ClimbEvent extends Event{
     public enum ClimbType {
         // Success Assisted means they were assisted climbing
         // Success Assisted Others means they assisted others while climbing
-        NO_CLIMB, FAIL, SUCCESS_INDEPENDENT, SUCCESS_ASSISTED, SUCCESS_ASSISTED_OTHERS;
+        NO_CLIMB, FAIL, SUCCESS_INDEPENDENT, SUCCESS_ASSISTED, SUCCESS_ASSISTED_OTHERS, ON_BASE;
     }
 
     public ClimbType climbType;

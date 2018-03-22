@@ -8,11 +8,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import ca.team2706.scouting.mcmergemanager.R;
-import ca.team2706.scouting.mcmergemanager.backend.dataObjects.PostThread;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.CommentList;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.PostCommentThread;
+import ca.team2706.scouting.mcmergemanager.backend.dataObjects.PostMessageThread;
 import ca.team2706.scouting.mcmergemanager.backend.dataObjects.PullThread;
 import ca.team2706.scouting.mcmergemanager.gui.MainActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.Auto.AutoScoutingObject;
@@ -37,16 +40,15 @@ public class WebServerUtils {
     // Post a comment to the server, returns true if successful
     public static boolean postCommentToServer(int team_number, String message) {
         Request request = new Request.Builder()
-                .url(SERVER_URL + "comments/create?team=" + team_number + "&body=" + message)
+                .url(SERVER_URL + "comments/create.json?team=" + team_number + "&body=" + message)
                 .build();
 
         try {
             Response response = client.newCall(request).execute();
 
-            // If server returns succes then the comment posted
-            if (new String(response.body().string()).equals("success")) {
+            // If server returns succes then the comment posted, else save to file
+            if (new String(response.body().string()).equals("success"))
                 return true;
-            }
         } catch (IOException e) {
             Log.d("Okhttp3 error", e.toString());
         }
@@ -67,7 +69,7 @@ public class WebServerUtils {
                         "&extra=" + extra)
                 .build();
 
-        System.out.println(request.url());
+//        System.out.println(request.url());    <-- Used for testing
 
         try {
             Response response = client.newCall(request).execute();
@@ -113,7 +115,7 @@ public class WebServerUtils {
     // Get the details of a certain team
     public static JSONObject getTeamFromServer(int team_number) {
         try {
-            return new JSONObject(getDataFromServer("teams/show?team=" + team_number));
+            return new JSONObject(getDataFromServer("teams/show.json?team=" + team_number));
         } catch (JSONException e) {
             return null;
         } catch (NullPointerException e) {
@@ -174,38 +176,38 @@ public class WebServerUtils {
                 ArrayList<Event> unpostedEvents = new ArrayList<>();
 
                 // If the match key is null then something didn't work, therefore don't continue in current loop
-                ArrayList<PostThread> threads = new ArrayList<PostThread>();
+                ArrayList<PostMessageThread> threads = new ArrayList<PostMessageThread>();
 
                 // If -1 then it is a field watcher match
-                if(match.preGameObject.teamNumber != -1) {
+                if (match.preGameObject.teamNumber != -1) {
                     for (Event event : match.autoScoutingObject.getEvents()) {
-                        threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+                        threads.add(new PostMessageThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
                     }
 
                     for (Event event : match.teleopScoutingObject.getEvents()) {
-                        threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+                        threads.add(new PostMessageThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
                     }
                 } else {
                     // Use the blue1 team to upload the match. Will be filtered out once downloaded
                     String tempTeamNumber = BlueAllianceUtils.getBlueOneTeamForMatch(matchKey);
 
-                    for(Event event : match.autoScoutingObject.getEvents()) {
-                        threads.add(new PostThread(matchKey, tempTeamNumber, event));
+                    for (Event event : match.autoScoutingObject.getEvents()) {
+                        threads.add(new PostMessageThread(matchKey, tempTeamNumber, event));
                     }
 
-                    for(Event event : match.fieldWatcherObject.getEvents()) {
-                        threads.add(new PostThread(matchKey, tempTeamNumber, event));
+                    for (Event event : match.fieldWatcherObject.getEvents()) {
+                        threads.add(new PostMessageThread(matchKey, tempTeamNumber, event));
                     }
                 }
 
                 // Run all the threads
-                for (PostThread t : threads) {
+                for (PostMessageThread t : threads) {
                     t.run();
                 }
 
                 // Wait for threads
                 try {
-                    for (PostThread t : threads) {
+                    for (PostMessageThread t : threads) {
                         t.join();
 
                         // If not posted then add to stuff that needs to be reposted
@@ -233,6 +235,9 @@ public class WebServerUtils {
     }
 
     public static void uploadUnsyncedMatches() {
+        if (!BlueAllianceUtils.isConnected(MainActivity.me))
+            return;
+
         // Used for saving matches that failed to post
         JSONArray unpostedMatches = new JSONArray();
 
@@ -262,43 +267,43 @@ public class WebServerUtils {
             if (matchKey == null) {
                 unpostedMatches.put(match.toJsonObject());
                 continue;
-            } else if(matchKey.equals("WrongMatchNumber")) {
+            } else if (matchKey.equals("WrongMatchNumber")) {
                 FileUtils.saveWrongMatchNumberMatch(match.toJsonObject());
                 continue;
             }
 
-            ArrayList<PostThread> threads = new ArrayList<PostThread>();
+            ArrayList<PostMessageThread> threads = new ArrayList<PostMessageThread>();
 
             // If -1 then it is a field watcher match
-            if(match.preGameObject.teamNumber != -1) {
+            if (match.preGameObject.teamNumber != -1) {
                 for (Event event : match.autoScoutingObject.getEvents()) {
-                    threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+                    threads.add(new PostMessageThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
                 }
 
                 for (Event event : match.teleopScoutingObject.getEvents()) {
-                    threads.add(new PostThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
+                    threads.add(new PostMessageThread(matchKey, Integer.toString(match.preGameObject.teamNumber), event));
                 }
             } else {
                 // Use the blue1 team to upload the match. Will be filtered out once downloaded
                 String tempTeamNumber = BlueAllianceUtils.getBlueOneTeamForMatch(matchKey);
 
-                for(Event event : match.autoScoutingObject.getEvents()) {
-                    threads.add(new PostThread(matchKey, tempTeamNumber, event));
+                for (Event event : match.autoScoutingObject.getEvents()) {
+                    threads.add(new PostMessageThread(matchKey, tempTeamNumber, event));
                 }
 
-                for(Event event : match.fieldWatcherObject.getEvents()) {
-                    threads.add(new PostThread(matchKey, tempTeamNumber, event));
+                for (Event event : match.fieldWatcherObject.getEvents()) {
+                    threads.add(new PostMessageThread(matchKey, tempTeamNumber, event));
                 }
             }
 
             // Run all the threads
-            for (PostThread t : threads) {
+            for (PostMessageThread t : threads) {
                 t.run();
             }
 
             // Wait for threads
             try {
-                for (PostThread t : threads) {
+                for (PostMessageThread t : threads) {
                     t.join();
 
                     // If not posted then add to stuff that needs to be reposted
@@ -367,7 +372,7 @@ public class WebServerUtils {
 
         // Get the competition form the server
         JSONObject competition = getCompetitonFromServer(TBA_Event);
-        if(competition == null)
+        if (competition == null)
             return;
         JSONArray matches = new JSONArray();
 
@@ -395,5 +400,76 @@ public class WebServerUtils {
         }
 
         System.out.println("Done syncing matches");
+    }
+
+    public static void syncUnpostedComments() {
+        JSONArray commentList = FileUtils.readUnpostedComments();
+
+        JSONArray unpostedComments = new JSONArray();
+        ArrayList<PostCommentThread> threads = new ArrayList<>();
+        for (int i = 0; i < commentList.length(); i++) {
+
+            try {
+                threads.add(new PostCommentThread(commentList.getJSONObject(i).getInt("number"),
+                        commentList.getJSONObject(i).getString("comment")));
+            } catch (JSONException e) {
+                Log.d("JSON err", e.toString());
+
+                // If posting fails gotta save
+                try {
+                    unpostedComments.put(commentList.get(i));
+                } catch (JSONException err) {
+                    err.printStackTrace();
+                }
+            }
+        }
+
+        for (PostCommentThread t : threads)
+            t.run();
+
+        for (PostCommentThread t : threads) {
+            try {
+                t.join();
+
+                // Check whether it successeded or fail
+                if (!t.success)
+                    unpostedComments.put(t.getComment());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Delete the contents of the file before resaving them
+        File file = new File(FileUtils.sLocalEventFilePath + "/" + FileUtils.UNPOSTED_COMMENT_FILENAME);
+        file.delete();
+
+        for (int i = 0; i < unpostedComments.length(); i++) {
+            try {
+                FileUtils.saveUnpostedComment(unpostedComments.getJSONObject(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void syncComments() {
+        if (!BlueAllianceUtils.isConnected(MainActivity.me) || MainActivity.sMatchSchedule == null)
+            return;
+
+        // Get teams at event
+        for (String teamNumber : MainActivity.sMatchSchedule.getTeamNumsAtEvent()) {
+            try {
+                // Get team data from server
+                JSONObject teamData = getTeamFromServer(Integer.parseInt(teamNumber));
+
+                // Get comments
+                if(teamData != null)
+                    FileUtils.saveTeamCommentsFromServer(new CommentList(teamData.getJSONArray("comments")), Integer.parseInt(teamNumber));
+            } catch (JSONException e) {
+                Log.d("Err saving comments", e.toString());
+            }
+        }
     }
 }

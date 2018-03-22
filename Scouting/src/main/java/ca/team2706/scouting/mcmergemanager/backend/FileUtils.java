@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -98,6 +99,49 @@ public class FileUtils {
         } catch (IOException e) {
             Log.d("Err saving file", e.toString());
         }
+    }
+
+    public static final String UNPOSTED_COMMENT_FILENAME = "unpostedComments.json";
+
+    public static void saveUnpostedComment(JSONObject json) {
+        File file = new File(sLocalEventFilePath + "/" + UNPOSTED_COMMENT_FILENAME);
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+
+            bw.append(json.toString() + "\n");
+
+            bw.close();
+        } catch(IOException e) {
+            Log.d("Err save unpost comment", e.toString());
+        }
+
+        // Force the midea scanner to scan this file so it shows up from a PC over USB.
+        App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+    }
+
+    public static JSONArray readUnpostedComments() {
+        File file = new File(sLocalEventFilePath + "/" + UNPOSTED_COMMENT_FILENAME);
+
+        JSONArray arr = new JSONArray();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            String line;
+            while((line = br.readLine()) != null) {
+                arr.put(new JSONObject(line));
+            }
+
+            br.close();
+        } catch(FileNotFoundException e) {
+            Log.d("File not found", e.toString());
+        } catch(IOException e) {
+            Log.d("IO err,", e.toString());
+        } catch(JSONException e) {
+            Log.d("JSON err", e.toString());
+        }
+
+        return arr;
     }
 
     public enum FileType {
@@ -237,7 +281,7 @@ public class FileUtils {
                 if (subFile.isDirectory()) {
                     // Recurse!
                     scanDirectoryTree(subFile.getAbsolutePath());
-                } else if(subFile.getName().substring(subFile.getName().length() - 5).equals(".json")) {
+                } else if (subFile.getName().substring(subFile.getName().length() - 5).equals(".json")) {
                     continue;
                 } else {
                     try {
@@ -368,11 +412,16 @@ public class FileUtils {
         fieldWatcher.put("events", new JSONArray());
 
         JSONArray arr = (JSONArray) match.get("events");
+
+        // If there are no events, then the match has not been scouted, and therefore should not be saved to phone
+        if (arr.length() == 0)
+            return;
+
         for (int i = 0; i < arr.length(); i++) {
             JSONObject event = (JSONObject) arr.get(i);
 
             // For fieldwatcher stuff
-            if(event.getString("goal").equals(MatchData.BLUE_SWITCH) || event.getString("goal").equals(MatchData.BOOST) ||
+            if (event.getString("goal").equals(MatchData.BLUE_SWITCH) || event.getString("goal").equals(MatchData.BOOST) ||
                     event.getString("goal").equals(MatchData.FORCE) || event.getString("goal").equals(MatchData.LEVITATE) ||
                     event.getString("goal").equals(MatchData.RED_SWITCH) || event.getString("goal").equals(MatchData.SCALE)) {
                 fieldWatcher.getJSONArray("events").put(makeEvent(event.getString("start_time"),
@@ -428,13 +477,21 @@ public class FileUtils {
             }
         }
 
-        new MatchData.Match(fieldWatcher).toJson();
-        new MatchData.Match(jsonBlue1).toJson();
-        new MatchData.Match(jsonBlue2).toJson();
-        new MatchData.Match(jsonBlue3).toJson();
-        new MatchData.Match(jsonRed1).toJson();
-        new MatchData.Match(jsonRed2).toJson();
-        new MatchData.Match(jsonRed3).toJson();
+        // If their is no events for the team then don't create a match file for them
+        if(fieldWatcher.getJSONArray("events").length() != 0)
+            new MatchData.Match(fieldWatcher).toJson();
+        if(jsonBlue1.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonBlue1).toJson();
+        if(jsonBlue2.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonBlue2).toJson();
+        if(jsonBlue3.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonBlue3).toJson();
+        if(jsonRed1.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonRed1).toJson();
+        if(jsonRed2.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonRed2).toJson();
+        if(jsonRed3.getJSONArray("events").length() != 0)
+            new MatchData.Match(jsonRed3).toJson();
     }
 
     public static JSONObject makeEvent(String startTime, String goal, String extra, String endTime) throws JSONException {
@@ -471,11 +528,11 @@ public class FileUtils {
             match = new MatchData.Match(new JSONObject(bw.readLine()));
 
             bw.close();
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Log.d("No match found", e.toString());
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -743,107 +800,63 @@ public class FileUtils {
 
     }
 
-    /**
-     * Saves the JSON to a file
-     *
-     * @param commentList
-     * <p>
-     * /*
-     * gets a competition data from the swagger server
-     * if compID is 0 will take from current event, if other number will get that competition
-     */
-//    public static void getMatchesFromServer(final Context context) {
-//        RequestQueue queue = Volley.newRequestQueue(context);
-//        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-//        final String url = "http://ftp.team2706.ca:3000/competitions/" + SP.getString(App.getContext().getResources().getString(R.string.PROPERTY_event), "<Not Set>") + "/matches.json";
-//
-//        System.out.println(url);
-//
-//        // prepare the Request
-//        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-//                new Response.Listener<JSONArray>() {
-//                    @Override
-//                    public void onResponse(JSONArray response) {
-//                        // display response
-//                        saveJsonFile(response);
-//                        System.out.println(response.toString() + "\nWriting should have gone well");
-//
-//                        loadMatchDataFile();
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.d("Error.Response", error.toString());
-//                        error.printStackTrace();
-//                    }
-//                }
-//        );
-//
-//        // add it to the RequestQueue
-//        queue.add(getRequest);
-//    }
-
-
     /*
     @param CommentList Class
     Saves the JSON to a file
->>>>>>> 6b076f5c6fddbfff9a4a621a8d554b6a2ce08396
      */
     private static final String COMMENT_FILE_PATH = "comments.json";
 
-    public static void saveTeamComments(CommentList commentList) {
 
-        JSONObject jsonObject = getTeamComments(commentList.getTeamNumber());
+    public static void saveTeamCommentsAtEndOfFile(CommentList commentList) {
+        File file = new File(sLocalCommentFilePath + "/" + commentList.getTeamNumber() + COMMENT_FILE);
 
-        if (jsonObject == null) {
+        try {
+            // Get the old file contents
+            CommentList oldComments = new CommentList(getTeamComments(commentList.getTeamNumber()));
 
-            try {
-                jsonObject = commentList.getJson();
-
-            } catch (JSONException e) {
-                Log.d("JSON Error", e.getMessage());
-                Log.d("JSON might be null", "");
-
-            }
-        } else {
-            try {
-                CommentList cl = new CommentList(jsonObject);
-                for (int i = 0; i < cl.getComments().size(); i++) {
-                    commentList.addComment(cl.getComments().get(i));
-                }
-                jsonObject = commentList.getJson();
-
-            } catch (Exception e) {
-                Log.d("ERROR", e.getMessage());
+            // Add the new comments to it
+            for(int i = 0; i < commentList.getComments().size(); i++) {
+                oldComments.addComment(commentList.getComments().get(i));
             }
 
+            file.delete();
 
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+
+            bw.write(oldComments.getJson().toString());
+
+            bw.close();
+        } catch(JSONException e) {
+            Log.d("JSON err", e.toString());
+        } catch(IOException e) {
+            Log.d("OI err", e.toString());
         }
+    }
 
-        String outFileName = sLocalCommentFilePath + "/" + commentList.getTeamNumber() + COMMENT_FILE;
-
-        File file = new File(outFileName);
+    // Saves comments to visible folder. If append is false it overwrites the file
+    public static void saveTeamCommentsFromServer(CommentList commentList, int teamNumber) {
+        File file = new File(sLocalCommentFilePath + "/" + teamNumber + COMMENT_FILE);
 
         try {
             file.delete();
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
 
-            bw.append(jsonObject.toString());
+            bw.append(commentList.getJson().toString());
 
             bw.flush();
             bw.close();
+
+            // Force the midea scanner to scan this file so it shows up from a PC over USB.
+            App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         } catch (IOException e) {
             Log.d("File writing error ", e.toString());
         } catch (NullPointerException e) {
             // This should never be triggered, but is here for testing purposes
             Log.d("Json is null.", e.toString());
-
+        } catch(JSONException e) {
+            Log.d("JSON err", e.toString());
         }
-
-        scanDirectoryTree(sLocalCommentFilePath);
-
     }
 
     /**
@@ -940,8 +953,8 @@ public class FileUtils {
             bw.flush();
             bw.close();
 
-//            scanDirectoryTree(sLocalEventFilePath);
-
+            // Force the midea scanner to scan this file so it shows up from a PC over USB.
+            App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         } catch (IOException e) {
             Log.d("IOException", e.getMessage());
         } catch (JSONException e) {
@@ -1034,7 +1047,7 @@ public class FileUtils {
     }
 
     // Update to 2018
-    public static final String EVENT_KEYS_FILENAME = "EventKeys2017.json";
+    public static final String EVENT_KEYS_FILENAME = "EventKeys2018.json";
 
     // Saves a list of all the events for a certain year,
     // User then chooses what event that they are at

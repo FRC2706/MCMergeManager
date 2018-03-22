@@ -49,7 +49,7 @@ public class AutoScouting extends AppCompatActivity {
 
         autoScoutingObject2018 = new AutoScoutingObject();
 
-       // TODO Add the code for comment_bar
+        // TODO Add the code for comment_bar
 
         m_handler = new Handler();
 
@@ -86,7 +86,7 @@ public class AutoScouting extends AppCompatActivity {
         final EditText teamNumber = (EditText) findViewById(R.id.teamNumber);
         final EditText comment = (EditText) findViewById(R.id.comment);
 
-        teamNumber.setOnKeyListener(new View.OnKeyListener(){
+        teamNumber.setOnKeyListener(new View.OnKeyListener() {
 
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
 
@@ -102,7 +102,7 @@ public class AutoScouting extends AppCompatActivity {
         PreGameObject preGameObject = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
         final Integer teamNum = preGameObject.teamNumber;
 
-        comment.setOnKeyListener(new View.OnKeyListener(){
+        comment.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
                 CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, view, getContext());
                 teamNumber.setText(teamNum.toString());
@@ -133,7 +133,7 @@ public class AutoScouting extends AppCompatActivity {
                 }
             }
         });
-        
+
 
         final CheckBox malfunctioncheckbox = (CheckBox) findViewById(R.id.autoMalfunctionCheckbox);
         malfunctioncheckbox.setChecked(false);
@@ -167,72 +167,72 @@ public class AutoScouting extends AppCompatActivity {
                 } else {
                     groundCheckbox.setChecked(false);
                 }
+            }
+        });
 
-                final CheckBox switchCheckbox = (CheckBox) findViewById(R.id.autoSwitchCheckbox);
-                switchCheckbox.setChecked(false);
-                final Event swevent;
-                switchCheckbox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (switchCheckbox.isChecked()) {
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.ALLIANCE_SWITCH);
-                            autoScoutingObject2018.add(autoCubePlacementEvent);
-                            switchCheckbox.setChecked(true);
-                        } else {
-                            switchCheckbox.setChecked(false);
-                        }
+        final CheckBox switchCheckbox = (CheckBox) findViewById(R.id.autoSwitchCheckbox);
+        switchCheckbox.setChecked(false);
+        final Event swevent;
+        switchCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (switchCheckbox.isChecked()) {
+                    AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.SWITCH);
+                    autoScoutingObject2018.add(autoCubePlacementEvent);
+                    switchCheckbox.setChecked(true);
+                } else {
+                    switchCheckbox.setChecked(false);
+                }
 
-                    }
-                });
+            }
+        });
 
-                final CheckBox scaleCheckbox = (CheckBox) findViewById(R.id.autoScaleCheckbox);
-                scaleCheckbox.setChecked(false);
-                final Event scevent;
-                scaleCheckbox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v){
-                        if (scaleCheckbox.isChecked()) {
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.SCALE);
-                            autoScoutingObject2018.add(autoCubePlacementEvent);
-                            scaleCheckbox.setChecked(true);
-                        } else {
-                            scaleCheckbox.setChecked(false);
-                        }
+        final CheckBox scaleCheckbox = (CheckBox) findViewById(R.id.autoScaleCheckbox);
+        scaleCheckbox.setChecked(false);
+        final Event scevent;
+        scaleCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (scaleCheckbox.isChecked()) {
+                    AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.SCALE);
+                    autoScoutingObject2018.add(autoCubePlacementEvent);
+                    scaleCheckbox.setChecked(true);
+                } else {
+                    scaleCheckbox.setChecked(false);
+                }
 
-                    }
-                });
+            }
+        });
 
-                final CheckBox exchangeCheckbox = (CheckBox) findViewById(R.id.autoExchangeCheckbox);
-                exchangeCheckbox.setChecked(false);
-                final Event eevent;
-                exchangeCheckbox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (exchangeCheckbox.isChecked()) {
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.EXCHANGE);
-                            autoScoutingObject2018.add(autoCubePlacementEvent);
-                            exchangeCheckbox.setChecked(true);
-                        } else {
-                            exchangeCheckbox.setChecked(false);
-                        }
-                    }
-                });
+        final CheckBox exchangeCheckbox = (CheckBox) findViewById(R.id.autoExchangeCheckbox);
+        exchangeCheckbox.setChecked(false);
+        final Event eevent;
+        exchangeCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (exchangeCheckbox.isChecked()) {
+                    AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.EXCHANGE);
+                    autoScoutingObject2018.add(autoCubePlacementEvent);
+                    exchangeCheckbox.setChecked(true);
+                } else {
+                    exchangeCheckbox.setChecked(false);
+                }
+            }
+        });
 
-                final CheckBox droppedCheckbox = (CheckBox) findViewById(R.id.autoDroppedCheckbox);
-                droppedCheckbox.setChecked(false);
-                final Event devent;
-                droppedCheckbox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (droppedCheckbox.isChecked()) {
-                            AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.DROPPED);
-                            autoScoutingObject2018.add(autoCubePlacementEvent);
-                            droppedCheckbox.setChecked(true);
-                        } else {
-                            droppedCheckbox.setChecked(false);
-                        }
-                    }
-                });
+        final CheckBox droppedCheckbox = (CheckBox) findViewById(R.id.autoDroppedCheckbox);
+        droppedCheckbox.setChecked(false);
+        final Event devent;
+        droppedCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (droppedCheckbox.isChecked()) {
+                    AutoCubePlacementEvent autoCubePlacementEvent = new AutoCubePlacementEvent(15 - remainTime, AutoCubePlacementEvent.PlacementType.DROPPED);
+                    autoScoutingObject2018.add(autoCubePlacementEvent);
+                    droppedCheckbox.setChecked(true);
+                } else {
+                    droppedCheckbox.setChecked(false);
+                }
             }
         });
     }

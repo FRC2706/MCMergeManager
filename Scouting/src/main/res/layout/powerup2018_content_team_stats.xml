@@ -130,24 +130,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Total Placed Cubes:"
-                android:id="@+id/autoTotalPlacedCubesLBL"
-                android:layout_row="3"
-                android:layout_column="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0 / 0 (0)"
-                android:id="@+id/autoTotalPlacedCubesTV"
-                android:layout_row="3"
-                android:layout_column="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Pickup ground:"
                 android:id="@+id/autoPickupGroundLBL"
                 android:layout_row="5"
@@ -160,6 +142,24 @@
                 android:text="0"
                 android:id="@+id/autoPickupGroundTV"
                 android:layout_row="5"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Auto cubes:"
+                android:id="@+id/autoCubesLBL"
+                android:layout_row="6"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/autoCubesTV"
+                android:layout_row="6"
                 android:layout_column="1" />
 
             <TextView
@@ -293,9 +293,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Total Placed Cubes:"
+                android:id="@+id/autoTotalPlacedCubesLBL"
+                android:layout_row="8"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/autoTotalPlacedCubesTV"
+                android:layout_row="8"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Portal pickup: "
                 android:id="@+id/telePickupPortalLBL"
-                android:layout_row="8"
+                android:layout_row="9"
                 android:layout_column="0" />
 
             <TextView
@@ -304,7 +322,25 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0"
                 android:id="@+id/telePickupPortalTV"
-                android:layout_row="8"
+                android:layout_row="9"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Pyramid pickup: "
+                android:id="@+id/telePyramidPortalLBL"
+                android:layout_row="10"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/telePickupPyramidTV"
+                android:layout_row="10"
                 android:layout_column="1" />
 
             <TextView
@@ -313,7 +349,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Pickup exchange: "
                 android:id="@+id/telePickupExchangeLBL"
-                android:layout_row="9"
+                android:layout_row="11"
                 android:layout_column="0" />
 
             <TextView
@@ -322,7 +358,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0"
                 android:id="@+id/telePickupExchangeTV"
-                android:layout_row="9"
+                android:layout_row="11"
                 android:layout_column="1" />
 
             <TextView
@@ -331,7 +367,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Placed switch: "
                 android:id="@+id/telePlacedSwitchLBL"
-                android:layout_row="10"
+                android:layout_row="12"
                 android:layout_column="0" />
 
             <TextView
@@ -340,7 +376,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0 / 0 (0)"
                 android:id="@+id/telePlacedSwitchTV"
-                android:layout_row="10"
+                android:layout_row="12"
                 android:layout_column="1" />
 
             <TextView
@@ -349,7 +385,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Placed scale:"
                 android:id="@+id/telePlacedScaleLBL"
-                android:layout_row="11"
+                android:layout_row="13"
                 android:layout_column="0" />
 
             <TextView
@@ -358,7 +394,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0"
                 android:id="@+id/telePlacedScaleTV"
-                android:layout_row="11"
+                android:layout_row="13"
                 android:layout_column="1"
                 android:gravity="end" />
 
@@ -368,7 +404,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Placed exchange:"
                 android:id="@+id/telePlacedExchangeLBL"
-                android:layout_row="12"
+                android:layout_row="14"
                 android:layout_column="0" />
 
             <TextView
@@ -377,7 +413,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0%"
                 android:id="@+id/telePlacedExchangeTV"
-                android:layout_row="12"
+                android:layout_row="14"
                 android:layout_column="1" />
 
             <TextView
@@ -386,7 +422,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Easy drop:"
                 android:id="@+id/teleEasyDropLBL"
-                android:layout_row="13"
+                android:layout_row="15"
                 android:layout_column="0" />
 
             <TextView
@@ -395,7 +431,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0%"
                 android:id="@+id/teleEasyDropTV"
-                android:layout_row="13"
+                android:layout_row="15"
                 android:layout_column="1" />
 
             <TextView
@@ -404,7 +440,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Left it:"
                 android:id="@+id/teleLeftItLBL"
-                android:layout_row="14"
+                android:layout_row="16"
                 android:layout_column="0" />
 
             <TextView
@@ -413,7 +449,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0%"
                 android:id="@+id/teleLeftItTV"
-                android:layout_row="14"
+                android:layout_row="16"
                 android:layout_column="1" />
 
             <TextView
@@ -422,7 +458,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Fumble:"
                 android:id="@+id/teleFumbleLBL"
-                android:layout_row="15"
+                android:layout_row="17"
                 android:layout_column="0" />
 
             <TextView
@@ -431,7 +467,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="0%"
                 android:id="@+id/teleFumbleTV"
-                android:layout_row="15"
+                android:layout_row="17"
                 android:layout_column="1" />
 
             <TextView

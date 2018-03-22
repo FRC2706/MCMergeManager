@@ -104,7 +104,7 @@ public class MatchSchedule implements Serializable {
 
         List<String> teamListStr = new ArrayList<>();
         for(Integer i: teamListInt)
-        teamListStr.add(i.toString());
+            teamListStr.add(i.toString());
 
         return teamListStr;
     }

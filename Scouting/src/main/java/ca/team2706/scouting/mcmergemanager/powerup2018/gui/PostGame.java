@@ -50,6 +50,13 @@ public class PostGame extends AppCompatActivity {
     SeekBar defenseSeekBar;
     SeekBar climbTimeSeekBar;
 
+    CheckBox noClimbCheckbox;
+    CheckBox climbFailCheckbox;
+    CheckBox climbBarCheckbox;
+    CheckBox climbAssistCheckbox;
+    CheckBox climbWasAssistedCheckbox;
+    CheckBox climbOnBase;
+
     public static int teamNum = -1;
 
 
@@ -60,6 +67,74 @@ public class PostGame extends AppCompatActivity {
 
         // postGameObject = (PostGameObject) getIntent().getSerializableExtra("PostGameData");  // climb was set in climbingFragment
 
+        // CLIMB type listeners
+        noClimbCheckbox = (CheckBox) findViewById(R.id.climbTypeNoClimb);
+        climbFailCheckbox = (CheckBox) findViewById(R.id.climbTypeFail);
+        climbBarCheckbox = (CheckBox) findViewById(R.id.climbTypeBar);
+        climbAssistCheckbox = (CheckBox) findViewById(R.id.climbTypeAssisted);
+        climbWasAssistedCheckbox = (CheckBox) findViewById(R.id.climbTypeWasAssisted);
+        climbOnBase = (CheckBox) findViewById(R.id.climbTypeOnBase);
+
+        noClimbCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                climbFailCheckbox.setChecked(false);
+                climbBarCheckbox.setChecked(false);
+                climbAssistCheckbox.setChecked(false);
+                climbWasAssistedCheckbox.setChecked(false);
+                climbOnBase.setChecked(false);
+            }
+        });
+        climbFailCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noClimbCheckbox.setChecked(false);
+                climbBarCheckbox.setChecked(false);
+                climbAssistCheckbox.setChecked(false);
+                climbWasAssistedCheckbox.setChecked(false);
+                climbOnBase.setChecked(false);
+            }
+        });
+        climbBarCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noClimbCheckbox.setChecked(false);
+                climbFailCheckbox.setChecked(false);
+                climbAssistCheckbox.setChecked(false);
+                climbWasAssistedCheckbox.setChecked(false);
+                climbOnBase.setChecked(false);
+            }
+        });
+        climbAssistCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noClimbCheckbox.setChecked(false);
+                climbFailCheckbox.setChecked(false);
+                climbBarCheckbox.setChecked(false);
+                climbWasAssistedCheckbox.setChecked(false);
+                climbOnBase.setChecked(false);
+            }
+        });
+        climbWasAssistedCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noClimbCheckbox.setChecked(false);
+                climbFailCheckbox.setChecked(false);
+                climbBarCheckbox.setChecked(false);
+                climbAssistCheckbox.setChecked(false);
+                climbOnBase.setChecked(false);
+            }
+        });
+        climbOnBase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noClimbCheckbox.setChecked(false);
+                climbFailCheckbox.setChecked(false);
+                climbBarCheckbox.setChecked(false);
+                climbAssistCheckbox.setChecked(false);
+                climbWasAssistedCheckbox.setChecked(false);
+            }
+        });
 
         //CLIMB TIME
         climbTimeSeekBar = (SeekBar) findViewById(R.id.climb_time_seekBar);
@@ -141,7 +216,7 @@ public class PostGame extends AppCompatActivity {
         final EditText comment = (EditText) findViewById(R.id.comment);
 
 
-        teamNumber.setOnKeyListener(new View.OnKeyListener(){
+        teamNumber.setOnKeyListener(new View.OnKeyListener() {
 
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
 
@@ -157,7 +232,7 @@ public class PostGame extends AppCompatActivity {
         PreGameObject preGameObject = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
         final Integer teamNum = preGameObject.teamNumber;
 
-        comment.setOnKeyListener(new View.OnKeyListener(){
+        comment.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
                 CommentListener.saveComment(keyCode, keyevent, comment, teamNum, teamNumber, view, getContext());
                 teamNumber.setText(teamNum.toString());
@@ -171,97 +246,82 @@ public class PostGame extends AppCompatActivity {
 
 
     public void returnHome(View view) {
+//        if (noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+//            // postGameObject.climbType(PostGameObject.ClimbType.NO_CLIMB);
+//            climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
+//
+//        } else if (!noClimbCheckbox.isChecked() && climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+//            climbEvent.climbType = ClimbEvent.ClimbType.FAIL;
+//
+//        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+//            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_INDEPENDENT;
+//
+//        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+//            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED_OTHERS;
+//
+//
+//        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && climbWasAssistedCheckbox.isChecked()) {
+//            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
+//                //   [1] No climber mechanism
+//            if (noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+//                // postGameObject.climbType(PostGameObject.ClimbType.NO_CLIMB);
+//                climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
+//                climbFailCheckbox.toggle(); //2
+//                climbBarCheckbox.toggle(); //3
+//                climbAssistCheckbox.toggle(); //4
+//
+//                //   [2] Failed climb
+//            } else if (!noClimbCheckbox.isChecked() && climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+//                climbEvent.climbType = ClimbEvent.ClimbType.FAIL;
+//                noClimbCheckbox.setEnabled(false); //1
+//                climbBarCheckbox.setEnabled(false); //3
+//                climbAssistCheckbox.setEnabled(false); //4
+//                climbWasAssistedCheckbox.setEnabled(false); //5
+//
+//                //   [3] Climb success: bar
+//            } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+//                climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_INDEPENDENT;
+//                noClimbCheckbox.setEnabled(false); //1
+//                climbFailCheckbox.setEnabled(false); //2
+//                climbWasAssistedCheckbox.setEnabled(false); //5
+//
+//                //   [4] Assisted a climb
+//            } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+//                climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED_OTHERS;
+//                noClimbCheckbox.setEnabled(false); //1
+//                climbFailCheckbox.setEnabled(false); //2
+//                climbWasAssistedCheckbox.setEnabled(false); //5
+//
+//                //   [5] Was assisted
+//            } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && climbWasAssistedCheckbox.isChecked()) {
+//                climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
+//                climbFailCheckbox.setEnabled(false); //2
+//                climbBarCheckbox.setEnabled(false); //3
+//                climbAssistCheckbox.setEnabled(false); //4
+//
+//                //No checkboxes chosen
+//            } else {
+//                climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
+//            }
 
-        final CheckBox noClimbCheckbox = (CheckBox) findViewById(R.id.climbTypeNoClimb);
-        final CheckBox climbFailCheckbox = (CheckBox) findViewById(R.id.climbTypeFail);
-        final CheckBox climbBarCheckbox = (CheckBox) findViewById(R.id.climbTypeBar);
-        final CheckBox climbAssistCheckbox = (CheckBox) findViewById(R.id.climbTypeAssisted);
-        final CheckBox climbWasAssistedCheckbox = (CheckBox) findViewById(R.id.climbTypeWasAssisted);
-
-        if (noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-            // postGameObject.climbType(PostGameObject.ClimbType.NO_CLIMB);
+        if (noClimbCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
-
-        } else if (!noClimbCheckbox.isChecked() && climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+        } else if (climbFailCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.FAIL;
-
-        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
+        } else if (climbBarCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_INDEPENDENT;
-
-        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED_OTHERS;
-
-
-        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && climbWasAssistedCheckbox.isChecked()) {
+        } else if (climbAssistCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
-                //   [1] No climber mechanism
-            if (noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-                // postGameObject.climbType(PostGameObject.ClimbType.NO_CLIMB);
-                climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
-                climbFailCheckbox.toggle(); //2
-                climbBarCheckbox.toggle(); //3
-                climbAssistCheckbox.toggle(); //4
-
-                //   [2] Failed climb
-            } else if (!noClimbCheckbox.isChecked() && climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-                climbEvent.climbType = ClimbEvent.ClimbType.FAIL;
-                noClimbCheckbox.setEnabled(false); //1
-                climbBarCheckbox.setEnabled(false); //3
-                climbAssistCheckbox.setEnabled(false); //4
-                climbWasAssistedCheckbox.setEnabled(false); //5
-
-                //   [3] Climb success: bar
-            } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-                climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_INDEPENDENT;
-                noClimbCheckbox.setEnabled(false); //1
-                climbFailCheckbox.setEnabled(false); //2
-                climbWasAssistedCheckbox.setEnabled(false); //5
-
-                //   [4] Assisted a climb
-            } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-                climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED_OTHERS;
-                noClimbCheckbox.setEnabled(false); //1
-                climbFailCheckbox.setEnabled(false); //2
-                climbWasAssistedCheckbox.setEnabled(false); //5
-
-                //   [5] Was assisted
-            } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && climbWasAssistedCheckbox.isChecked()) {
-                climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
-                climbFailCheckbox.setEnabled(false); //2
-                climbBarCheckbox.setEnabled(false); //3
-                climbAssistCheckbox.setEnabled(false); //4
-
-                //No checkboxes chosen
-            } else {
-                climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
-            }
-            Intent thisIntent = getIntent();
-
-            TeleopScoutingObject t  = (TeleopScoutingObject) getIntent().getSerializableExtra("TeleopScoutingData");
-            PreGameObject pre = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
-            AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
-            climbEvent.timestamp = 140;
-            postGameObject.timestamp = 140;
-            t.add(climbEvent);
-            t.add(postGameObject);
-
-            MatchData.Match match =  new MatchData.Match(pre, a ,t);
-
-            try {
-                match.toJson();
-            } catch (JSONException e) {
-                Toast.makeText(this, "JSON Failed to save", Toast.LENGTH_SHORT).show();
-            }
-
+        } else if (climbOnBase.isChecked()) {
+            climbEvent.climbType = ClimbEvent.ClimbType.ON_BASE;
         } else {
             climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
         }
-        Intent thisIntent = getIntent();
 
-
+        // Compile all the data into one match
         TeleopScoutingObject t = (TeleopScoutingObject) getIntent().getSerializableExtra("TeleopScoutingData");
         PreGameObject pre = (PreGameObject) getIntent().getSerializableExtra("PreGameData");
-        AutoScoutingObject a = (AutoScoutingObject) thisIntent.getSerializableExtra("AutoScoutingData");
+        AutoScoutingObject a = (AutoScoutingObject) getIntent().getSerializableExtra("AutoScoutingData");
         climbEvent.timestamp = 140;
         postGameObject.timestamp = 140;
         t.add(climbEvent);
@@ -269,15 +329,16 @@ public class PostGame extends AppCompatActivity {
 
         MatchData.Match match = new MatchData.Match(pre, a, t);
 
-        // Make sure it doesn't run on main thread
+        // Upload the match and save to phone
+        try {
+            match.toJson();
+        } catch (JSONException e) {
+            Toast.makeText(this, "JSON Failed to save", Toast.LENGTH_SHORT).show();
+        }
         WebServerUtils.uploadMatch(match);
-//        try {
-//            match.toJson();
-//        } catch (JSONException e) {
-//            Toast.makeText(this, "JSON Failed to save", Toast.LENGTH_SHORT).show();
-//        }
 
         Intent intent = new Intent(this, PreGameActivity.class);
+
         startActivity(intent);
     }
 
