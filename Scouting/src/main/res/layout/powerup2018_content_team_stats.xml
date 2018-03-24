@@ -688,6 +688,23 @@
                 android:layout_row="11"
                 android:layout_column="1" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/onBaseClimbTV"
+                android:layout_row="12"
+                android:layout_column="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="On Base:"
+                android:id="@+id/onBaseClimbLBL"
+                android:layout_row="12"
+                android:layout_column="0" />
 
         </GridLayout>
 
@@ -707,8 +724,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/postGameTitle"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
-
-
 
             <TextView
                 android:layout_width="wrap_content"

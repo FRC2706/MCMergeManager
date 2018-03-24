@@ -122,6 +122,7 @@ public class TeamStatsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.independentClimbTV)).setText(Integer.toString(m_teamStatsReport.independentClimb));
         ((TextView) findViewById(R.id.assistedClimbTV)).setText(Integer.toString(m_teamStatsReport.assistedClimb));
         ((TextView) findViewById(R.id.assistedOthersClimbTV)).setText(Integer.toString(m_teamStatsReport.assistedOthersClimb));
+        ((TextView) findViewById(R.id.onBaseClimbTV)).setText(Integer.toString(m_teamStatsReport.onBase));
 
         // Post game
         ((TextView) findViewById(R.id.avgTimeDefendingTV)).setText(String.format("%.2f", m_teamStatsReport.avgTimeDefending) + "s");
