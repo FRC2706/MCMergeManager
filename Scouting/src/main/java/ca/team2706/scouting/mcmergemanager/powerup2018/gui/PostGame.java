@@ -311,6 +311,8 @@ public class PostGame extends AppCompatActivity {
         if (climbBarCheckbox.isChecked())
             climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_INDEPENDENT;
         if (climbAssistCheckbox.isChecked())
+            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED_OTHERS;
+        if (climbWasAssistedCheckbox.isChecked())
             climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
         if (climbOnBase.isChecked())
             climbEvent.climbType = ClimbEvent.ClimbType.ON_BASE;
