@@ -635,7 +635,10 @@ public class StatsEngine implements Serializable {
     }
 
     private void fillInTeleopStats(TeamStatsReport teamStatsReport) {
-        // Loop through all the matches, calculate cycles using a big ol state maching
+
+        int numNonZeroClimbTimes = 0;
+
+        // Loop through all the matches, calculate cycles using a big ol state machine
         for (MatchData.Match match : teamStatsReport.teamMatchData.matches) {
             // Process all the events during this match in a big state machine.
             ArrayList<Event> events = match.teleopScoutingObject.getEvents();
@@ -766,6 +769,7 @@ public class StatsEngine implements Serializable {
                     // Don't include climb times of zero
                     if(c.climb_time != 0 && c.climb_time < teamStatsReport.minClimbTime) {
                         teamStatsReport.minClimbTime = c.climb_time;
+                        numNonZeroClimbTimes++;
                     }
                 } else if(event instanceof PostGameObject) {
                     PostGameObject p = (PostGameObject) event;
@@ -820,7 +824,8 @@ public class StatsEngine implements Serializable {
             teamStatsReport.avgDeadness /= teamStatsReport.numMatchesPlayed;
 
             // Climbing
-            teamStatsReport.avgClimbTime /= teamStatsReport.numMatchesPlayed;
+            if (numNonZeroClimbTimes != 0)
+                teamStatsReport.avgClimbTime /= numNonZeroClimbTimes;
 
             // Defending
             teamStatsReport.avgTimeDefending /= teamStatsReport.numMatchesPlayed;
