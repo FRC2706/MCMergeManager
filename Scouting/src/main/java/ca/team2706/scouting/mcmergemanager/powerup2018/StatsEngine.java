@@ -637,6 +637,9 @@ public class StatsEngine implements Serializable {
     }
 
     private void fillInTeleopStats(TeamStatsReport teamStatsReport) {
+        // Vars used for calculating averages
+        int numMatchesClimbed = 0;
+
         // Loop through all the matches, calculate cycles using a big ol state maching
         for (MatchData.Match match : teamStatsReport.teamMatchData.matches) {
             // Process all the events during this match in a big state machine.
@@ -820,6 +823,10 @@ public class StatsEngine implements Serializable {
 
                     // Time for climbing
                     teamStatsReport.avgClimbTime += c.climb_time;
+                    // Only calculate the averages of matches that climbed
+                    if(c.climb_time > 0)
+                        numMatchesClimbed++;
+
                     if(c.climb_time > teamStatsReport.maxClimbTime) {
                         teamStatsReport.maxClimbTime = c.climb_time;
                     }
@@ -931,7 +938,7 @@ public class StatsEngine implements Serializable {
             teamStatsReport.avgDeadness /= teamStatsReport.numMatchesPlayed;
 
             // Climbing
-            teamStatsReport.avgClimbTime /= teamStatsReport.numMatchesPlayed;
+            teamStatsReport.avgClimbTime /= numMatchesClimbed;
 
             // Defending
             teamStatsReport.avgTimeDefending /= teamStatsReport.numMatchesPlayed;
