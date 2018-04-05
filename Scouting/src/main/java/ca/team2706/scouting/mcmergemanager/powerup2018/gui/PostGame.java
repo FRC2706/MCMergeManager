@@ -154,8 +154,6 @@ public class PostGame extends AppCompatActivity {
                 TextView tvd = (TextView) findViewById(R.id.climbTime_tracker_textView);
 
                 pointsScored = progressChangedValue * 5;
-                climbEvent.climb_time = progressChangedValue * 5;
-                pointsScored = progressChangedValue * 5;
                 pointsScoredString = String.valueOf(pointsScored);
                 textViewDisplayString = pointsScoredString + test;
                 tvd.setText(textViewDisplayString);
@@ -246,63 +244,6 @@ public class PostGame extends AppCompatActivity {
 
 
     public void returnHome(View view) {
-//        if (noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-//            // postGameObject.climbType(PostGameObject.ClimbType.NO_CLIMB);
-//            climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
-//
-//        } else if (!noClimbCheckbox.isChecked() && climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-//            climbEvent.climbType = ClimbEvent.ClimbType.FAIL;
-//
-//        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-//            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_INDEPENDENT;
-//
-//        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-//            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED_OTHERS;
-//
-//
-//        } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && climbWasAssistedCheckbox.isChecked()) {
-//            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
-//                //   [1] No climber mechanism
-//            if (noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-//                // postGameObject.climbType(PostGameObject.ClimbType.NO_CLIMB);
-//                climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
-//                climbFailCheckbox.toggle(); //2
-//                climbBarCheckbox.toggle(); //3
-//                climbAssistCheckbox.toggle(); //4
-//
-//                //   [2] Failed climb
-//            } else if (!noClimbCheckbox.isChecked() && climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-//                climbEvent.climbType = ClimbEvent.ClimbType.FAIL;
-//                noClimbCheckbox.setEnabled(false); //1
-//                climbBarCheckbox.setEnabled(false); //3
-//                climbAssistCheckbox.setEnabled(false); //4
-//                climbWasAssistedCheckbox.setEnabled(false); //5
-//
-//                //   [3] Climb success: bar
-//            } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-//                climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_INDEPENDENT;
-//                noClimbCheckbox.setEnabled(false); //1
-//                climbFailCheckbox.setEnabled(false); //2
-//                climbWasAssistedCheckbox.setEnabled(false); //5
-//
-//                //   [4] Assisted a climb
-//            } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && climbAssistCheckbox.isChecked() && !climbWasAssistedCheckbox.isChecked()) {
-//                climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED_OTHERS;
-//                noClimbCheckbox.setEnabled(false); //1
-//                climbFailCheckbox.setEnabled(false); //2
-//                climbWasAssistedCheckbox.setEnabled(false); //5
-//
-//                //   [5] Was assisted
-//            } else if (!noClimbCheckbox.isChecked() && !climbFailCheckbox.isChecked() && !climbBarCheckbox.isChecked() && !climbAssistCheckbox.isChecked() && climbWasAssistedCheckbox.isChecked()) {
-//                climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
-//                climbFailCheckbox.setEnabled(false); //2
-//                climbBarCheckbox.setEnabled(false); //3
-//                climbAssistCheckbox.setEnabled(false); //4
-//
-//                //No checkboxes chosen
-//            } else {
-//                climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
-//            }
 
         if (noClimbCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.NO_CLIMB;
@@ -310,8 +251,25 @@ public class PostGame extends AppCompatActivity {
             climbEvent.climbType = ClimbEvent.ClimbType.FAIL;
         } else if (climbBarCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_INDEPENDENT;
+
+            if (climbEvent.climb_time == 0) {
+                Toast.makeText(this, "Please set a climb time", Toast.LENGTH_SHORT).show();
+                return;
+            }
         } else if (climbAssistCheckbox.isChecked()) {
+            climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED_OTHERS;
+
+            if (climbEvent.climb_time == 0) {
+                Toast.makeText(this, "Please set a climb time", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } else if (climbWasAssistedCheckbox.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.SUCCESS_ASSISTED;
+
+            if (climbEvent.climb_time == 0) {
+                Toast.makeText(this, "Please set a climb time", Toast.LENGTH_SHORT).show();
+                return;
+            }
         } else if (climbOnBase.isChecked()) {
             climbEvent.climbType = ClimbEvent.ClimbType.ON_BASE;
         } else {
