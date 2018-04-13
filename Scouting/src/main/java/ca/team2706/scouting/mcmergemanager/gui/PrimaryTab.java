@@ -143,19 +143,16 @@ public class PrimaryTab extends Fragment {
         ConnectivityManager cm = (ConnectivityManager) App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
-        if (activeNetwork == null ) {
-            // not connected to the internet
-            v.findViewById(R.id.syncButon).setEnabled(false);
-            return;
-        }
-        else if (ftpSyncOnlyWifi && activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
-            // Settings require FTP sync only over WiFi
-            // and we not connected over WiFi.
-            v.findViewById(R.id.syncButon).setEnabled(false);
-            return;
-        }
+//        if (activeNetwork == null ) {
+//            // not connected to the internet
+//            v.findViewById(R.id.syncButon).setEnabled(false);
+//            return;
+//        }
+//        else if (ftpSyncOnlyWifi && activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
+//            // Settings require FTP sync only over WiFi
+//            // and we not connected over WiFi.
+//            v.findViewById(R.id.syncButon).setEnabled(false);
+//            return;
+//        }
     }
-
-
-
 }

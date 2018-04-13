@@ -51,7 +51,17 @@ public class TeamStatsReport implements Serializable {
     public double pickupPortalAvgMatch, pickupGroundAvgMatch, pickupExchangeAvgMatch, pickupPyramidAvgMatch;
     public double placeSwitchAvgMatch, placeScaleAvgMatch, placeExchangeAvgMatch, droppedAvgMatch;
 
+    // Cycle times of teleop
+    public ArrayList<Double> switchCycleTimes = new ArrayList<>(),
+            scaleCycleTimes = new ArrayList<>(),
+            exchangeCycleTimes = new ArrayList<>(),
+            droppedCycleTimes = new ArrayList<>();
+    public double switchMedianCycleTime, scaleMedianCycleTime, exchangeMedianCycleTime, droppedMedianCycleTimes;
     public double switchAvgCycleTime, scaleAvgCycleTime, exchangeAvgCycleTime, droppedAvgCycleTime;
+
+    // Get the average times for only the later matches
+    public int switchLaterCycles, scaleLaterCycles, exchangeLaterCycles, droppedLaterCycles;
+    public double switchAvgLaterCycleTime, scaleAvgLaterCycleTime, exchangeAvgLaterCycleTime, droppedAvgLaterCycleTime;
 
     public CubePickupEvent.PickupType favouritePickup;
     public CubePlacementEvent.PlacementType favouritePlacement;

@@ -7,6 +7,7 @@ import org.json.JSONException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ import static ca.team2706.scouting.mcmergemanager.powerup2018.dataObjects.FieldW
 public class StatsEngine implements Serializable {
 
     public static final String OPR_FILENAME = "OPRs.json";
+    public static final int LATER_MATCH_START = 35;
 
     private MatchData matchData;
     private MatchSchedule matchSchedule;
@@ -635,7 +637,7 @@ public class StatsEngine implements Serializable {
     }
 
     private void fillInTeleopStats(TeamStatsReport teamStatsReport) {
-
+        // Vars used for calculating averages
         int numNonZeroClimbTimes = 0;
 
         // Loop through all the matches, calculate cycles using a big ol state machine
@@ -649,28 +651,49 @@ public class StatsEngine implements Serializable {
             boolean inSwitchCycle = false, inScaleCycle = false, inExchangeCycle = false;
             Cycle cubeCycle = new Cycle();
 
+            double lastEventTimeStamp = -2;
             // Loop through all events in the match
             for (Event event : events) {
-
                 if (event instanceof CubePickupEvent) {
+                    if(lastEventTimeStamp == event.timestamp)
+                        continue;
+
                     CubePickupEvent c = (CubePickupEvent) event;
 
                     double cycleTime = c.timestamp - cubeCycle.startTime;
 
                     if(inSwitchCycle) {
                         teamStatsReport.switchAvgCycleTime += cycleTime;
+                        teamStatsReport.switchCycleTimes.add(cycleTime);
                         cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.SWITCH));
                         inSwitchCycle = false;
+
+                        if(match.preGameObject.matchNumber > LATER_MATCH_START) {
+                            teamStatsReport.switchLaterCycles++;
+                            teamStatsReport.switchAvgLaterCycleTime += cycleTime;
+                        }
                     }
                     if(inScaleCycle) {
                         teamStatsReport.scaleAvgCycleTime += cycleTime;
+                        teamStatsReport.scaleCycleTimes.add(cycleTime);
                         cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.SCALE));
                         inScaleCycle = false;
+
+                        if(match.preGameObject.matchNumber > LATER_MATCH_START) {
+                            teamStatsReport.scaleLaterCycles++;
+                            teamStatsReport.scaleAvgLaterCycleTime += cycleTime;
+                        }
                     }
                     if(inExchangeCycle) {
                         teamStatsReport.exchangeAvgCycleTime += cycleTime;
+                        teamStatsReport.exchangeCycleTimes.add(cycleTime);
                         cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.EXCHANGE));
                         inExchangeCycle = false;
+
+                        if(match.preGameObject.matchNumber > LATER_MATCH_START) {
+                            teamStatsReport.exchangeLaterCycles++;
+                            teamStatsReport.exchangeAvgLaterCycleTime += cycleTime;
+                        }
                     }
 
                     // Get the timestamp
@@ -693,10 +716,48 @@ public class StatsEngine implements Serializable {
                             break;
                     }
                 } else if (event instanceof CubePlacementEvent) {
+                    if(lastEventTimeStamp == event.timestamp)
+                        continue;
+
                     CubePlacementEvent c = (CubePlacementEvent) event;
 
                     // Time stamp stuff
                     cubeCycle.endTime = c.timestamp;
+
+                    // Check if already in cycle, finish it
+                    if(inSwitchCycle) {
+                        teamStatsReport.switchAvgCycleTime += cubeCycle.getCycleTime();
+                        teamStatsReport.switchCycleTimes.add(cubeCycle.getCycleTime());
+                        cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.SWITCH));
+                        inSwitchCycle = false;
+
+                        if(match.preGameObject.matchNumber > LATER_MATCH_START) {
+                            teamStatsReport.switchLaterCycles++;
+                            teamStatsReport.switchAvgLaterCycleTime += cubeCycle.getCycleTime();
+                        }
+                    }
+                    if(inScaleCycle) {
+                        teamStatsReport.scaleAvgCycleTime += cubeCycle.getCycleTime();
+                        teamStatsReport.scaleCycleTimes.add(cubeCycle.getCycleTime());
+                        cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.SCALE));
+                        inScaleCycle = false;
+
+                        if(match.preGameObject.matchNumber > LATER_MATCH_START) {
+                            teamStatsReport.scaleLaterCycles++;
+                            teamStatsReport.scaleAvgLaterCycleTime += cubeCycle.getCycleTime();
+                        }
+                    }
+                    if(inExchangeCycle) {
+                        teamStatsReport.exchangeAvgCycleTime += cubeCycle.getCycleTime();
+                        teamStatsReport.exchangeCycleTimes.add(cubeCycle.getCycleTime());
+                        cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.EXCHANGE));
+                        inExchangeCycle = false;
+
+                        if(match.preGameObject.matchNumber > LATER_MATCH_START) {
+                            teamStatsReport.exchangeLaterCycles++;
+                            teamStatsReport.exchangeAvgLaterCycleTime += cubeCycle.getCycleTime();
+                        }
+                    }
 
                     // Cycle has succeeded
                     cubeCycle.success = true;
@@ -718,6 +779,9 @@ public class StatsEngine implements Serializable {
                             break;
                     }
                 } else if(event instanceof CubeDroppedEvent) {
+                    if(lastEventTimeStamp == event.timestamp)
+                        continue;
+
                     CubeDroppedEvent c = (CubeDroppedEvent) event;
 
                     cubeCycle.endTime = c.timestamp;
@@ -735,6 +799,11 @@ public class StatsEngine implements Serializable {
                     }
 
                     teamStatsReport.droppedAvgCycleTime += cubeCycle.getCycleTime();
+                    teamStatsReport.droppedCycleTimes.add(cubeCycle.getCycleTime());
+                    if(match.preGameObject.matchNumber > LATER_MATCH_START) {
+                        teamStatsReport.droppedLaterCycles++;
+                        teamStatsReport.droppedAvgLaterCycleTime += cubeCycle.getCycleTime();
+                    }
                     cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.DROPPED));
                 } else if(event instanceof ClimbEvent) {
                     ClimbEvent c = (ClimbEvent) event;
@@ -763,13 +832,16 @@ public class StatsEngine implements Serializable {
 
                     // Time for climbing
                     teamStatsReport.avgClimbTime += c.climb_time;
+                    // Only calculate the averages of matches that climbed
+                    if(c.climb_time > 0)
+                        numNonZeroClimbTimes++;
+
                     if(c.climb_time > teamStatsReport.maxClimbTime) {
                         teamStatsReport.maxClimbTime = c.climb_time;
                     }
                     // Don't include climb times of zero
                     if(c.climb_time != 0 && c.climb_time < teamStatsReport.minClimbTime) {
                         teamStatsReport.minClimbTime = c.climb_time;
-                        numNonZeroClimbTimes++;
                     }
                 } else if(event instanceof PostGameObject) {
                     PostGameObject p = (PostGameObject) event;
@@ -791,7 +863,40 @@ public class StatsEngine implements Serializable {
                     }
                 }
 
-                // TODO: i don't think i need to finish cycles
+                lastEventTimeStamp = event.timestamp;
+            }
+
+            // Finish cycles
+            cubeCycle.endTime = 0;
+            if(inSwitchCycle) {
+                teamStatsReport.switchAvgCycleTime += cubeCycle.getCycleTime();
+                teamStatsReport.switchCycleTimes.add(cubeCycle.getCycleTime());
+                cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.SWITCH));
+
+                if(match.preGameObject.matchNumber > LATER_MATCH_START) {
+                    teamStatsReport.switchLaterCycles++;
+                    teamStatsReport.switchAvgLaterCycleTime += cubeCycle.getCycleTime();
+                }
+            }
+            if(inScaleCycle) {
+                teamStatsReport.scaleAvgCycleTime += cubeCycle.getCycleTime();
+                teamStatsReport.scaleCycleTimes.add(cubeCycle.getCycleTime());
+                cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.SCALE));
+
+                if(match.preGameObject.matchNumber > LATER_MATCH_START) {
+                    teamStatsReport.scaleLaterCycles++;
+                    teamStatsReport.scaleAvgLaterCycleTime += cubeCycle.getCycleTime();
+                }
+            }
+            if(inExchangeCycle) {
+                teamStatsReport.exchangeAvgCycleTime += cubeCycle.getCycleTime();
+                teamStatsReport.exchangeCycleTimes.add(cubeCycle.getCycleTime());
+                cyclesInThisMatch.cycles.add(cubeCycle.clone(Cycle.CycleType.EXCHANGE));
+
+                if(match.preGameObject.matchNumber > LATER_MATCH_START) {
+                    teamStatsReport.exchangeLaterCycles++;
+                    teamStatsReport.exchangeAvgLaterCycleTime += cubeCycle.getCycleTime();
+                }
             }
 
             // Add the cycles to the report
@@ -807,7 +912,27 @@ public class StatsEngine implements Serializable {
             teamStatsReport.switchAvgCycleTime /= (double) teamStatsReport.totalPlaceSwitch;
             teamStatsReport.scaleAvgCycleTime /= (double) teamStatsReport.totalPlaceScale;
             teamStatsReport.exchangeAvgCycleTime /= (double) teamStatsReport.totalPlaceExchange;
-            teamStatsReport.droppedAvgCycleTime /= (double) teamStatsReport.totalPlaceDropped;
+            teamStatsReport.droppedAvgCycleTime /= (double) (teamStatsReport.totalFumbles + teamStatsReport.totalEasyDrop + teamStatsReport.totalLeftIt);
+
+            teamStatsReport.switchAvgLaterCycleTime /= (double) teamStatsReport.switchLaterCycles;
+            teamStatsReport.scaleAvgLaterCycleTime /= (double) teamStatsReport.scaleLaterCycles;
+            teamStatsReport.exchangeAvgLaterCycleTime /= (double) teamStatsReport.exchangeLaterCycles;
+            teamStatsReport.droppedAvgLaterCycleTime /= (double) teamStatsReport.droppedLaterCycles;
+
+            // Sort Cycle times, then get the median
+            if(teamStatsReport.switchCycleTimes.size() != 0) {
+                Collections.sort(teamStatsReport.switchCycleTimes);
+                teamStatsReport.switchMedianCycleTime = teamStatsReport.switchCycleTimes.get(teamStatsReport.switchCycleTimes.size() / 2);
+            } if(teamStatsReport.scaleCycleTimes.size() != 0) {
+                Collections.sort(teamStatsReport.scaleCycleTimes);
+                teamStatsReport.scaleMedianCycleTime = teamStatsReport.scaleCycleTimes.get(teamStatsReport.scaleCycleTimes.size() / 2);
+            } if(teamStatsReport.exchangeCycleTimes.size() != 0) {
+                Collections.sort(teamStatsReport.exchangeCycleTimes);
+                teamStatsReport.exchangeMedianCycleTime = teamStatsReport.exchangeCycleTimes.get(teamStatsReport.exchangeCycleTimes.size() / 2);
+            } if(teamStatsReport.droppedCycleTimes.size() != 0) {
+                Collections.sort(teamStatsReport.droppedCycleTimes);
+                teamStatsReport.droppedMedianCycleTimes = teamStatsReport.droppedCycleTimes.get(teamStatsReport.droppedCycleTimes.size() / 2);
+            }
 
             // Avg per match
             teamStatsReport.pickupGroundAvgMatch = (double) teamStatsReport.totalPickupGround / teamStatsReport.numMatchesPlayed;

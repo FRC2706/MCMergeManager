@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import ca.team2706.scouting.mcmergemanager.gui.MainActivity;
 import ca.team2706.scouting.mcmergemanager.powerup2018.StatsEngine;
@@ -68,10 +69,18 @@ public class CreateCsvFile {
         writeCell(sb, "TELEOP TOTAL FUMBLES");
         writeCell(sb, "TELEOP TOTAL EASY DROP");
         writeCell(sb, "TELEOP TOTAL DROP & LEFT");
-        writeCell(sb, "TELEOP SWITCH CYCLE TIME");
-        writeCell(sb, "TELEOP SCALE CYCLE TIME");
-        writeCell(sb, "TELEOP EXCHANGE CYCLE TIME");
-        writeCell(sb, "TELEOP DROPPED CYCLE TIME");
+        writeCell(sb, "TELEOP MEAN SWITCH CYCLE TIME");
+        writeCell(sb, "TELEOP MEAN SCALE CYCLE TIME");
+        writeCell(sb, "TELEOP MEAN EXCHANGE CYCLE TIME");
+        writeCell(sb, "TELEOP MEAN DROPPED CYCLE TIME");
+        writeCell(sb, "TELEOP MEDIAN SWITCH CYCLE TIME");
+        writeCell(sb, "TELEOP MEDIAN SCALE CYCLE TIME");
+        writeCell(sb, "TELEOP MEDIAN EXCHANGE CYCLE TIME");
+        writeCell(sb, "TELEOP MEDIAN DROPPED CYCLE TIME");
+        writeCell(sb, "TELEOP LATER SWITCH CYCLE TIME");
+        writeCell(sb, "TELEOP LATER SCALE CYCLE TIME");
+        writeCell(sb, "TELEOP LATER EXCHANGE CYCLE TIME");
+        writeCell(sb, "TELEOP LATER DROPPED CYCLE TIME");
         writeCell(sb, "AVG DEADNESS");
         writeCell(sb, "HIGHEST DEADNESS");
         writeCell(sb, "DEAD MATCHES");
@@ -84,6 +93,10 @@ public class CreateCsvFile {
         writeCell(sb, "ON BASE");
         writeCell(sb, "AVG DEFENDING");
         writeCell(sb, "MAX DEFENDING");
+        writeCell(sb, "ALL SWITCH CYCLES");
+        writeCell(sb, "ALL SCALE CYCLES");
+        writeCell(sb, "ALL EXCHANGE CYCLES");
+        writeCell(sb, "ALL DROPPED CYCLES");
         sb.append("\n");
 
         // Print all the stuff
@@ -116,6 +129,14 @@ public class CreateCsvFile {
                 writeCell(sb, teamStatsReport.scaleAvgCycleTime);
                 writeCell(sb, teamStatsReport.exchangeAvgCycleTime);
                 writeCell(sb, teamStatsReport.droppedAvgCycleTime);
+                writeCell(sb, teamStatsReport.switchMedianCycleTime);
+                writeCell(sb, teamStatsReport.scaleMedianCycleTime);
+                writeCell(sb, teamStatsReport.exchangeMedianCycleTime);
+                writeCell(sb, teamStatsReport.droppedMedianCycleTimes);
+                writeCell(sb, teamStatsReport.switchAvgLaterCycleTime);
+                writeCell(sb, teamStatsReport.scaleAvgLaterCycleTime);
+                writeCell(sb, teamStatsReport.exchangeAvgLaterCycleTime);
+                writeCell(sb, teamStatsReport.droppedAvgLaterCycleTime);
                 writeCell(sb, teamStatsReport.avgDeadness);
                 writeCell(sb, teamStatsReport.highestDeadness);
                 writeCell(sb, (teamStatsReport.numMatchesPlayed - teamStatsReport.numMatchesNoDeadness));
@@ -128,6 +149,10 @@ public class CreateCsvFile {
                 writeCell(sb, teamStatsReport.onBase);
                 writeCell(sb, teamStatsReport.avgTimeDefending);
                 writeCell(sb, teamStatsReport.maxTimeDefending);
+                writeCell(sb, arrayToString(teamStatsReport.switchCycleTimes));
+                writeCell(sb, arrayToString(teamStatsReport.scaleCycleTimes));
+                writeCell(sb, arrayToString(teamStatsReport.exchangeCycleTimes));
+                writeCell(sb, arrayToString(teamStatsReport.droppedCycleTimes));
 
                 // New line
                 sb.append("\n");
@@ -161,5 +186,15 @@ public class CreateCsvFile {
         }
 
         System.out.println("Totla time: " + (System.currentTimeMillis() - startTime));
+    }
+
+    public static String arrayToString(ArrayList<Double> arr) {
+        String s = "";
+
+        for(Double d : arr) {
+            s += d + " ";
+        }
+
+        return s;
     }
 }
