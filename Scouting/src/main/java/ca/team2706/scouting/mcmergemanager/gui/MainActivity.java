@@ -96,13 +96,6 @@ public class MainActivity extends AppCompatActivity
         FileUtils.checkFileReadWritePermissions(this);
 
         getEventKeys();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                WebServerUtils.postCommentToServer(2706, "asdjfhasghahraefgrh");
-            }
-        }).start();
     }
 
     public void createCsvFile(View view) {
@@ -133,6 +126,7 @@ public class MainActivity extends AppCompatActivity
         // Sync all the match data
         syncMatchData();
 
+        me = this;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -398,7 +392,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void updateSyncBar(String Caption, int Progress, Activity activity, boolean isRunning) {
+    public void updateSyncBar(String Caption, int Progress, Activity activity, final boolean isRunning) {
         final String caption = Caption;
         final int progress = Progress;
         final Activity activ = activity;
@@ -407,18 +401,17 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 TextView tv = (TextView) activ.findViewById(R.id.syncCaption);
                 ProgressBar pb = (ProgressBar) activ.findViewById(R.id.syncBar);
-                Button bu = (Button) activ.findViewById(R.id.syncButon);
-                if (isRunningf) {
-                    bu.setText("syncing...");
-                } else {
-                    bu.setText("Sync Photos");
-                }
                 if (caption.startsWith("^")) {
                     pb.setIndeterminate(true);
                     tv.setText("Getting File Listing...");
                 } else {
                     pb.setIndeterminate(false);
-                    tv.setText(caption);
+
+                    if(isRunning) {
+                        tv.setText(caption);
+                    } else {
+                        tv.setText("Finished");
+                    }
                 }
                 pb.setProgress(progress);
             }
@@ -433,23 +426,30 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 // Post the un-posted comments
                 WebServerUtils.syncUnpostedComments();
+                updateSyncBar("Upload Comments", 20, MainActivity.me, true);
 
                 // Post all data to server
                 WebServerUtils.uploadUnsyncedMatches();
+                updateSyncBar("Upload matches", 40, MainActivity.me, true);
 
                 // Get data from server
                 WebServerUtils.syncMatchData();
+                updateSyncBar("Synced Matches", 60, MainActivity.me, true);
 
                 // Sync the comments
                 WebServerUtils.syncComments();
+                updateSyncBar("Synced Comments", 80, MainActivity.me, true);
 
                 // Reload the match data
                 FileUtils.readUnpostedMatches();
+                updateSyncBar("Finished", 100, MainActivity.me, false);
             }
         });
 
         syncThread.start();
     }
+
+
 
     public void onClickSyncMatchData(View v) {
         syncMatchData();

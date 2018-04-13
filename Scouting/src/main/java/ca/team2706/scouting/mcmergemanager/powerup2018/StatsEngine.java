@@ -651,10 +651,13 @@ public class StatsEngine implements Serializable {
             boolean inSwitchCycle = false, inScaleCycle = false, inExchangeCycle = false;
             Cycle cubeCycle = new Cycle();
 
+            double lastEventTimeStamp = -2;
             // Loop through all events in the match
             for (Event event : events) {
-
                 if (event instanceof CubePickupEvent) {
+                    if(lastEventTimeStamp == event.timestamp)
+                        continue;
+
                     CubePickupEvent c = (CubePickupEvent) event;
 
                     double cycleTime = c.timestamp - cubeCycle.startTime;
@@ -713,6 +716,9 @@ public class StatsEngine implements Serializable {
                             break;
                     }
                 } else if (event instanceof CubePlacementEvent) {
+                    if(lastEventTimeStamp == event.timestamp)
+                        continue;
+
                     CubePlacementEvent c = (CubePlacementEvent) event;
 
                     // Time stamp stuff
@@ -773,6 +779,9 @@ public class StatsEngine implements Serializable {
                             break;
                     }
                 } else if(event instanceof CubeDroppedEvent) {
+                    if(lastEventTimeStamp == event.timestamp)
+                        continue;
+
                     CubeDroppedEvent c = (CubeDroppedEvent) event;
 
                     cubeCycle.endTime = c.timestamp;
@@ -853,6 +862,8 @@ public class StatsEngine implements Serializable {
                         teamStatsReport.numMatchesNoDeadness++;
                     }
                 }
+
+                lastEventTimeStamp = event.timestamp;
             }
 
             // Finish cycles
